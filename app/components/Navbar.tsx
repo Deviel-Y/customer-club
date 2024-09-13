@@ -1,10 +1,27 @@
 "use client";
 
 import { Avatar } from "@nextui-org/react";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const Navbar = () => {
+  const path = usePathname();
+  const [pathName, setPathName] = useState<string>("");
+  const headingMapping: Record<string, { label: string }> = {
+    "": { label: "" },
+    "/": { label: "داشبورد" },
+    "/bill": { label: "فاکتورها" },
+    "/invoice": { label: "پیش فاکتورها" },
+  };
+
+  useEffect(() => {
+    setPathName(path);
+  }, [path]);
+
   return (
-    <div className="flex flex-row justify-end items-center p-5">
+    <div className="flex flex-row justify-between items-center p-5">
+      <h1 className="text-[40px]">{headingMapping[pathName].label}</h1>
+
       <Avatar
         alt="Profile Avater"
         fallback="?"

@@ -12,6 +12,7 @@ interface Props {
 const dataMapping: Record<
   string,
   {
+    label: string;
     backgroundColor: string;
     icon: JSX.Element;
     iconBackgroung: string;
@@ -19,6 +20,7 @@ const dataMapping: Record<
   }
 > = {
   bill: {
+    label: "تعداد فاکتورها",
     backgroundColor: "bg-gradient-to-r from-pink-500 to-rose-500",
     icon: (
       <ShoppingBagIcon className="stroke-[0.75px] opacity-75 w-8 h-8 -translate-y-[2px]" />
@@ -28,6 +30,7 @@ const dataMapping: Record<
   },
 
   invoice: {
+    label: "تعداد پیش فاکتورها",
     backgroundColor: "bg-gradient-to-r from-amber-200 to-yellow-500",
     icon: (
       <NewspaperIcon className="stroke-[0.75px] opacity-75 w-8 h-8 text-center " />
@@ -48,7 +51,7 @@ const DashboardCard = ({ label, amount }: Props) => {
     >
       <div className="flex flex-col h-full w-full justify-between">
         <div className="flex flex-row justify-between items-center">
-          <p className="text-lg">{label}</p>
+          <p className="text-lg">{dataMapping[label].label}</p>
           <div
             className={`w-11 h-11 rounded-full flex justify-center items-center ${dataMapping[label].iconBackgroung}`}
           >
