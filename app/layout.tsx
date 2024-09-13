@@ -1,8 +1,18 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import localFont from "next/font/local";
+import AllProviders from "./AllProviders";
+import Navbar from "./components/Navbar";
+import Sidebar from "./components/Sidebar";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const iranYekan_bold = localFont({
+  src: "./fonts/IRANYekanBold.ttf",
+  variable: "--font-iran-yekan-bold",
+});
+const iranYekan_regular = localFont({
+  src: "./fonts/IRANYekanRegular.ttf",
+  variable: "--font-iran-yekan-regular",
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -15,8 +25,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
+    <html lang="fa" dir="rtl">
+      <body
+        className={`${iranYekan_bold.variable} ${iranYekan_regular.variable} antialiased relative h-screen bg-neutral-100`}
+      >
+        <AllProviders>
+          <div>
+            <Sidebar />
+          </div>
+
+          <main className="flex flex-col mr-[66px] h-full ">
+            <nav className="w-full">
+              <Navbar />
+            </nav>
+
+            {children}
+          </main>
+        </AllProviders>
+      </body>
     </html>
   );
 }
