@@ -1,13 +1,17 @@
+import { redirect } from "next/navigation";
+import { auth } from "./auth";
 import DashboardCard from "./components/DashboardCard";
 
-const HomePage = () => {
-  const labels = ["bill", "invoice"];
+const HomePage = async () => {
+  const session = await auth();
+  if (!session) redirect("/api/auth/signin");
+
   return (
     <>
       <section className="flex flex-row justify-start gap-5 p-5">
-        {labels.map((label, index) => (
-          <DashboardCard key={label} label={label} amount={index} />
-        ))}
+        <DashboardCard label={"bill"} amount={1} />
+
+        <DashboardCard label={"invoice"} amount={2} />
       </section>
     </>
   );
