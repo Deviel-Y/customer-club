@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 export type CreateUserSchameType = z.infer<typeof createUserSchame>;
+export type SignInUserSchemaType = z.infer<typeof signInUserSchema>;
 
 export const createUserSchame = z.object({
   email: z.string().email().min(6).max(50),
@@ -10,4 +11,16 @@ export const createUserSchame = z.object({
   itManager: z.string().min(1).max(50),
   address: z.string().min(1).max(200).optional(),
   image: z.string().min(1).optional(),
+});
+
+export const signInUserSchema = z.object({
+  email: z
+    .string()
+    .min(1)
+    .max(40, { message: "Email is too long" })
+    .email({ message: "Enter valid type of email" }),
+  password: z
+    .string()
+    .min(3, { message: "Password must be at least 3 charachers long" })
+    .max(50, { message: "Password is too long" }),
 });

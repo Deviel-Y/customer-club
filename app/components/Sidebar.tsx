@@ -10,11 +10,13 @@ import {
 } from "@heroicons/react/24/outline";
 import { Button, Image } from "@nextui-org/react";
 import { motion, useAnimationControls } from "framer-motion";
+import { useSession } from "next-auth/react";
 import NextImage from "next/image";
 import { useEffect, useState } from "react";
 import SidebarLink from "./SidebarLink";
 
 const Sidebar = () => {
+  const { data: session } = useSession();
   const svgControls = useAnimationControls();
   const containerControls = useAnimationControls();
   const [isOpen, setIsOpen] = useState(false);
@@ -25,6 +27,8 @@ const Sidebar = () => {
       ? (containerControls.start("open"), svgControls.start("open"))
       : (containerControls.start("close"), svgControls.start("close"));
   }, [isOpen, svgControls, containerControls]);
+
+  if (!session) return null;
 
   return (
     <motion.aside
