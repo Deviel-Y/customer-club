@@ -4,8 +4,10 @@ import { SignInUserSchemaType, signInUserSchema } from "@/app/validationSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Card, Input } from "@nextui-org/react";
 import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import toast, { Toaster } from "react-hot-toast";
 import {
   AiFillEyeInvisible,
   AiOutlineEye,
@@ -14,6 +16,7 @@ import {
 import { BsKey } from "react-icons/bs";
 
 const LoginForm = () => {
+  const router = useRouter();
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [isLoading, setLoading] = useState(false);
 
@@ -28,14 +31,21 @@ const LoginForm = () => {
     <div className="w-full flex justify-center items-center">
       <form
         className="w-2/3"
-        onSubmit={handleSubmit((data) => {
-          setLoading(true);
-          signIn("credentials", {
+        onSubmit={handleSubmit(async (data) => {
+          const res = await signIn("credentials", {
             email: data.email,
             password: data.password,
-            redirect: true,
-            callbackUrl: "/",
-          }).catch(() => setLoading(false));
+            redirect: false,
+          });
+
+          res?.error
+            ? toast.error("رمز عبور یا آدرس ایمیل اشتباه است")
+            : (setLoading(true),
+              signIn("credentials", {
+                email: data.email,
+                password: data.password,
+                redirect: false,
+              }).then(() => router.push("/")));
         })}
       >
         <Card isBlurred className="flex flex-col p-5" shadow="lg">
@@ -109,6 +119,7 @@ const LoginForm = () => {
             ادامه
           </Button>
         </Card>
+        <Toaster />
       </form>
     </div>
   );

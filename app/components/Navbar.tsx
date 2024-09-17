@@ -10,7 +10,7 @@ const Navbar = () => {
   const path = usePathname();
   const [pathName, setPathName] = useState<string>("");
   const headingMapping: Record<string, { label: string }> = {
-    "": { label: "" },
+    "/userAuth/login": { label: "داشبورد" },
     "/": { label: "داشبورد" },
     "/bill": { label: "فاکتورها" },
     "/invoice": { label: "پیش فاکتورها" },
