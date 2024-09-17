@@ -4,7 +4,6 @@ import templateLogo from "@/app/public/teplateLogo.png";
 import {
   HomeIcon,
   NewspaperIcon,
-  PowerIcon,
   ShoppingBagIcon,
   UserCircleIcon,
 } from "@heroicons/react/24/outline";
@@ -14,6 +13,7 @@ import { useSession } from "next-auth/react";
 import NextImage from "next/image";
 import { useEffect, useState } from "react";
 import SidebarLink from "./SidebarLink";
+import { SignOutConfirmation } from "./SignoutConfirmation";
 
 const Sidebar = () => {
   const { data: session } = useSession();
@@ -99,9 +99,7 @@ const Sidebar = () => {
         </SidebarLink>
 
         <div className="cursor-pointer bottom-3 overflow-clip rounded flex stroke-[0.75px] hover:stroke-neutral-100 stroke-neutral-600 text-neutral-600 hover:text-neutral-100 place-items-center gap-3 hover:bg-red-500 transition-colors duration-[10ms]">
-          <Button color="danger" className="bg-transparent" isIconOnly>
-            <PowerIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />
-          </Button>
+          <SignOutConfirmation />
           <p className="whitespace-nowrap text-inherit tracking-wide">خروج</p>
         </div>
       </div>
