@@ -28,6 +28,38 @@ const Sidebar = () => {
       : (containerControls.start("close"), svgControls.start("close"));
   }, [isOpen, svgControls, containerControls]);
 
+  const sidebarDataMap: Record<string, { icon: JSX.Element; href: string }> = {
+    داشبورد: {
+      href: "/",
+      icon: <HomeIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />,
+    },
+    "دریافت فاکتورها": {
+      href: "/bill",
+      icon: (
+        <ShoppingBagIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />
+      ),
+    },
+    "دریافت پیش فاکتورها": {
+      href: "/invoice",
+      icon: (
+        <NewspaperIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />
+      ),
+    },
+    "ویرایش اطلاعات کاربر": {
+      href: "/editUserInfo",
+      icon: (
+        <UserCircleIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />
+      ),
+    },
+  };
+
+  const sidebarLabels: string[] = [
+    "داشبورد",
+    "دریافت فاکتورها",
+    "دریافت پیش فاکتورها",
+    "ویرایش اطلاعات کاربر",
+  ];
+
   if (!session) return null;
 
   return (
@@ -82,21 +114,15 @@ const Sidebar = () => {
       </div>
 
       <div className="flex flex-col gap-3 h-full">
-        <SidebarLink href="/" label="داشبورد">
-          <HomeIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />
-        </SidebarLink>
-
-        <SidebarLink href="/bill" label="دریافت فاکتورها">
-          <ShoppingBagIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />
-        </SidebarLink>
-
-        <SidebarLink href="/invoice" label="دریافت پیش فاکتورها">
-          <NewspaperIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />
-        </SidebarLink>
-
-        <SidebarLink href="/editUserInfo" label="ویرایش اطلاعات کاربر">
-          <UserCircleIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />
-        </SidebarLink>
+        {sidebarLabels.map((label) => (
+          <SidebarLink
+            key={label}
+            href={sidebarDataMap[label].href}
+            label={label}
+          >
+            {sidebarDataMap[label].icon}
+          </SidebarLink>
+        ))}
 
         <div className="cursor-pointer bottom-3 overflow-clip rounded flex stroke-[0.75px] hover:stroke-neutral-100 stroke-neutral-600 text-neutral-600 hover:text-neutral-100 place-items-center gap-3 hover:bg-red-500 transition-colors duration-[10ms]">
           <SignOutConfirmation />
