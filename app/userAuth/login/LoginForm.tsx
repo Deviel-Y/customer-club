@@ -45,7 +45,10 @@ const LoginForm = () => {
                 email: data.email,
                 password: data.password,
                 redirect: false,
-              }).then(() => router.push("/")));
+              }).then(() => {
+                router.push("/");
+                router.refresh();
+              }));
         })}
       >
         <Card isBlurred className="flex flex-col p-5" shadow="lg">

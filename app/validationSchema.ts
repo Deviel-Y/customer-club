@@ -16,7 +16,7 @@ export const createUserSchame = z.object({
 export const signInUserSchema = z.object({
   email: z
     .string()
-    .min(1, { message: "دارد کردن آدرس ایمیل جباری میباشد" })
+    .min(1, { message: "وارد کردن آدرس ایمیل اجباری میباشد" })
     .max(40, { message: "آدرس ایمیل باید کمتر از 40 کاراکتر باشد" })
     .email({ message: "ایمیل خود را به درستی وارد کنید" }),
   password: z
