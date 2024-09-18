@@ -10,10 +10,14 @@ const Navbar = () => {
   const path = usePathname();
   const [pathName, setPathName] = useState<string>("");
   const headingMapping: Record<string, { label: string }> = {
-    "/userAuth/login": { label: "داشبورد" },
     "/": { label: "داشبورد" },
-    "/bill": { label: "فاکتورها" },
-    "/invoice": { label: "پیش فاکتورها" },
+    "/userAuth/login": { label: "داشبورد" },
+    "/invoice": { label: "فاکتورها" },
+    "/proformaInvoice": { label: "پیش فاکتورها" },
+    "/admin": { label: "پنل مدیریت" },
+    "/admin/invoice-issuing": { label: "صدور فاکتور" },
+    "/admin/proformaInvoice-issuing": { label: "صدور پیش فاکتور" },
+    "/admin/manage-users": { label: "مدیریت کاربران" },
   };
 
   useEffect(() => {

@@ -28,39 +28,20 @@ const Sidebar = () => {
       : (containerControls.start("close"), svgControls.start("close"));
   }, [isOpen, svgControls, containerControls]);
 
-  const sidebarDataMap: Record<string, { icon: JSX.Element; href: string }> = {
-    داشبورد: {
-      href: "/",
-      icon: <HomeIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />,
-    },
-    "دریافت فاکتورها": {
-      href: "/bill",
-      icon: (
-        <ShoppingBagIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />
-      ),
-    },
-    "دریافت پیش فاکتورها": {
-      href: "/invoice",
-      icon: (
-        <NewspaperIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />
-      ),
-    },
-    "ویرایش اطلاعات کاربر": {
-      href: "/editUserInfo",
-      icon: (
-        <UserCircleIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />
-      ),
-    },
-  };
-
-  const sidebarLabels: string[] = [
+  const userLinkLabels: string[] = [
     "داشبورد",
-    "دریافت فاکتورها",
-    "دریافت پیش فاکتورها",
+    "فاکتورها",
+    "پیش فاکتورها",
     "ویرایش اطلاعات کاربر",
   ];
+  const adminLinkLabels: string[] = [
+    "پنل مدیریت",
+    "صدور فاکتور",
+    "صدور پیش فاکتور",
+    "مدیریت کاربران",
+  ];
 
-  if (!session) return null;
+  if (!session?.user) return null;
 
   return (
     <motion.aside
@@ -114,15 +95,27 @@ const Sidebar = () => {
       </div>
 
       <div className="flex flex-col gap-3 h-full">
-        {sidebarLabels.map((label) => (
-          <SidebarLink
-            key={label}
-            href={sidebarDataMap[label].href}
-            label={label}
-          >
-            {sidebarDataMap[label].icon}
-          </SidebarLink>
-        ))}
+        {session.user.role === "USER" &&
+          userLinkLabels.map((label) => (
+            <SidebarLink
+              key={label}
+              href={sidebarDataMap[label].href}
+              label={label}
+            >
+              {sidebarDataMap[label].icon}
+            </SidebarLink>
+          ))}
+
+        {session.user.role === "ADMIN" &&
+          adminLinkLabels.map((label) => (
+            <SidebarLink
+              key={label}
+              href={sidebarDataMap[label].href}
+              label={label}
+            >
+              {sidebarDataMap[label].icon}
+            </SidebarLink>
+          ))}
 
         <div className="cursor-pointer bottom-3 overflow-clip rounded flex stroke-[0.75px] hover:stroke-neutral-100 stroke-neutral-600 text-neutral-600 hover:text-neutral-100 place-items-center gap-3 hover:bg-red-500 transition-colors duration-[10ms]">
           <SignOutConfirmation />
@@ -134,6 +127,54 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
+
+//Used for sidebarLinks
+const sidebarDataMap: Record<string, { icon: JSX.Element; href: string }> = {
+  داشبورد: {
+    href: "/",
+    icon: <HomeIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />,
+  },
+  فاکتورها: {
+    href: "/invoice",
+    icon: (
+      <ShoppingBagIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />
+    ),
+  },
+  "پیش فاکتورها": {
+    href: "/proformaInvoice",
+    icon: (
+      <NewspaperIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />
+    ),
+  },
+  "ویرایش اطلاعات کاربر": {
+    href: "/editUserInfo",
+    icon: (
+      <UserCircleIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />
+    ),
+  },
+  "پنل مدیریت": {
+    href: "/admin",
+    icon: <HomeIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />,
+  },
+  "صدور فاکتور": {
+    href: "/admin/invoice-issuing",
+    icon: (
+      <ShoppingBagIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />
+    ),
+  },
+  "صدور پیش فاکتور": {
+    href: "/admin/proformaInvoice-issuing",
+    icon: (
+      <NewspaperIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />
+    ),
+  },
+  "مدیریت کاربران": {
+    href: "/admin/manage-users",
+    icon: (
+      <UserCircleIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />
+    ),
+  },
+};
 
 // Framer motion variants
 const containerVariant = {
