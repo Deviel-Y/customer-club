@@ -117,9 +117,8 @@ const Sidebar = () => {
             </SidebarLink>
           ))}
 
-        <div className="cursor-pointer bottom-3 overflow-clip rounded flex stroke-[0.75px] hover:stroke-neutral-100 stroke-neutral-600 text-neutral-600 hover:text-neutral-100 place-items-center gap-3 hover:bg-red-500 transition-colors duration-[10ms]">
+        <div className="cursor-pointer bottom-3 overflow-clip rounded flex stroke-[0.75px] hover:stroke-neutral-100 stroke-neutral-600 text-neutral-600 place-items-center gap-3 hover:bg-red-500 transition-all duration-[10ms]">
           <SignOutConfirmation />
-          <p className="whitespace-nowrap text-inherit tracking-wide">خروج</p>
         </div>
       </div>
     </motion.aside>

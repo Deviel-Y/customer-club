@@ -15,13 +15,11 @@ export const SignOutConfirmation = () => {
 
   return (
     <>
-      <Button
-        color="danger"
-        className="bg-transparent"
-        onPress={onOpen}
-        isIconOnly
-      >
-        <PowerIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />
+      <Button color="danger" className="bg-transparent p-0" onPress={onOpen}>
+        <PowerIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8  " />
+        <p className="whitespace-nowrap text-inherit tracking-wide text-neutral-600 text-[16px]">
+          خروج
+        </p>
       </Button>
       <Modal backdrop="blur" isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
