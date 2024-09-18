@@ -1,4 +1,5 @@
 import prisma from "@/prisma/client";
+import { Role } from "@prisma/client";
 import bcrypt from "bcrypt";
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
@@ -56,9 +57,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         return {
           ...token,
           id: user.id,
-          name: token.name,
-          email: token.email,
-          image: token.picture,
+          name: user.name,
+          email: user.email,
+          image: user.image,
+          role: user.role,
         };
       }
 
@@ -71,7 +73,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         user: {
           ...session.user,
           id: token.sub,
-          provider: token.provider,
+          role: token.role as Role,
         },
       };
     },
