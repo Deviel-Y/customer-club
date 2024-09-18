@@ -11,6 +11,7 @@ export const createUserSchame = z.object({
   itManager: z.string().min(1).max(50),
   address: z.string().min(1).max(200).optional(),
   image: z.string().min(1).optional(),
+  role: z.enum(["USER", "ADMIN"]),
 });
 
 export const signInUserSchema = z.object({

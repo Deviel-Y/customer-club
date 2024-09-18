@@ -16,6 +16,7 @@ export const POST = async (request: NextRequest) => {
     password,
     address,
     image,
+    role,
   } = body;
 
   const validation = createUserSchame.safeParse(body);
@@ -36,6 +37,7 @@ export const POST = async (request: NextRequest) => {
       hashedPassword,
       address,
       image,
+      role,
     },
   });
   return NextResponse.json(newUser, { status: 201 });
