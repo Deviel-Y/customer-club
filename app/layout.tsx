@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import AllProviders from "./AllProviders";
-import { auth } from "./auth";
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
 import "./globals.css";
+import getSession from "./libs/getSession";
 
 const iranYekan_bold = localFont({
   src: "./fonts/IRANYekanBold.ttf",
@@ -25,7 +25,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await auth();
+  const session = await getSession();
   return (
     <html lang="fa" dir="rtl">
       <body

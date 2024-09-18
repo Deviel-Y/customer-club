@@ -7,7 +7,7 @@ import { PropsWithChildren } from "react";
 const AllProviders = ({ children }: PropsWithChildren) => {
   return (
     <SessionProvider>
-      <NextUIProvider>{children}</NextUIProvider>;
+      <NextUIProvider>{children}</NextUIProvider>
     </SessionProvider>
   );
 };

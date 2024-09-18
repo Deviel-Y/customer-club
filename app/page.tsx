@@ -1,9 +1,9 @@
 import { redirect } from "next/navigation";
-import { auth } from "./auth";
 import DashboardCard from "./components/DashboardCard";
+import getSession from "./libs/getSession";
 
 const HomePage = async () => {
-  const session = await auth();
+  const session = await getSession();
   if (!session) redirect("/api/auth/signin");
 
   return (
