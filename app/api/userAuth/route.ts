@@ -1,4 +1,7 @@
-import { createUserSchame, CreateUserSchameType } from "@/app/validationSchema";
+import {
+  createUserSchame,
+  CreateUserSchameType,
+} from "@/app/libs/validationSchema";
 import prisma from "@/prisma/client";
 import bcrypt from "bcrypt";
 import { NextRequest, NextResponse } from "next/server";

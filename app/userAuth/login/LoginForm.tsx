@@ -1,6 +1,9 @@
 "use client";
 
-import { SignInUserSchemaType, signInUserSchema } from "@/app/validationSchema";
+import {
+  SignInUserSchemaType,
+  signInUserSchema,
+} from "@/app/libs/validationSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Card, Input } from "@nextui-org/react";
 import { signIn } from "next-auth/react";
