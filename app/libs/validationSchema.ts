@@ -2,6 +2,7 @@ import { z } from "zod";
 
 export type CreateUserSchameType = z.infer<typeof createUserSchame>;
 export type SignInUserSchemaType = z.infer<typeof signInUserSchema>;
+export type InvoiceSchemaType = z.infer<typeof invoiceSchema>;
 
 export const createUserSchame = z.object({
   email: z.string().email().min(6).max(50),
@@ -24,4 +25,12 @@ export const signInUserSchema = z.object({
     .string()
     .min(8, { message: "رمز عبور باید بیشتر از 8 کاراکتر باشد" })
     .max(50, { message: "رمز عبور باید کمتر از 120 کاراکتر باشد" }),
+});
+
+export const invoiceSchema = z.object({
+  invoiceNumber: z.number().min(1).max(999_999),
+  organization: z.string().min(1).max(100),
+  description: z.string().min(1).max(200),
+  organizationBranch: z.string().min(1).max(50),
+  assignedToUserId: z.string(),
 });
