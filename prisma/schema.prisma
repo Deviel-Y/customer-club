@@ -37,7 +37,7 @@ enum Role {
 
 model Invoice {
   id                 String @id @default(cuid())
-  invoiceNumber      Int    @unique
+  invoiceNumber      String @unique
   organization       String
   description        String
   organizationBranch String

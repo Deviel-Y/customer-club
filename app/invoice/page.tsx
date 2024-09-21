@@ -4,11 +4,19 @@ import UserActionBar from "../components/UserActionBar";
 import getSession from "../libs/getSession";
 import UserInvoiceTable from "./UserInvoiceTable";
 
-const InvoicePage = async () => {
+interface Props {
+  searchParams: { invoiceNumber: string; description: string };
+}
+
+const InvoicePage = async ({
+  searchParams: { invoiceNumber, description },
+}: Props) => {
   const session = await getSession();
   const userInvoice: Invoice[] = await prisma.invoice.findMany({
     where: {
       assignedToUserId: session?.user.id,
+      invoiceNumber: { contains: invoiceNumber },
+      description: { contains: description },
     },
   });
 

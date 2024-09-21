@@ -28,7 +28,7 @@ export const signInUserSchema = z.object({
 });
 
 export const invoiceSchema = z.object({
-  invoiceNumber: z.number().min(1).max(999_999),
+  invoiceNumber: z.string().min(1).max(999_999),
   organization: z.string().min(1).max(100),
   description: z.string().min(1).max(200),
   organizationBranch: z.string().min(1).max(50),
