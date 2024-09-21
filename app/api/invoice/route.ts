@@ -1,4 +1,3 @@
-import getSession from "@/app/libs/getSession";
 import { invoiceSchema } from "@/app/libs/validationSchema";
 import prisma from "@/prisma/client";
 import { Invoice } from "@prisma/client";
@@ -13,9 +12,8 @@ export const POST = async (request: NextRequest) => {
       organization,
       organizationBranch,
       assignedToUserId,
+      issuerId,
     } = body;
-
-    const session = await getSession();
 
     const validation = invoiceSchema.safeParse(body);
     if (!validation.success)
@@ -36,7 +34,7 @@ export const POST = async (request: NextRequest) => {
         organization,
         organizationBranch,
         assignedToUserId,
-        issuerId: session?.user.id!,
+        issuerId,
       },
     });
 
