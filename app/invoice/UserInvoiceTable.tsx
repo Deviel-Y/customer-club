@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  Button,
   Table,
   TableBody,
   TableCell,
@@ -16,6 +17,7 @@ interface Props {
 
 const UserInvoiceTable = ({ invoices }: Props) => {
   const columns: { label: string; value: keyof Invoice }[] = [
+    { label: "دریافت فاکتور", value: "organization" }, //this is temprerary
     { label: "شماره فاکتور", value: "invoiceNumber" },
     { label: "توضیحات", value: "description" },
     { label: "تاریخ صدور", value: "createdAt" },
@@ -37,6 +39,11 @@ const UserInvoiceTable = ({ invoices }: Props) => {
       <TableBody items={invoices} emptyContent="فاکتوری برای شما وجود ندارد">
         {invoices.map((invoice) => (
           <TableRow key={invoice.id}>
+            <TableCell>
+              <Button color="primary" variant="shadow">
+                دانلود
+              </Button>
+            </TableCell>
             <TableCell>{invoice.invoiceNumber}</TableCell>
             <TableCell>{invoice.description}</TableCell>
             <TableCell>{invoice.createdAt.toDateString()}</TableCell>
