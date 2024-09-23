@@ -46,7 +46,7 @@ const dataMapping: Record<
       <ShoppingBagIcon className="stroke-[0.75px] opacity-75 w-8 h-8 -translate-y-[2px]" />
     ),
     iconBackgroung: "bg-red-600/70",
-    href: "/invoice-issuing",
+    href: "/admin/invoice-issuing",
   },
 
   adminProformaInvoice: {
@@ -56,7 +56,7 @@ const dataMapping: Record<
       <NewspaperIcon className="stroke-[0.75px] opacity-75 w-8 h-8 text-center " />
     ),
     iconBackgroung: "bg-yellow-400",
-    href: "/proformaInvoice-issuing",
+    href: "/admin/proformaInvoice-issuing",
   },
 };
 

@@ -17,7 +17,7 @@ const Navbar = () => {
     "/admin": { label: "پنل مدیریت" },
     "/admin/invoice-issuing": { label: "صدور فاکتور" },
     "/admin/proformaInvoice-issuing": { label: "صدور پیش فاکتور" },
-    "/admin/manage-users": { label: "مدیریت کاربران" },
+    "/admin/userList": { label: "مدیریت کاربران" },
   };
 
   useEffect(() => {

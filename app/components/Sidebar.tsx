@@ -168,7 +168,7 @@ const sidebarDataMap: Record<string, { icon: JSX.Element; href: string }> = {
     ),
   },
   "مدیریت کاربران": {
-    href: "/admin/manage-users",
+    href: "/admin/userList",
     icon: (
       <UserCircleIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />
     ),

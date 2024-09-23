@@ -1,0 +1,66 @@
+"use client";
+
+import { PencilSquareIcon } from "@heroicons/react/24/outline";
+import {
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
+} from "@nextui-org/react";
+import { User } from "@prisma/client";
+
+interface Props {
+  users: User[];
+}
+
+const UserListTable = ({ users }: Props) => {
+  const columns: {
+    label: string | JSX.Element;
+    value: keyof User | "editInfo";
+  }[] = [
+    { label: "ویرایش اطلاعات", value: "editInfo" },
+    { label: "نام سازمان", value: "companyName" },
+    { label: "شعبه", value: "companyBranch" },
+    { label: "آدرس ایمیل", value: "email" },
+    { label: "مسئول انفوماتیک", value: "itManager" },
+    { label: "تاریخ ایجاد", value: "createdAt" },
+  ];
+
+  return (
+    <Table isStriped aria-label="List of users">
+      <TableHeader>
+        {columns.map((column) => (
+          <TableColumn
+            width={column.value === "companyName" ? 400 : undefined}
+            align="center"
+            key={column.value}
+          >
+            {column.label}
+          </TableColumn>
+        ))}
+      </TableHeader>
+
+      <TableBody emptyContent="کاربری تعریف نشده">
+        {users.map((user) => (
+          <TableRow key={user.id}>
+            <TableCell>
+              <Button color="primary" isIconOnly>
+                <PencilSquareIcon className="min-w-5 w-4" />
+              </Button>
+            </TableCell>
+            <TableCell>{user.companyName}</TableCell>
+            <TableCell>{user.companyBranch}</TableCell>
+            <TableCell>{user.email}</TableCell>
+            <TableCell>{user.itManager}</TableCell>
+            <TableCell>{user.createdAt.toLocaleDateString()}</TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  );
+};
+
+export default UserListTable;
