@@ -77,7 +77,7 @@ const ActionBar = () => {
 
             router.push(`?${newParams.toString()}`);
           }}
-          label="موضوع"
+          label="توضیحات"
           type="search"
           size="lg"
           variant="underlined"

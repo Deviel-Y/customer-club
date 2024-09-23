@@ -1,6 +1,6 @@
 import prisma from "@/prisma/client";
 import { Invoice } from "@prisma/client";
-import UserActionBar from "../components/UserActionBar";
+import ActionBar from "../components/ActionBar";
 import getSession from "../libs/getSession";
 import UserInvoiceTable from "./UserInvoiceTable";
 
@@ -22,7 +22,7 @@ const InvoicePage = async ({
 
   return (
     <div className="flex flex-col gap-5 p-10 w-full">
-      <UserActionBar />
+      <ActionBar />
 
       <UserInvoiceTable invoices={userInvoice} />
     </div>
