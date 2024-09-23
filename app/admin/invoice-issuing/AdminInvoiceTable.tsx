@@ -1,5 +1,6 @@
 "use client";
 
+import PaginationControl from "@/app/components/PaginationControl";
 import {
   Button,
   Table,
@@ -13,9 +14,10 @@ import { Invoice } from "@prisma/client";
 
 interface Props {
   invoices: Invoice[];
+  totalPage: number;
 }
 
-const AdminInvoiceTable = ({ invoices }: Props) => {
+const AdminInvoiceTable = ({ invoices, totalPage }: Props) => {
   const columns: { label: string; value: keyof Invoice }[] = [
     { label: "دریافت فاکتور", value: "organization" }, //this is temprerary
     { label: "شماره فاکتور", value: "invoiceNumber" },
@@ -27,7 +29,15 @@ const AdminInvoiceTable = ({ invoices }: Props) => {
   ];
 
   return (
-    <Table isStriped aria-label="Invoices Table">
+    <Table
+      bottomContent={
+        <div className="flex justify-center w-full">
+          <PaginationControl totalPage={totalPage} />
+        </div>
+      }
+      isStriped
+      aria-label="Invoices Table"
+    >
       <TableHeader>
         {columns.map((column) => (
           <TableColumn align="center" key={column.value}>

@@ -19,6 +19,7 @@ const ActionBar = () => {
       >
         صدور فاکتور جدید
       </Button>
+
       <div className="grid grid-cols-4 gap-5 mb-5">
         <Input
           onChange={(event) => {
@@ -41,6 +42,8 @@ const ActionBar = () => {
                 "organizationBranch",
                 searchParmas.get("organizationBranch")!
               );
+
+            if (searchParmas.get("pageNumber")) newParams.delete("pageNumber");
 
             router.push(`?${newParams.toString()}`);
           }}
@@ -75,6 +78,8 @@ const ActionBar = () => {
                 searchParmas.get("organizationBranch")!
               );
 
+            if (searchParmas.get("pageNumber")) newParams.delete("pageNumber");
+
             router.push(`?${newParams.toString()}`);
           }}
           label="توضیحات"
@@ -108,6 +113,9 @@ const ActionBar = () => {
                   "invoiceNumber",
                   searchParmas.get("invoiceNumber")!
                 );
+
+              if (searchParmas.get("pageNumber"))
+                newParams.delete("pageNumber");
 
               router.push(`?${newParams.toString()}`);
             }}
@@ -146,6 +154,9 @@ const ActionBar = () => {
                   "invoiceNumber",
                   searchParmas.get("invoiceNumber")!
                 );
+
+              if (searchParmas.get("pageNumber"))
+                newParams.delete("pageNumber");
 
               router.push(`?${newParams.toString()}`);
             }}

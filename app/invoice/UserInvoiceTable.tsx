@@ -10,12 +10,14 @@ import {
   TableRow,
 } from "@nextui-org/react";
 import { Invoice } from "@prisma/client";
+import PaginationControl from "../components/PaginationControl";
 
 interface Props {
   invoices: Invoice[];
+  totalPage: number;
 }
 
-const UserInvoiceTable = ({ invoices }: Props) => {
+const UserInvoiceTable = ({ invoices, totalPage }: Props) => {
   const columns: { label: string; value: keyof Invoice }[] = [
     { label: "دریافت فاکتور", value: "organization" }, //this is temprerary
     { label: "شماره فاکتور", value: "invoiceNumber" },
@@ -24,7 +26,15 @@ const UserInvoiceTable = ({ invoices }: Props) => {
   ];
 
   return (
-    <Table isStriped aria-label="Invoices Table">
+    <Table
+      bottomContent={
+        <div className="flex justify-center w-full">
+          <PaginationControl totalPage={totalPage} />
+        </div>
+      }
+      isStriped
+      aria-label="Invoices Table"
+    >
       <TableHeader>
         {columns.map((column) => (
           <TableColumn
