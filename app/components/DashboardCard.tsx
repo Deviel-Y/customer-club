@@ -19,7 +19,7 @@ const dataMapping: Record<
     href: string;
   }
 > = {
-  invoice: {
+  userInvoice: {
     label: "تعداد فاکتورها",
     backgroundColor: "bg-gradient-to-r from-pink-500 to-rose-500",
     icon: (
@@ -29,7 +29,7 @@ const dataMapping: Record<
     href: "/invoice",
   },
 
-  proformaInvoice: {
+  userProformaInvoice: {
     label: "تعداد پیش فاکتورها",
     backgroundColor: "bg-gradient-to-r from-amber-200 to-yellow-500",
     icon: (

@@ -13,12 +13,21 @@ const HomePage = async () => {
     },
   });
 
+  const dashboardCardInfo: { label: string; amount: number }[] = [
+    { label: "invoice", amount: invoiceCount },
+    { label: "proformaInvoice", amount: 2 },
+  ];
+
   return (
     <>
       <section className="flex flex-row justify-start gap-5 p-5">
-        <DashboardCard label={"invoice"} amount={invoiceCount} />
-
-        <DashboardCard label={"proformaInvoice"} amount={2} />
+        {dashboardCardInfo.map((info) => (
+          <DashboardCard
+            amount={info.amount}
+            label={info.label}
+            key={info.label}
+          />
+        ))}
       </section>
     </>
   );
