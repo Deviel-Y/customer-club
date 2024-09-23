@@ -14,8 +14,8 @@ const HomePage = async () => {
   });
 
   const dashboardCardInfo: { label: string; amount: number }[] = [
-    { label: "invoice", amount: invoiceCount },
-    { label: "proformaInvoice", amount: 2 },
+    { label: "userInvoice", amount: invoiceCount },
+    { label: "userProformaInvoice", amount: 2 },
   ];
 
   return (

@@ -38,6 +38,26 @@ const dataMapping: Record<
     iconBackgroung: "bg-yellow-400",
     href: "/proformaInvoice",
   },
+
+  adminInvoice: {
+    label: "تعداد فاکتورها",
+    backgroundColor: "bg-gradient-to-r from-pink-500 to-rose-500",
+    icon: (
+      <ShoppingBagIcon className="stroke-[0.75px] opacity-75 w-8 h-8 -translate-y-[2px]" />
+    ),
+    iconBackgroung: "bg-red-600/70",
+    href: "/invoice-issuing",
+  },
+
+  adminProformaInvoice: {
+    label: "تعداد پیش فاکتورها",
+    backgroundColor: "bg-gradient-to-r from-amber-200 to-yellow-500",
+    icon: (
+      <NewspaperIcon className="stroke-[0.75px] opacity-75 w-8 h-8 text-center " />
+    ),
+    iconBackgroung: "bg-yellow-400",
+    href: "/proformaInvoice-issuing",
+  },
 };
 
 const DashboardCard = ({ label, amount }: Props) => {
