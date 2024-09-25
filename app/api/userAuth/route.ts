@@ -23,7 +23,9 @@ export const POST = async (request: NextRequest) => {
   if (!validation.success)
     return NextResponse.json(validation.error.format(), { status: 400 });
 
-  const user = await prisma.user.findUnique({ where: { email } });
+  const user = await prisma.user.findFirst({
+    where: { OR: [{ email }, { companyName }] },
+  });
   if (user) return NextResponse.json("User is already exist", { status: 400 });
 
   const hashedPassword = await bcrypt.hash(password, 10);
