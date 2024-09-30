@@ -1,17 +1,16 @@
 "use client";
 
 import { Button, Input } from "@nextui-org/react";
-import { useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 const UserSearchField = () => {
-  const { data: session } = useSession();
   const searchParmas = useSearchParams();
   const router = useRouter();
 
   return (
     <div className=" flex flex-col gap-5">
       <Button
+        onPress={() => router.push("/admin/createNewUser")}
         size="lg"
         className="self-start"
         color="secondary"
