@@ -10,9 +10,20 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Card, Input } from "@nextui-org/react";
 import { Key, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
+
+type PasswordVisibility = {
+  password: boolean;
+  confirmPassword: boolean;
+};
 
 const UserForm = () => {
   const [selectedRole, setSelectedRole] = useState<Key>();
+  const [isPasswordsVisible, setIsPasswordsVisible] =
+    useState<PasswordVisibility>({
+      password: false,
+      confirmPassword: false,
+    });
   const {
     register,
     handleSubmit,
@@ -30,7 +41,7 @@ const UserForm = () => {
       })}
       className="flex justify-center items-center"
     >
-      <Card className="flex flex-col p-5 gap-5 w-3/5">
+      <Card className="flex flex-col p-5 gap-5 w-4/5">
         <div>
           <h2 className="text-[25px]">اطلاعات کاربر</h2>
         </div>
@@ -66,10 +77,27 @@ const UserForm = () => {
 
           <div className="col-span-2 w-full">
             <Input
+              endContent={
+                <Button
+                  onPress={() =>
+                    setIsPasswordsVisible({
+                      ...isPasswordsVisible,
+                      password: !isPasswordsVisible.password,
+                    })
+                  }
+                  isIconOnly
+                >
+                  {isPasswordsVisible.password ? (
+                    <AiFillEye size={20} fill="#585858" />
+                  ) : (
+                    <AiFillEyeInvisible size={20} fill="#585858" />
+                  )}
+                </Button>
+              }
               {...register("password")}
               isRequired
               size="lg"
-              type="password"
+              type={isPasswordsVisible.password ? "text" : "password"}
               label="رمز عبور"
             />
 
@@ -116,7 +144,7 @@ const UserForm = () => {
             />
           </div>
 
-          <div className="col-span-2 w-full">
+          <div className="col-span-1 w-full">
             <Input
               {...register("itManager")}
               isDisabled={selectedRole === "ADMIN"}
@@ -127,7 +155,7 @@ const UserForm = () => {
             <FormErrorMessage errorMessage={errors.itManager?.message || ""} />
           </div>
 
-          <div className="col-span-2 w-full">
+          <div className="col-span-3 w-full">
             <Input
               {...register("address", { required: !disabled })}
               isDisabled={selectedRole === "ADMIN"}
