@@ -24,6 +24,7 @@ const UserListPage = async ({
       email: { contains: email },
       itManager: { contains: itManager },
     },
+    orderBy: { createdAt: "desc" },
   });
 
   return (

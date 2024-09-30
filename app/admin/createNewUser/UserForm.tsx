@@ -8,8 +8,11 @@ import {
 } from "@/app/libs/validationSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Card, Input } from "@nextui-org/react";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 import { Key, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+import toast, { Toaster } from "react-hot-toast";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 
 type PasswordVisibility = {
@@ -32,12 +35,21 @@ const UserForm = () => {
   } = useForm<CreateUserSchameType>({
     resolver: zodResolver(createUserSchame),
   });
+  const router = useRouter();
 
   return (
     <form
       onSubmit={handleSubmit((data) => {
-        console.log(data);
-        // use axios
+        const promise = axios.post("/api/userAuth", data).then(() => {
+          router.push("/admin/userList");
+          router.refresh();
+        });
+
+        toast.promise(promise, {
+          error: "خطایی در تعریف کاربر رخ داده است",
+          loading: "در حال تعریف کابر جدید",
+          success: "کاربر جدید تعریف شد",
+        });
       })}
       className="flex justify-center items-center"
     >
@@ -177,6 +189,7 @@ const UserForm = () => {
           </Button>
         </div>
       </Card>
+      <Toaster />
     </form>
   );
 };
