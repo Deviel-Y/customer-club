@@ -5,12 +5,14 @@ import { Role } from "@prisma/client";
 import { Key } from "react";
 
 interface Props {
+  userRole: Role;
   selectedRole: (role: Key) => void;
 }
 
-const RoleSelection = ({ selectedRole }: Props) => {
+const RoleSelection = ({ selectedRole, userRole }: Props) => {
   return (
     <Autocomplete
+      defaultSelectedKey={userRole}
       aria-label="Role selection"
       isRequired
       onSelectionChange={(value) => selectedRole(value || "User")}

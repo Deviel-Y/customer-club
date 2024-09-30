@@ -1,0 +1,213 @@
+"use client";
+
+import FormErrorMessage from "@/app/components/FormErrorMessage";
+import RoleSelection from "@/app/components/RoleSelection";
+import { UserSchameType, userSchame } from "@/app/libs/validationSchema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Button, Card, Input } from "@nextui-org/react";
+import { User } from "@prisma/client";
+import axios, { AxiosError } from "axios";
+import { useRouter } from "next/navigation";
+import { Key, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import toast, { Toaster } from "react-hot-toast";
+import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
+
+type PasswordVisibility = {
+  password: boolean;
+  confirmPassword: boolean;
+};
+
+interface Props {
+  user?: User;
+}
+
+const UserForm = ({ user }: Props) => {
+  const router = useRouter();
+  const [selectedRole, setSelectedRole] = useState<Key>();
+  const [isPasswordsVisible, setIsPasswordsVisible] =
+    useState<PasswordVisibility>({
+      password: false,
+      confirmPassword: false,
+    });
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors, disabled },
+  } = useForm<UserSchameType>({
+    resolver: zodResolver(userSchame),
+  });
+
+  const onSubmit = handleSubmit((data) => {
+    const promise = user
+      ? axios.patch(`/api/userAuth/${user.id}`, data).then(() => {
+          router.push("/admin/userList");
+          router.refresh();
+        })
+      : axios.post("/api/userAuth", data).then(() => {
+          router.push("/admin/userList");
+          router.refresh();
+        });
+
+    toast.promise(promise, {
+      error: (error: AxiosError) => error.response?.data as string,
+      // error: user
+      //   ? "خطایی در ویرایش اطلاعات کاربر رخ داده است"
+      //   : "خطایی در تعریف کاربر رخ داده است",
+      loading: user ? "در حال ویرایش اطلاعات کابر " : "در حال تعریف کابر جدید",
+      success: user ? "اطلاعات کاربر ویرایش شد" : "کاربر جدید تعریف شد",
+    });
+  });
+
+  return (
+    <form onSubmit={onSubmit} className="flex justify-center items-center">
+      <Card className="flex flex-col p-5 gap-5 w-4/5">
+        <div>
+          <h2 className="text-[25px]">اطلاعات کاربر</h2>
+        </div>
+
+        <div className="grid grid-cols-4 grid-rows-4 gap-3 place-items-center">
+          <div className="col-span-3 w-full">
+            <Input
+              {...register("email")}
+              defaultValue={user?.email}
+              isRequired
+              size="lg"
+              type="email"
+              label="آدرس ایمیل"
+            />
+
+            <FormErrorMessage errorMessage={errors.email?.message || ""} />
+          </div>
+
+          <div>
+            <Controller
+              name="role"
+              control={control}
+              defaultValue={user?.role}
+              render={({ field: { onChange } }) => (
+                <RoleSelection
+                  userRole={user?.role!}
+                  selectedRole={(value) => (
+                    setSelectedRole(value!), onChange(value)
+                  )}
+                />
+              )}
+            />
+
+            <FormErrorMessage errorMessage={errors.role?.message || ""} />
+          </div>
+
+          <div className="col-span-2 w-full">
+            <Input
+              endContent={
+                <Button
+                  onPress={() =>
+                    setIsPasswordsVisible({
+                      ...isPasswordsVisible,
+                      password: !isPasswordsVisible.password,
+                    })
+                  }
+                  isIconOnly
+                >
+                  {isPasswordsVisible.password ? (
+                    <AiFillEye size={20} fill="#585858" />
+                  ) : (
+                    <AiFillEyeInvisible size={20} fill="#585858" />
+                  )}
+                </Button>
+              }
+              {...register("password")}
+              isRequired
+              size="lg"
+              type={isPasswordsVisible.password ? "text" : "password"}
+              label="رمز عبور"
+            />
+
+            <FormErrorMessage errorMessage={errors.password?.message || ""} />
+          </div>
+
+          <div className="col-span-2 w-full">
+            <Input
+              {...register("confirmPassword")}
+              isRequired
+              size="lg"
+              type="password"
+              label="تکرار رمز عبور"
+            />
+
+            <FormErrorMessage
+              errorMessage={errors.confirmPassword?.message || ""}
+            />
+          </div>
+
+          <div className="col-span-2 w-full">
+            <Input
+              defaultValue={user?.companyName!}
+              {...register("companyName")}
+              isDisabled={selectedRole === "ADMIN"}
+              size="lg"
+              label="نام سازمان"
+            />
+
+            <FormErrorMessage
+              errorMessage={errors.companyName?.message || ""}
+            />
+          </div>
+
+          <div className="col-span-2 w-full">
+            <Input
+              defaultValue={user?.companyBranch!}
+              {...register("companyBranch")}
+              isDisabled={selectedRole === "ADMIN"}
+              size="lg"
+              label="نام شعبه"
+            />
+
+            <FormErrorMessage
+              errorMessage={errors.companyBranch?.message || ""}
+            />
+          </div>
+
+          <div className="col-span-1 w-full">
+            <Input
+              defaultValue={user?.itManager!}
+              {...register("itManager")}
+              isDisabled={selectedRole === "ADMIN"}
+              size="lg"
+              label="مسئول انفوماتیک"
+            />
+
+            <FormErrorMessage errorMessage={errors.itManager?.message || ""} />
+          </div>
+
+          <div className="col-span-3 w-full">
+            <Input
+              defaultValue={user?.address!}
+              {...register("address")}
+              isDisabled={selectedRole === "ADMIN"}
+              size="lg"
+              label="آدرس"
+            />
+
+            <FormErrorMessage errorMessage={errors.address?.message || ""} />
+          </div>
+        </div>
+
+        <div className="flex flex-row gap-5 mt-5">
+          <Button type="submit" size="lg" color="primary" variant="shadow">
+            {user ? "ویرایش " : "ایجاد"}
+          </Button>
+
+          <Button size="lg" color="danger" variant="light">
+            انصراف
+          </Button>
+        </div>
+      </Card>
+      <Toaster />
+    </form>
+  );
+};
+
+export default UserForm;

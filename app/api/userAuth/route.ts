@@ -1,14 +1,11 @@
-import {
-  createUserSchame,
-  CreateUserSchameType,
-} from "@/app/libs/validationSchema";
+import { UserSchameType, userSchame } from "@/app/libs/validationSchema";
 import prisma from "@/prisma/client";
 import bcrypt from "bcrypt";
 import { NextRequest, NextResponse } from "next/server";
 
 export const POST = async (request: NextRequest) => {
   try {
-    const body: CreateUserSchameType = await request.json();
+    const body: UserSchameType = await request.json();
     const {
       confirmPassword,
       companyBranch,
@@ -21,31 +18,33 @@ export const POST = async (request: NextRequest) => {
       role,
     } = body;
 
-    const validation = createUserSchame.safeParse(body);
+    const validation = userSchame.safeParse(body);
     if (!validation.success)
       return NextResponse.json(validation.error.format(), { status: 400 });
 
     const user = await prisma.user.findFirst({
-      where: { OR: [{ email }, { companyName }] },
+      where: { OR: [{ email: email! }, { companyName }] },
     });
     if (user)
-      return NextResponse.json("User is already exist", { status: 400 });
-
-    if (password !== confirmPassword)
-      return NextResponse.json("Passwords are not match each other", {
+      return NextResponse.json("کاربر با این ایمیل یا نام سازمان وجود دارد", {
         status: 400,
       });
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    if (password !== confirmPassword)
+      return NextResponse.json("گذرواژه ها با یکدیگر مطابقت ندارند", {
+        status: 400,
+      });
+
+    const hashedPassword = await bcrypt.hash(password!, 10);
 
     const newUser = await prisma.user.create({
       data: {
-        companyBranch: role === "ADMIN" ? null : companyBranch,
-        companyName: role === "ADMIN" ? null : companyName,
-        email,
-        itManager: role === "ADMIN" ? null : itManager,
+        companyBranch: role === "ADMIN" ? undefined : companyBranch,
+        companyName: role === "ADMIN" ? undefined : companyName,
+        email: email!,
+        itManager: role === "ADMIN" ? undefined : itManager,
         hashedPassword,
-        address: role === "ADMIN" ? null : address,
+        address: role === "ADMIN" ? undefined : address,
         image,
         role,
       },

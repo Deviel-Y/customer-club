@@ -1,20 +1,25 @@
-import { z } from "zod";
+import { literal, z } from "zod";
 
-export type CreateUserSchameType = z.infer<typeof createUserSchame>;
+// export type UpdateUserSchameType = z.infer<typeof updateUserSchame>;
+export type UserSchameType = z.infer<typeof userSchame>;
 export type SignInUserSchemaType = z.infer<typeof signInUserSchema>;
 export type InvoiceSchemaType = z.infer<typeof invoiceSchema>;
-export const createUserSchame = z
+
+export const userSchame = z
   .object({
     email: z
       .string()
       .email({ message: "آدرس ایمیل خود را به درستی دارد کنید" })
       .min(6)
-      .max(50, { message: "ایمیل باید کمتر از 50 کاراکتر باشد" }),
+      .max(50, { message: "ایمیل باید کمتر از 50 کاراکتر باشد" })
+      .optional(),
     password: z
       .string()
       .min(8, { message: "گذرواژه باید بیشتر از 8 کاراکتر باشد" })
-      .max(120, { message: "گذرواژه باید کمتر از 120 کاراکتر باشد" }),
-    confirmPassword: z.string(),
+      .max(120, { message: "گذرواژه باید کمتر از 120 کاراکتر باشد" })
+      .optional()
+      .or(literal("")),
+    confirmPassword: z.string().optional().or(literal("")),
     companyName: z
       .string()
       .max(100, { message: "نام سازمان باید کمتر از 100 کاراکتر باشد" })
@@ -53,7 +58,7 @@ export const createUserSchame = z
       return true;
     },
     {
-      message: "لطفا تمامی فیلدهای الزامی را پر کنید", // General message for required fields
+      message: "لطفا تمامی فیلدهای الزامی را پر کنید",
     }
   )
   .superRefine(
