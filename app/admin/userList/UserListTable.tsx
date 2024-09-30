@@ -11,12 +11,14 @@ import {
   TableRow,
 } from "@nextui-org/react";
 import { User } from "@prisma/client";
+import { useRouter } from "next/navigation";
 
 interface Props {
   users: User[];
 }
 
 const UserListTable = ({ users }: Props) => {
+  const router = useRouter();
   const columns: {
     label: string | JSX.Element;
     value: keyof User | "editInfo";
@@ -47,7 +49,11 @@ const UserListTable = ({ users }: Props) => {
         {users.map((user) => (
           <TableRow key={user.id}>
             <TableCell>
-              <Button color="primary" isIconOnly>
+              <Button
+                onPress={() => router.push(`/admin/editUser/${user.id}`)}
+                color="primary"
+                isIconOnly
+              >
                 <PencilSquareIcon className="min-w-5 w-4" />
               </Button>
             </TableCell>

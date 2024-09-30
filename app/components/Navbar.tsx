@@ -4,6 +4,7 @@ import { Avatar } from "@nextui-org/react";
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { removeLastSegmentURL } from "../utils/removeLastSegmentURL";
 
 const Navbar = () => {
   const { data: session } = useSession();
@@ -19,11 +20,16 @@ const Navbar = () => {
     "/admin/proformaInvoice-issuing": { label: "صدور پیش فاکتور" },
     "/admin/userList": { label: "مدیریت کاربران" },
     "/admin/createNewUser": { label: "تعریف کاربر جدید" },
+    "/admin/editUser": { label: "ویرایش کاربر" },
   };
 
   useEffect(() => {
-    setPathName(path);
-  }, [path]);
+    if (path.includes("/admin/editUser")) {
+      setPathName(removeLastSegmentURL(path));
+    } else {
+      setPathName(path);
+    }
+  }, [path, pathName]);
 
   if (!session) return null;
 

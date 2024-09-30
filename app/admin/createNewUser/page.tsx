@@ -1,6 +1,6 @@
 import getSession from "@/app/libs/getSession";
 import { authorizeAdmin } from "@/app/utils/authorizeRole";
-import UserForm from "./UserForm";
+import UserForm from "../../components/UserForm";
 
 const CreateNewUserPage = async () => {
   const session = await getSession();
