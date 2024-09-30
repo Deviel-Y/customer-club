@@ -16,7 +16,6 @@ const RoleSelection = ({ selectedRole, userRole }: Props) => {
       aria-label="Role selection"
       isRequired
       onSelectionChange={(value) => selectedRole(value || "User")}
-      size="lg"
       label="سطح دسترسی"
     >
       {roles.map((role) => (

@@ -9,7 +9,7 @@ export const userSchame = z
   .object({
     email: z
       .string()
-      .email({ message: "آدرس ایمیل خود را به درستی دارد کنید" })
+      .email({ message: "آدرس ایمیل خود را به درستی وارد کنید" })
       .min(6)
       .max(50, { message: "ایمیل باید کمتر از 50 کاراکتر باشد" })
       .optional(),

@@ -30,6 +30,11 @@ export const POST = async (request: NextRequest) => {
         status: 400,
       });
 
+    if (!password || !confirmPassword)
+      return NextResponse.json("وارد کردن گذرواژه الزامی است", {
+        status: 400,
+      });
+
     if (password !== confirmPassword)
       return NextResponse.json("گذرواژه ها با یکدیگر مطابقت ندارند", {
         status: 400,
@@ -41,7 +46,7 @@ export const POST = async (request: NextRequest) => {
       data: {
         companyBranch: role === "ADMIN" ? undefined : companyBranch,
         companyName: role === "ADMIN" ? undefined : companyName,
-        email: email!,
+        email: email?.toLocaleLowerCase()!,
         itManager: role === "ADMIN" ? undefined : itManager,
         hashedPassword,
         address: role === "ADMIN" ? undefined : address,

@@ -49,7 +49,7 @@ export const PATCH = async (
   const updatedUser = await prisma.user.update({
     where: { id },
     data: {
-      email: email!,
+      email: email?.toLocaleLowerCase()!,
       hashedPassword,
       role,
       address,

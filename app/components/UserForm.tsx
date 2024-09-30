@@ -34,7 +34,7 @@ const UserForm = ({ user }: Props) => {
     register,
     handleSubmit,
     control,
-    formState: { errors, disabled },
+    formState: { errors },
   } = useForm<UserSchameType>({
     resolver: zodResolver(userSchame),
   });
@@ -52,9 +52,6 @@ const UserForm = ({ user }: Props) => {
 
     toast.promise(promise, {
       error: (error: AxiosError) => error.response?.data as string,
-      // error: user
-      //   ? "خطایی در ویرایش اطلاعات کاربر رخ داده است"
-      //   : "خطایی در تعریف کاربر رخ داده است",
       loading: user ? "در حال ویرایش اطلاعات کابر " : "در حال تعریف کابر جدید",
       success: user ? "اطلاعات کاربر ویرایش شد" : "کاربر جدید تعریف شد",
     });
@@ -62,7 +59,7 @@ const UserForm = ({ user }: Props) => {
 
   return (
     <form onSubmit={onSubmit} className="flex justify-center items-center">
-      <Card className="flex flex-col p-5 gap-5 w-4/5">
+      <Card className="flex flex-col p-5 gap-3 w-4/5">
         <div>
           <h2 className="text-[25px]">اطلاعات کاربر</h2>
         </div>
@@ -73,7 +70,6 @@ const UserForm = ({ user }: Props) => {
               {...register("email")}
               defaultValue={user?.email}
               isRequired
-              size="lg"
               type="email"
               label="آدرس ایمیل"
             />
@@ -100,30 +96,33 @@ const UserForm = ({ user }: Props) => {
           </div>
 
           <div className="col-span-2 w-full">
-            <Input
-              endContent={
-                <Button
-                  onPress={() =>
-                    setIsPasswordsVisible({
-                      ...isPasswordsVisible,
-                      password: !isPasswordsVisible.password,
-                    })
-                  }
-                  isIconOnly
-                >
-                  {isPasswordsVisible.password ? (
-                    <AiFillEye size={20} fill="#585858" />
-                  ) : (
-                    <AiFillEyeInvisible size={20} fill="#585858" />
-                  )}
-                </Button>
-              }
-              {...register("password")}
-              isRequired
-              size="lg"
-              type={isPasswordsVisible.password ? "text" : "password"}
-              label="رمز عبور"
-            />
+            <div className="flex flex-row justify-center items-center">
+              <Input
+                endContent={
+                  <Button
+                    size="sm"
+                    onPress={() =>
+                      setIsPasswordsVisible({
+                        ...isPasswordsVisible,
+                        password: !isPasswordsVisible.password,
+                      })
+                    }
+                    isIconOnly
+                  >
+                    {isPasswordsVisible.password ? (
+                      <AiFillEye size={20} fill="#585858" />
+                    ) : (
+                      <AiFillEyeInvisible size={20} fill="#585858" />
+                    )}
+                  </Button>
+                }
+                {...register("password")}
+                isRequired
+                size="md"
+                type={isPasswordsVisible.password ? "text" : "password"}
+                label="رمز عبور"
+              />
+            </div>
 
             <FormErrorMessage errorMessage={errors.password?.message || ""} />
           </div>
@@ -132,7 +131,7 @@ const UserForm = ({ user }: Props) => {
             <Input
               {...register("confirmPassword")}
               isRequired
-              size="lg"
+              size="md"
               type="password"
               label="تکرار رمز عبور"
             />
@@ -147,7 +146,8 @@ const UserForm = ({ user }: Props) => {
               defaultValue={user?.companyName!}
               {...register("companyName")}
               isDisabled={selectedRole === "ADMIN"}
-              size="lg"
+              isRequired={selectedRole === "USER"}
+              size="md"
               label="نام سازمان"
             />
 
@@ -161,7 +161,8 @@ const UserForm = ({ user }: Props) => {
               defaultValue={user?.companyBranch!}
               {...register("companyBranch")}
               isDisabled={selectedRole === "ADMIN"}
-              size="lg"
+              isRequired={selectedRole === "USER"}
+              size="md"
               label="نام شعبه"
             />
 
@@ -175,7 +176,8 @@ const UserForm = ({ user }: Props) => {
               defaultValue={user?.itManager!}
               {...register("itManager")}
               isDisabled={selectedRole === "ADMIN"}
-              size="lg"
+              isRequired={selectedRole === "USER"}
+              size="md"
               label="مسئول انفوماتیک"
             />
 
@@ -187,7 +189,8 @@ const UserForm = ({ user }: Props) => {
               defaultValue={user?.address!}
               {...register("address")}
               isDisabled={selectedRole === "ADMIN"}
-              size="lg"
+              isRequired={selectedRole === "USER"}
+              size="md"
               label="آدرس"
             />
 
@@ -195,12 +198,12 @@ const UserForm = ({ user }: Props) => {
           </div>
         </div>
 
-        <div className="flex flex-row gap-5 mt-5">
-          <Button type="submit" size="lg" color="primary" variant="shadow">
+        <div className="flex flex-row gap-5">
+          <Button type="submit" size="md" color="primary" variant="shadow">
             {user ? "ویرایش " : "ایجاد"}
           </Button>
 
-          <Button size="lg" color="danger" variant="light">
+          <Button size="md" color="danger" variant="light">
             انصراف
           </Button>
         </div>
