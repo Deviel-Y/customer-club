@@ -10,6 +10,7 @@ import {
   TableRow,
 } from "@nextui-org/react";
 import { Invoice } from "@prisma/client";
+import moment from "moment-jalaali";
 import PaginationControl from "../components/PaginationControl";
 
 interface Props {
@@ -56,7 +57,9 @@ const UserInvoiceTable = ({ invoices, totalPage }: Props) => {
             </TableCell>
             <TableCell>{invoice.invoiceNumber}</TableCell>
             <TableCell>{invoice.description}</TableCell>
-            <TableCell>{invoice.createdAt.toDateString()}</TableCell>
+            <TableCell>
+              {moment(invoice.createdAt).format("jYYYY/jM/jD")}
+            </TableCell>
           </TableRow>
         ))}
       </TableBody>

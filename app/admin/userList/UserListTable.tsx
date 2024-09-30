@@ -11,6 +11,7 @@ import {
   TableRow,
 } from "@nextui-org/react";
 import { User } from "@prisma/client";
+import moment from "moment-jalaali";
 import { useRouter } from "next/navigation";
 
 interface Props {
@@ -61,7 +62,9 @@ const UserListTable = ({ users }: Props) => {
             <TableCell>{user.companyBranch}</TableCell>
             <TableCell>{user.email}</TableCell>
             <TableCell>{user.itManager}</TableCell>
-            <TableCell>{user.createdAt.toLocaleDateString()}</TableCell>
+            <TableCell>
+              {moment(user.createdAt).format("jYYYY/jM/jD")}
+            </TableCell>
           </TableRow>
         ))}
       </TableBody>

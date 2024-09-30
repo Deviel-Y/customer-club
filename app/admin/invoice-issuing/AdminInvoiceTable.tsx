@@ -11,6 +11,7 @@ import {
   TableRow,
 } from "@nextui-org/react";
 import { Invoice } from "@prisma/client";
+import moment from "moment-jalaali";
 
 interface Props {
   invoices: Invoice[];
@@ -57,8 +58,12 @@ const AdminInvoiceTable = ({ invoices, totalPage }: Props) => {
             <TableCell>{invoice.organization}</TableCell>
             <TableCell>{invoice.organizationBranch}</TableCell>
             <TableCell>{invoice.description}</TableCell>
-            <TableCell>{invoice.createdAt.toDateString()}</TableCell>
-            <TableCell>{invoice.updatedAt.toDateString()}</TableCell>
+            <TableCell>
+              {moment(invoice.createdAt).format("jYYYY/jM/jD")}
+            </TableCell>
+            <TableCell>
+              {moment(invoice.updatedAt).format("jYYYY/jM/jD")}
+            </TableCell>
           </TableRow>
         ))}
       </TableBody>
