@@ -1,25 +1,95 @@
-import { literal, z } from "zod";
+import { z } from "zod";
 
 export type CreateUserSchameType = z.infer<typeof createUserSchame>;
 export type SignInUserSchemaType = z.infer<typeof signInUserSchema>;
 export type InvoiceSchemaType = z.infer<typeof invoiceSchema>;
-
 export const createUserSchame = z
   .object({
-    email: z.string().email().min(6).max(50),
-    password: z.string().min(8).max(120),
-    confirmPassword: z.string().min(8).max(120),
-    companyName: z.string().min(1).max(100).optional().or(literal("")),
-    companyBranch: z.string().min(1).max(50).optional().or(literal("")),
-    itManager: z.string().min(1).max(50).optional().or(literal("")),
-    address: z.string().min(1).max(200).optional().or(literal("")),
+    email: z
+      .string()
+      .email({ message: "آدرس ایمیل خود را به درستی دارد کنید" })
+      .min(6)
+      .max(50, { message: "ایمیل باید کمتر از 50 کاراکتر باشد" }),
+    password: z
+      .string()
+      .min(8, { message: "گذرواژه باید بیشتر از 8 کاراکتر باشد" })
+      .max(120, { message: "گذرواژه باید کمتر از 120 کاراکتر باشد" }),
+    confirmPassword: z.string(),
+    companyName: z
+      .string()
+      .max(100, { message: "نام سازمان باید کمتر از 100 کاراکتر باشد" })
+      .optional(),
+    companyBranch: z
+      .string()
+      .max(50, { message: "نام شعبه باید کمتر از 50 کاراکتر باشد" })
+      .optional(),
+    itManager: z
+      .string()
+      .max(50, { message: "نام مسئول انفوماتیک باید کمتر از 50 کاراکتر باشد" })
+      .optional(),
+    address: z
+      .string()
+      .max(200, { message: "آدرس باید کمتر از 200 کاراکتر باشد" })
+      .optional(),
     image: z.string().min(1).optional(),
-    role: z.enum(["USER", "ADMIN"]),
+    role: z.enum(["USER", "ADMIN"], {
+      errorMap: () => ({ message: "تعیین سطح درسترسی الزامی است" }),
+    }),
   })
   .refine(({ password, confirmPassword }) => password === confirmPassword, {
     message: "گذرواژه ها با یکدیگر مطابقت ندارند",
     path: ["confirmPassword"],
-  });
+  })
+  .refine(
+    ({ role, companyName, companyBranch, address, itManager }) => {
+      if (role === "USER") {
+        return (
+          companyName?.length! > 0 &&
+          companyBranch?.length! > 0 &&
+          address?.length! > 0 &&
+          itManager?.length! > 0
+        );
+      }
+      return true;
+    },
+    {
+      message: "لطفا تمامی فیلدهای الزامی را پر کنید", // General message for required fields
+    }
+  )
+  .superRefine(
+    ({ role, companyName, companyBranch, address, itManager }, ctx) => {
+      if (role === "USER") {
+        if (!companyName || companyName.length === 0) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ["companyName"],
+            message: "وارد کردن نام سازمان الزامی است",
+          });
+        }
+        if (!companyBranch || companyBranch.length === 0) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ["companyBranch"],
+            message: "وارد کردن نام شعبه الزامی است",
+          });
+        }
+        if (!itManager || itManager.length === 0) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ["itManager"],
+            message: "وارد کردن نام مسئول انفوماتیک الزامی است",
+          });
+        }
+        if (!address || address.length === 0) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ["address"],
+            message: "وارد کردن آدرس الزامی است",
+          });
+        }
+      }
+    }
+  );
 
 export const signInUserSchema = z.object({
   email: z

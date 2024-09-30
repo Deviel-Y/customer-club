@@ -1,5 +1,6 @@
 "use client";
 
+import FormErrorMessage from "@/app/components/FormErrorMessage";
 import RoleSelection from "@/app/components/RoleSelection";
 import {
   createUserSchame,
@@ -12,107 +13,130 @@ import { Controller, useForm } from "react-hook-form";
 
 const UserForm = () => {
   const [selectedRole, setSelectedRole] = useState<Key>();
-  const { register, handleSubmit, control, setValue, getValues } =
-    useForm<CreateUserSchameType>({
-      resolver: zodResolver(createUserSchame),
-    });
-
-  const clearDisabledFields = () => {
-    if (selectedRole === "ADMIN") {
-      setValue("companyName", undefined, { shouldValidate: true });
-      setValue("companyBranch", undefined, { shouldValidate: true });
-      setValue("itManager", undefined, { shouldValidate: true });
-      setValue("address", undefined, { shouldValidate: true });
-    }
-  };
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors, disabled },
+  } = useForm<CreateUserSchameType>({
+    resolver: zodResolver(createUserSchame),
+  });
 
   return (
     <form
-      onSubmit={handleSubmit(() => {
-        clearDisabledFields();
-        const data = getValues();
-
+      onSubmit={handleSubmit((data) => {
         console.log(data);
         // use axios
       })}
       className="flex justify-center items-center"
     >
-      <Card className="flex flex-col p-5 w-3/5 gap-8">
+      <Card className="flex flex-col p-5 gap-5 w-3/5">
         <div>
           <h2 className="text-[25px]">اطلاعات کاربر</h2>
         </div>
 
-        <div className="grid grid-cols-4 grid-rows-4 gap-7 place-items-center">
-          <Input
-            {...register("email")}
-            isRequired
-            size="lg"
-            type="email"
-            className="col-span-3"
-            label="آدرس ایمیل"
-          />
+        <div className="grid grid-cols-4 grid-rows-4 gap-3 place-items-center">
+          <div className="col-span-3 w-full">
+            <Input
+              {...register("email")}
+              isRequired
+              size="lg"
+              type="email"
+              label="آدرس ایمیل"
+            />
 
-          <Controller
-            name="role"
-            control={control}
-            render={({ field: { onChange } }) => (
-              <RoleSelection
-                selectedRole={(value) => (
-                  setSelectedRole(value!), onChange(value)
-                )}
-              />
-            )}
-          />
+            <FormErrorMessage errorMessage={errors.email?.message || ""} />
+          </div>
 
-          <Input
-            {...register("password")}
-            isRequired
-            size="lg"
-            type="password"
-            className="col-span-2"
-            label="رمز عبور"
-          />
+          <div>
+            <Controller
+              name="role"
+              control={control}
+              render={({ field: { onChange } }) => (
+                <RoleSelection
+                  selectedRole={(value) => (
+                    setSelectedRole(value!), onChange(value)
+                  )}
+                />
+              )}
+            />
 
-          <Input
-            {...register("confirmPassword")}
-            isRequired
-            size="lg"
-            type="password"
-            className="col-span-2"
-            label="تکرار رمز عبور"
-          />
+            <FormErrorMessage errorMessage={errors.role?.message || ""} />
+          </div>
 
-          <Input
-            {...register("companyName")}
-            isDisabled={selectedRole === "ADMIN"}
-            size="lg"
-            className="col-span-2"
-            label="نام سازمان"
-          />
+          <div className="col-span-2 w-full">
+            <Input
+              {...register("password")}
+              isRequired
+              size="lg"
+              type="password"
+              label="رمز عبور"
+            />
 
-          <Input
-            {...register("companyBranch")}
-            isDisabled={selectedRole === "ADMIN"}
-            size="lg"
-            className="col-span-2"
-            label="نام شعبه"
-          />
+            <FormErrorMessage errorMessage={errors.password?.message || ""} />
+          </div>
 
-          <Input
-            {...register("itManager")}
-            isDisabled={selectedRole === "ADMIN"}
-            size="lg"
-            className="col-span-2"
-            label="مسئول انفوماتیک"
-          />
+          <div className="col-span-2 w-full">
+            <Input
+              {...register("confirmPassword")}
+              isRequired
+              size="lg"
+              type="password"
+              label="تکرار رمز عبور"
+            />
 
-          <Input
-            {...register("address")}
-            isDisabled={selectedRole === "ADMIN"}
-            size="lg"
-            className="col-span-2"
-            label="آدرس"
-          />
+            <FormErrorMessage
+              errorMessage={errors.confirmPassword?.message || ""}
+            />
+          </div>
+
+          <div className="col-span-2 w-full">
+            <Input
+              {...register("companyName")}
+              isDisabled={selectedRole === "ADMIN"}
+              size="lg"
+              label="نام سازمان"
+            />
+
+            <FormErrorMessage
+              errorMessage={errors.companyName?.message || ""}
+            />
+          </div>
+
+          <div className="col-span-2 w-full">
+            <Input
+              {...register("companyBranch")}
+              isDisabled={selectedRole === "ADMIN"}
+              size="lg"
+              label="نام شعبه"
+            />
+
+            <FormErrorMessage
+              errorMessage={errors.companyBranch?.message || ""}
+            />
+          </div>
+
+          <div className="col-span-2 w-full">
+            <Input
+              {...register("itManager")}
+              isDisabled={selectedRole === "ADMIN"}
+              size="lg"
+              label="مسئول انفوماتیک"
+            />
+
+            <FormErrorMessage errorMessage={errors.itManager?.message || ""} />
+          </div>
+
+          <div className="col-span-2 w-full">
+            <Input
+              {...register("address", { required: !disabled })}
+              isDisabled={selectedRole === "ADMIN"}
+              size="lg"
+              label="آدرس"
+            />
+
+            <FormErrorMessage errorMessage={errors.address?.message || ""} />
+          </div>
         </div>
 
         <div className="flex flex-row gap-5 mt-5">
