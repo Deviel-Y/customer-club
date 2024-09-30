@@ -1,19 +1,25 @@
-import { z } from "zod";
+import { literal, z } from "zod";
 
 export type CreateUserSchameType = z.infer<typeof createUserSchame>;
 export type SignInUserSchemaType = z.infer<typeof signInUserSchema>;
 export type InvoiceSchemaType = z.infer<typeof invoiceSchema>;
 
-export const createUserSchame = z.object({
-  email: z.string().email().min(6).max(50),
-  password: z.string().min(8).max(120),
-  companyName: z.string().min(1).max(100),
-  companyBranch: z.string().min(1).max(50),
-  itManager: z.string().min(1).max(50),
-  address: z.string().min(1).max(200).optional(),
-  image: z.string().min(1).optional(),
-  role: z.enum(["USER", "ADMIN"]),
-});
+export const createUserSchame = z
+  .object({
+    email: z.string().email().min(6).max(50),
+    password: z.string().min(8).max(120),
+    confirmPassword: z.string().min(8).max(120),
+    companyName: z.string().min(1).max(100).optional().or(literal("")),
+    companyBranch: z.string().min(1).max(50).optional().or(literal("")),
+    itManager: z.string().min(1).max(50).optional().or(literal("")),
+    address: z.string().min(1).max(200).optional().or(literal("")),
+    image: z.string().min(1).optional(),
+    role: z.enum(["USER", "ADMIN"]),
+  })
+  .refine(({ password, confirmPassword }) => password === confirmPassword, {
+    message: "گذرواژه ها با یکدیگر مطابقت ندارند",
+    path: ["confirmPassword"],
+  });
 
 export const signInUserSchema = z.object({
   email: z
