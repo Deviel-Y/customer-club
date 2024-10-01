@@ -16,7 +16,6 @@ const InvoicePage = async ({
   searchParams: { invoiceNumber, description, pageNumber },
 }: Props) => {
   const currentPage = pageNumber || 1;
-  const pageSize: number = 10;
   const session = await getSession();
 
   const invoiceCount: number = await prisma.invoice.count({
@@ -49,3 +48,5 @@ const InvoicePage = async ({
 };
 
 export default InvoicePage;
+
+const pageSize: number = 6;

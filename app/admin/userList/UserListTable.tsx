@@ -1,6 +1,7 @@
 "use client";
 
 import { DeleteConfirmation } from "@/app/components/DeleteConfirmation";
+import PaginationControl from "@/app/components/PaginationControl";
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
 import {
   Button,
@@ -17,24 +18,22 @@ import { useRouter } from "next/navigation";
 
 interface Props {
   users: User[];
+  totalPage: number;
 }
 
-const UserListTable = ({ users }: Props) => {
+const UserListTable = ({ users, totalPage }: Props) => {
   const router = useRouter();
-  const columns: {
-    label: string | JSX.Element;
-    value: keyof User | "editInfo";
-  }[] = [
-    { label: "ویرایش اطلاعات", value: "editInfo" },
-    { label: "نام سازمان", value: "companyName" },
-    { label: "شعبه", value: "companyBranch" },
-    { label: "آدرس ایمیل", value: "email" },
-    { label: "مسئول انفوماتیک", value: "itManager" },
-    { label: "تاریخ ایجاد", value: "createdAt" },
-  ];
 
   return (
-    <Table isStriped aria-label="List of users">
+    <Table
+      bottomContent={
+        <div className="flex justify-center w-full">
+          <PaginationControl totalPage={totalPage} />
+        </div>
+      }
+      isStriped
+      aria-label="List of users"
+    >
       <TableHeader>
         {columns.map((column) => (
           <TableColumn
@@ -77,3 +76,15 @@ const UserListTable = ({ users }: Props) => {
 };
 
 export default UserListTable;
+
+const columns: {
+  label: string | JSX.Element;
+  value: keyof User | "editInfo";
+}[] = [
+  { label: "ویرایش اطلاعات", value: "editInfo" },
+  { label: "نام سازمان", value: "companyName" },
+  { label: "شعبه", value: "companyBranch" },
+  { label: "آدرس ایمیل", value: "email" },
+  { label: "مسئول انفوماتیک", value: "itManager" },
+  { label: "تاریخ ایجاد", value: "createdAt" },
+];
