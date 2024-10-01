@@ -35,6 +35,7 @@ const LoginForm = () => {
       <form
         className="w-2/3"
         onSubmit={handleSubmit(async (data) => {
+          setLoading(true);
           const res = await signIn("credentials", {
             email: data.email,
             password: data.password,
@@ -43,15 +44,14 @@ const LoginForm = () => {
 
           res?.error
             ? toast.error("رمز عبور یا آدرس ایمیل اشتباه است")
-            : (setLoading(true),
-              signIn("credentials", {
+            : signIn("credentials", {
                 email: data.email,
                 password: data.password,
                 redirect: false,
               }).then(() => {
                 router.push("/");
                 router.refresh();
-              }));
+              });
         })}
       >
         <Card isBlurred className="flex flex-col p-5" shadow="lg">

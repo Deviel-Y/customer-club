@@ -24,6 +24,7 @@ interface Props {
 
 const UserForm = ({ user }: Props) => {
   const router = useRouter();
+  const [isLoading, setisLoading] = useState<boolean>(false);
   const [selectedRole, setSelectedRole] = useState<Key>();
   const [isPasswordsVisible, setIsPasswordsVisible] =
     useState<PasswordVisibility>({
@@ -40,15 +41,23 @@ const UserForm = ({ user }: Props) => {
   });
 
   const onSubmit = handleSubmit((data) => {
+    setisLoading(true);
+
     const promise = user
-      ? axios.patch(`/api/userAuth/${user.id}`, data).then(() => {
-          router.push("/admin/userList");
-          router.refresh();
-        })
-      : axios.post("/api/userAuth", data).then(() => {
-          router.push("/admin/userList");
-          router.refresh();
-        });
+      ? axios
+          .patch(`/api/userAuth/${user.id}`, data)
+          .then(() => {
+            router.push("/admin/userList");
+            router.refresh();
+          })
+          .finally(() => setisLoading(false))
+      : axios
+          .post("/api/userAuth", data)
+          .then(() => {
+            router.push("/admin/userList");
+            router.refresh();
+          })
+          .finally(() => setisLoading(false));
 
     toast.promise(promise, {
       error: (error: AxiosError) => error.response?.data as string,
@@ -199,11 +208,22 @@ const UserForm = ({ user }: Props) => {
         </div>
 
         <div className="flex flex-row gap-5">
-          <Button type="submit" size="md" color="primary" variant="shadow">
+          <Button
+            isLoading={isLoading}
+            type="submit"
+            size="md"
+            color="primary"
+            variant="shadow"
+          >
             {user ? "ویرایش " : "ایجاد"}
           </Button>
 
-          <Button size="md" color="danger" variant="light">
+          <Button
+            isDisabled={isLoading}
+            size="md"
+            color="danger"
+            variant="light"
+          >
             انصراف
           </Button>
         </div>
