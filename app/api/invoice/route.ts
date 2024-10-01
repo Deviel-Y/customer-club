@@ -1,9 +1,12 @@
+import getSession from "@/app/libs/getSession";
 import { invoiceSchema } from "@/app/libs/validationSchema";
 import prisma from "@/prisma/client";
 import { Invoice } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
 export const POST = async (request: NextRequest) => {
+  const session = await getSession();
+
   try {
     const body: Invoice = await request.json();
     const {
@@ -12,7 +15,6 @@ export const POST = async (request: NextRequest) => {
       organization,
       organizationBranch,
       assignedToUserId,
-      issuerId,
     } = body;
 
     const validation = invoiceSchema.safeParse(body);
@@ -34,7 +36,7 @@ export const POST = async (request: NextRequest) => {
         organization,
         organizationBranch,
         assignedToUserId,
-        issuerId,
+        issuerId: session?.user.id!,
       },
     });
 
