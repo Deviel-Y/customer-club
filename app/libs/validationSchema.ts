@@ -108,9 +108,20 @@ export const signInUserSchema = z.object({
 });
 
 export const invoiceSchema = z.object({
-  invoiceNumber: z.string().min(1).max(999_999),
-  organization: z.string().min(1).max(100),
-  description: z.string().min(1).max(200),
-  organizationBranch: z.string().min(1).max(50),
-  assignedToUserId: z.string(),
+  invoiceNumber: z
+    .string()
+    .min(1, { message: "وارد کردن این فیلد الزامی مبیاشد" })
+    .max(30, { message: "شماره فاکتور تباید از 30 کاراکتر بیشتر باشد" }),
+  organization: z
+    .string({ message: "وارد کردن این فیلد الزامی مبیاشد" })
+    .min(1, { message: "وارد کردن این فیلد الزامی مبیاشد" })
+    .max(100, { message: "نام سازمان تباید از 100 کاراکتر بیشتر باشد" }),
+  description: z
+    .string()
+    .min(1, { message: "وارد کردن این فیلد الزامی مبیاشد" })
+    .max(200, { message: "توضیحات تباید از 200 کاراکتر بیشتر باشد" }),
+  organizationBranch: z
+    .string()
+    .min(1, { message: "وارد کردن این فیلد الزامی مبیاشد" })
+    .max(50, { message: "نام شعبه تباید از 50 کاراکتر بیشتر باشد" }),
 });

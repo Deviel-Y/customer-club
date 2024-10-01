@@ -35,14 +35,6 @@ export const PATCH = async (
   const user = await prisma.user.findUnique({ where: { id } });
   if (!user) return NextResponse.json("User not found", { status: 404 });
 
-  const existingUser = await prisma.user.findFirst({
-    where: { email: email! },
-  });
-  if (existingUser)
-    return NextResponse.json("کاربر با این آدرس ایمیل وجود دارد", {
-      status: 400,
-    });
-
   const validation = userSchame.safeParse(body);
   if (!validation.success)
     return NextResponse.json(validation.error.format(), { status: 400 });
