@@ -16,6 +16,7 @@ const ActionBar = () => {
         className="self-start"
         color="secondary"
         variant="shadow"
+        onPress={() => router.push("/admin/invoice-issuing/createNewInvoice")}
       >
         صدور فاکتور جدید
       </Button>

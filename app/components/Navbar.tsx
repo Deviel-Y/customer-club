@@ -21,6 +21,7 @@ const Navbar = () => {
     "/admin/userList": { label: "مدیریت کاربران" },
     "/admin/createNewUser": { label: "تعریف کاربر جدید" },
     "/admin/editUser": { label: "ویرایش کاربر" },
+    "/admin/invoice-issuing/createNewInvoice": { label: "صدور فاکتور جدید" },
   };
 
   useEffect(() => {
