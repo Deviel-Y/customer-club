@@ -19,14 +19,6 @@ interface Props {
 }
 
 const UserInvoiceTable = ({ invoices, totalPage }: Props) => {
-  const columns: { label: string; value: keyof Invoice | "downloadInvoice" }[] =
-    [
-      { label: "دریافت فاکتور", value: "downloadInvoice" },
-      { label: "شماره فاکتور", value: "invoiceNumber" },
-      { label: "توضیحات", value: "description" },
-      { label: "تاریخ صدور", value: "createdAt" },
-    ];
-
   return (
     <Table
       bottomContent={
@@ -69,3 +61,10 @@ const UserInvoiceTable = ({ invoices, totalPage }: Props) => {
 };
 
 export default UserInvoiceTable;
+
+const columns: { label: string; value: keyof Invoice | "downloadInvoice" }[] = [
+  { label: "دریافت فاکتور", value: "downloadInvoice" },
+  { label: "شماره فاکتور", value: "invoiceNumber" },
+  { label: "توضیحات", value: "description" },
+  { label: "تاریخ صدور", value: "createdAt" },
+];

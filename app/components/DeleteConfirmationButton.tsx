@@ -16,10 +16,16 @@ import { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 
 interface Props {
-  id: string;
+  endpoint: string;
+  title: string;
+  content: string;
 }
 
-export const DeleteConfirmation = ({ id }: Props) => {
+export const DeleteConfirmationButton = ({
+  endpoint,
+  content,
+  title,
+}: Props) => {
   const [isLoading, setisLoading] = useState<boolean>(false);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const router = useRouter();
@@ -33,9 +39,9 @@ export const DeleteConfirmation = ({ id }: Props) => {
         <ModalContent>
           {(onClose) => (
             <div>
-              <ModalHeader className="flex flex-col">حذف کاربر</ModalHeader>
+              <ModalHeader className="flex flex-col">{title}</ModalHeader>
               <ModalBody>
-                <p>آیا از حذف این کاربر مطمئن اید؟</p>
+                <p>{content}</p>
               </ModalBody>
               <ModalFooter>
                 <Button
@@ -52,7 +58,7 @@ export const DeleteConfirmation = ({ id }: Props) => {
                   onPress={() => {
                     setisLoading(true);
                     axios
-                      .delete(`/api/userAuth/${id}`)
+                      .delete(endpoint)
                       .then(() => router.refresh())
                       .catch((error: AxiosError) => {
                         setisLoading(false);

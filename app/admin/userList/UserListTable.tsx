@@ -1,6 +1,6 @@
 "use client";
 
-import { DeleteConfirmation } from "@/app/components/DeleteConfirmation";
+import { DeleteConfirmationButton } from "@/app/components/DeleteConfirmationButton";
 import PaginationControl from "@/app/components/PaginationControl";
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
 import {
@@ -51,7 +51,11 @@ const UserListTable = ({ users, totalPage }: Props) => {
           <TableRow key={user.id}>
             <TableCell>
               <div className="flex flex-row justify-center items-center gap-x-3">
-                <DeleteConfirmation id={user.id} />
+                <DeleteConfirmationButton
+                  content="آیا از حذف این کاربر مطمئن اید؟"
+                  title="حذف کاربر"
+                  endpoint={`/api/userAuth/${user.id}`}
+                />
                 <Button
                   onPress={() => router.push(`/admin/editUser/${user.id}`)}
                   color="primary"
