@@ -1,6 +1,5 @@
 import { literal, z } from "zod";
 
-// export type UpdateUserSchameType = z.infer<typeof updateUserSchame>;
 export type UserSchameType = z.infer<typeof userSchame>;
 export type SignInUserSchemaType = z.infer<typeof signInUserSchema>;
 export type InvoiceSchemaType = z.infer<typeof invoiceSchema>;
