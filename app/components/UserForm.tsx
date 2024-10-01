@@ -40,19 +40,27 @@ const UserForm = ({ user }: Props) => {
     resolver: zodResolver(userSchame),
   });
 
-  const onSubmit = handleSubmit((data) => {
+  const onSubmit = handleSubmit(({ email, companyName, ...data }) => {
     setisLoading(true);
 
     const promise = user
       ? axios
-          .patch(`/api/userAuth/${user.id}`, data)
+          .patch(`/api/userAuth/${user.id}`, {
+            email: email?.trim(),
+            companyName: companyName?.trim(),
+            ...data,
+          })
           .then(() => {
             router.push("/admin/userList");
             router.refresh();
           })
           .finally(() => setisLoading(false))
       : axios
-          .post("/api/userAuth", data)
+          .post("/api/userAuth", {
+            email: email?.trim(),
+            companyName: companyName?.trim(),
+            ...data,
+          })
           .then(() => {
             router.push("/admin/userList");
             router.refresh();

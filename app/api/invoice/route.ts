@@ -25,9 +25,12 @@ export const POST = async (request: NextRequest) => {
       where: { invoiceNumber },
     });
     if (invoice)
-      return NextResponse.json("Invoice with this number is already exists", {
-        status: 400,
-      });
+      return NextResponse.json(
+        "فاکتور به همین شماره قبلا صادر شده است. لطفا شماره فاکتور را تغییر دهید.",
+        {
+          status: 400,
+        }
+      );
 
     const newInvoice = await prisma.invoice.create({
       data: {

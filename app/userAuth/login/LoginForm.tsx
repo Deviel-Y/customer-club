@@ -34,19 +34,19 @@ const LoginForm = () => {
     <div className="w-full flex justify-center items-center">
       <form
         className="w-2/3"
-        onSubmit={handleSubmit(async (data) => {
+        onSubmit={handleSubmit(async ({ email, password }) => {
           setLoading(true);
           const res = await signIn("credentials", {
-            email: data.email,
-            password: data.password,
+            email: email.trim(),
+            password,
             redirect: false,
           });
 
           res?.error
             ? toast.error("رمز عبور یا آدرس ایمیل اشتباه است")
             : signIn("credentials", {
-                email: data.email,
-                password: data.password,
+                email: email.trim(),
+                password,
                 redirect: false,
               }).then(() => {
                 router.push("/");

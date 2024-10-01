@@ -37,9 +37,13 @@ const InvoiceForm = ({ Userlist }: Props) => {
 
   return (
     <form
-      onSubmit={handleSubmit((data) => {
+      onSubmit={handleSubmit(({ invoiceNumber, ...data }) => {
         const promise = axios
-          .post("/api/invoice", { ...data, organization })
+          .post("/api/invoice", {
+            invoiceNumber: invoiceNumber.trim(),
+            organization,
+            ...data,
+          })
           .then(() => {
             router.push("/admin/invoice-issuing");
             router.refresh();
