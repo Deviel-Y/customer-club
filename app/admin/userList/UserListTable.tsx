@@ -1,5 +1,6 @@
 "use client";
 
+import { DeleteConfirmation } from "@/app/components/DeleteConfirmation";
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
 import {
   Button,
@@ -50,13 +51,16 @@ const UserListTable = ({ users }: Props) => {
         {users.map((user) => (
           <TableRow key={user.id}>
             <TableCell>
-              <Button
-                onPress={() => router.push(`/admin/editUser/${user.id}`)}
-                color="primary"
-                isIconOnly
-              >
-                <PencilSquareIcon className="min-w-5 w-4" />
-              </Button>
+              <div className="flex flex-row justify-center items-center gap-x-3">
+                <DeleteConfirmation id={user.id} />
+                <Button
+                  onPress={() => router.push(`/admin/editUser/${user.id}`)}
+                  color="primary"
+                  isIconOnly
+                >
+                  <PencilSquareIcon className="min-w-5 w-4" />
+                </Button>
+              </div>
             </TableCell>
             <TableCell>{user.companyName}</TableCell>
             <TableCell>{user.companyBranch}</TableCell>
