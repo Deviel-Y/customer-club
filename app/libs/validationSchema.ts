@@ -112,7 +112,7 @@ export const invoiceSchema = z.object({
     .string()
     .min(1, { message: "وارد کردن این فیلد الزامی مبیاشد" })
     .max(30, { message: "شماره فاکتور تباید از 30 کاراکتر بیشتر باشد" }),
-  organization: z
+  assignedToUserId: z
     .string({ message: "وارد کردن این فیلد الزامی مبیاشد" })
     .min(1, { message: "وارد کردن این فیلد الزامی مبیاشد" })
     .max(100, { message: "نام سازمان تباید از 100 کاراکتر بیشتر باشد" }),
