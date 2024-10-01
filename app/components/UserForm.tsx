@@ -61,7 +61,9 @@ const UserForm = ({ user }: Props) => {
 
     toast.promise(promise, {
       error: (error: AxiosError) => error.response?.data as string,
-      loading: user ? "در حال ویرایش اطلاعات کابر " : "در حال تعریف کابر جدید",
+      loading: user
+        ? "در حال ویرایش اطلاعات کاربر "
+        : "در حال تعریف کاربر جدید",
       success: user ? "اطلاعات کاربر ویرایش شد" : "کاربر جدید تعریف شد",
     });
   });
