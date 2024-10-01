@@ -58,7 +58,7 @@ const UserListTable = ({ users, totalPage }: Props) => {
                 />
                 <Button
                   onPress={() => router.push(`/admin/editUser/${user.id}`)}
-                  color="primary"
+                  color="success"
                   isIconOnly
                 >
                   <PencilSquareIcon className="min-w-5 w-4" />

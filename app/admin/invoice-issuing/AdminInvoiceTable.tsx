@@ -1,5 +1,6 @@
 "use client";
 
+import { DeleteConfirmationButton } from "@/app/components/DeleteConfirmationButton";
 import PaginationControl from "@/app/components/PaginationControl";
 import {
   Button,
@@ -12,6 +13,7 @@ import {
 } from "@nextui-org/react";
 import { Invoice } from "@prisma/client";
 import moment from "moment-jalaali";
+import { BsDownload } from "react-icons/bs";
 
 interface Props {
   invoices: Invoice[];
@@ -40,9 +42,16 @@ const AdminInvoiceTable = ({ invoices, totalPage }: Props) => {
         {invoices.map((invoice) => (
           <TableRow key={invoice.id}>
             <TableCell>
-              <Button color="primary" variant="shadow">
-                دانلود
-              </Button>
+              <div className="flex flex-row justify-center items-center gap-x-3">
+                <Button isIconOnly color="primary" variant="shadow">
+                  <BsDownload size={20} />
+                </Button>
+                <DeleteConfirmationButton
+                  content="آیا از حذف این کاربر مطمئن اید؟"
+                  title="حذف فاکتور"
+                  endpoint={`/api/invoice/${invoice.id}`}
+                />
+              </div>
             </TableCell>
             <TableCell>{invoice.invoiceNumber}</TableCell>
             <TableCell>{invoice.organization}</TableCell>
