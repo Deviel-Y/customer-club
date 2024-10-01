@@ -10,9 +10,10 @@ import {
   ModalHeader,
   useDisclosure,
 } from "@nextui-org/react";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
 
 interface Props {
   id: string;
@@ -52,7 +53,12 @@ export const DeleteConfirmation = ({ id }: Props) => {
                     setisLoading(true);
                     axios
                       .delete(`/api/userAuth/${id}`)
-                      .then(() => router.refresh());
+                      .then(() => router.refresh())
+                      .catch((error: AxiosError) => {
+                        setisLoading(false);
+                        onClose();
+                        toast.error(error?.response?.data as string);
+                      });
                   }}
                 >
                   حذف
@@ -62,6 +68,7 @@ export const DeleteConfirmation = ({ id }: Props) => {
           )}
         </ModalContent>
       </Modal>
+      <Toaster />
     </div>
   );
 };

@@ -11,6 +11,15 @@ export const DELETE = async (
   request: NextRequest,
   { params: { id } }: Props
 ) => {
+  const invoice = await prisma.invoice.findFirst({
+    where: { assignedToUserId: id },
+  });
+  if (invoice)
+    return NextResponse.json(
+      "امکان حذف وجود ندارد زیرا فاکتور یا پیش فاکتور به نام این کاربر ثبت شده است",
+      { status: 400 }
+    );
+
   const deletedUser = await prisma.user.delete({ where: { id } });
   return NextResponse.json(deletedUser);
 };
