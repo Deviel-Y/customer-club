@@ -7,6 +7,14 @@ interface Props {
   params: { id: string };
 }
 
+export const DELETE = async (
+  request: NextRequest,
+  { params: { id } }: Props
+) => {
+  const deletedUser = await prisma.user.delete({ where: { id } });
+  return NextResponse.json(deletedUser);
+};
+
 export const PATCH = async (
   request: NextRequest,
   { params: { id } }: Props
