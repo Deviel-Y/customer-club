@@ -28,7 +28,7 @@ const UserListPage = async ({
   });
 
   return (
-    <div className="p-5 flex flex-col">
+    <div className="px-5 py-2 flex flex-col">
       <UserSearchField />
 
       <UserListTable users={users} />

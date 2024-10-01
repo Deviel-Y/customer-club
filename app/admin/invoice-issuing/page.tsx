@@ -27,7 +27,7 @@ const InvoiceIssuingPage = async ({
   authorizeAdmin(session!);
 
   const currentPage = pageNumber || 1;
-  const pageSize: number = 10;
+  const pageSize: number = 6;
   const invoiceCount: number = await prisma.invoice.count({
     where: {
       description: { contains: description },
@@ -50,7 +50,7 @@ const InvoiceIssuingPage = async ({
   });
 
   return (
-    <div className="flex flex-col gap-1 p-5 w-full">
+    <div className="flex flex-col gap-1 px-5 py-2 w-full">
       <ActionBar />
 
       <AdminInvoiceTable

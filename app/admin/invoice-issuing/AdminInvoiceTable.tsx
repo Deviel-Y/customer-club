@@ -19,17 +19,6 @@ interface Props {
 }
 
 const AdminInvoiceTable = ({ invoices, totalPage }: Props) => {
-  const columns: { label: string; value: keyof Invoice | "downloadInvoice" }[] =
-    [
-      { label: "دریافت فاکتور", value: "downloadInvoice" },
-      { label: "شماره فاکتور", value: "invoiceNumber" },
-      { label: "سازمان", value: "organization" },
-      { label: "شعبه", value: "organizationBranch" },
-      { label: "توضیحات", value: "description" },
-      { label: "تاریخ صدور", value: "createdAt" },
-      { label: "تاریخ بروزسانی", value: "updatedAt" },
-    ];
-
   return (
     <Table
       bottomContent={
@@ -73,3 +62,13 @@ const AdminInvoiceTable = ({ invoices, totalPage }: Props) => {
 };
 
 export default AdminInvoiceTable;
+
+const columns: { label: string; value: keyof Invoice | "downloadInvoice" }[] = [
+  { label: "دریافت فاکتور", value: "downloadInvoice" },
+  { label: "شماره فاکتور", value: "invoiceNumber" },
+  { label: "سازمان", value: "organization" },
+  { label: "شعبه", value: "organizationBranch" },
+  { label: "توضیحات", value: "description" },
+  { label: "تاریخ صدور", value: "createdAt" },
+  { label: "تاریخ بروزسانی", value: "updatedAt" },
+];

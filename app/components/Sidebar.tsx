@@ -28,19 +28,6 @@ const Sidebar = () => {
       : (containerControls.start("close"), svgControls.start("close"));
   }, [isOpen, svgControls, containerControls]);
 
-  const userLinkLabels: string[] = [
-    "داشبورد",
-    "فاکتورها",
-    "پیش فاکتورها",
-    "ویرایش اطلاعات کاربر",
-  ];
-  const adminLinkLabels: string[] = [
-    "پنل مدیریت",
-    "صدور فاکتور",
-    "صدور پیش فاکتور",
-    "مدیریت کاربران",
-  ];
-
   if (!session?.user) return null;
 
   return (
@@ -48,7 +35,7 @@ const Sidebar = () => {
       variants={containerVariant}
       animate={containerControls}
       initial="close"
-      className="bg-[#ececec] border-l-1 border-neutral-300  flex flex-col z-50 gap-20 p-3 absolute top-0 right-0 h-full"
+      className="bg-[#ececec] border-l-1 border-neutral-300  flex flex-col z-50 gap-20 p-3 fixed top-0 right-0 h-screen"
     >
       <div className="flex flex-row w-full justify-between items-center">
         <Image
@@ -217,3 +204,16 @@ const svgVariant = {
     },
   },
 };
+
+const userLinkLabels: string[] = [
+  "داشبورد",
+  "فاکتورها",
+  "پیش فاکتورها",
+  "ویرایش اطلاعات کاربر",
+];
+const adminLinkLabels: string[] = [
+  "پنل مدیریت",
+  "صدور فاکتور",
+  "صدور پیش فاکتور",
+  "مدیریت کاربران",
+];
