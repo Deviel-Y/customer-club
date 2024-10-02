@@ -2,7 +2,10 @@
 
 import RoleSelection from "@/app/admin/components/RoleSelection";
 import FormErrorMessage from "@/app/components/FormErrorMessage";
-import { UserSchameType, userSchame } from "@/app/libs/validationSchema";
+import {
+  FullUserSchameType,
+  fullUserSchame,
+} from "@/app/libs/validationSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Card, Input } from "@nextui-org/react";
 import { User } from "@prisma/client";
@@ -36,8 +39,8 @@ const UserForm = ({ user }: Props) => {
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm<UserSchameType>({
-    resolver: zodResolver(userSchame),
+  } = useForm<FullUserSchameType>({
+    resolver: zodResolver(fullUserSchame),
   });
 
   const onSubmit = handleSubmit(({ email, companyName, ...data }) => {

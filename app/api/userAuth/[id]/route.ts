@@ -1,4 +1,7 @@
-import { userSchame, UserSchameType } from "@/app/libs/validationSchema";
+import {
+  FullUserSchameType,
+  fullUserSchame,
+} from "@/app/libs/validationSchema";
 import prisma from "@/prisma/client";
 import bcrypt from "bcrypt";
 import { NextRequest, NextResponse } from "next/server";
@@ -29,7 +32,7 @@ export const PATCH = async (
   { params: { id } }: Props
 ) => {
   try {
-    const body: UserSchameType = await request.json();
+    const body: FullUserSchameType = await request.json();
     const {
       email,
       currentPassword,
@@ -46,7 +49,7 @@ export const PATCH = async (
     const user = await prisma.user.findUnique({ where: { id } });
     if (!user) return NextResponse.json("User not found", { status: 404 });
 
-    const validation = userSchame.safeParse(body);
+    const validation = fullUserSchame.safeParse(body);
     if (!validation.success)
       return NextResponse.json(validation.error.format(), { status: 400 });
 

@@ -1,11 +1,14 @@
-import { UserSchameType, userSchame } from "@/app/libs/validationSchema";
+import {
+  FullUserSchameType,
+  fullUserSchame,
+} from "@/app/libs/validationSchema";
 import prisma from "@/prisma/client";
 import bcrypt from "bcrypt";
 import { NextRequest, NextResponse } from "next/server";
 
 export const POST = async (request: NextRequest) => {
   try {
-    const body: UserSchameType = await request.json();
+    const body: FullUserSchameType = await request.json();
     const {
       confirmPassword,
       companyBranch,
@@ -18,7 +21,7 @@ export const POST = async (request: NextRequest) => {
       role,
     } = body;
 
-    const validation = userSchame.safeParse(body);
+    const validation = fullUserSchame.safeParse(body);
     if (!validation.success)
       return NextResponse.json(validation.error.format(), { status: 400 });
 

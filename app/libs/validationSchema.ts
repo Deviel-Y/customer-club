@@ -1,10 +1,43 @@
 import { literal, z } from "zod";
 
-export type UserSchameType = z.infer<typeof userSchame>;
+export type UserSide_userSchameType = z.infer<typeof userSide_userSchame>;
+export type FullUserSchameType = z.infer<typeof fullUserSchame>;
 export type SignInUserSchemaType = z.infer<typeof signInUserSchema>;
 export type InvoiceSchemaType = z.infer<typeof invoiceSchema>;
 
-export const userSchame = z
+export const userSide_userSchame = z
+  .object({
+    currentPassword: z
+      .string()
+      .min(8, { message: "گذرواژه باید بیشتر از 8 کاراکتر باشد" })
+      .max(120, { message: "گذرواژه باید کمتر از 120 کاراکتر باشد" })
+      .optional()
+      .or(literal("")),
+    newPassword: z
+      .string()
+      .min(8, { message: "گذرواژه باید بیشتر از 8 کاراکتر باشد" })
+      .max(120, { message: "گذرواژه باید کمتر از 120 کاراکتر باشد" })
+      .optional()
+      .or(literal("")),
+    confirmPassword: z.string().optional().or(literal("")),
+    companyBranch: z
+      .string()
+      .max(50, { message: "نام شعبه باید کمتر از 50 کاراکتر باشد" })
+      .min(1, { message: "فیلد نام شعبه الزامی می باشد" }),
+    itManager: z
+      .string()
+      .max(50, { message: "نام مسئول انفوماتیک باید کمتر از 50 کاراکتر باشد" })
+      .min(1, { message: "فیلد مسئول انفوماتیک الزامی می باشد" }),
+  })
+  .refine(
+    ({ newPassword, confirmPassword }) => newPassword === confirmPassword,
+    {
+      message: "گذرواژه ها با یکدیگر مطابقت ندارند",
+      path: ["confirmPassword"],
+    }
+  );
+
+export const fullUserSchame = z
   .object({
     email: z
       .string()
