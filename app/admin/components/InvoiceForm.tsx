@@ -8,7 +8,7 @@ import {
   Card,
   Input,
 } from "@nextui-org/react";
-import { User } from "@prisma/client";
+import { Invoice, User } from "@prisma/client";
 import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -19,9 +19,10 @@ import { invoiceSchema, InvoiceSchemaType } from "../../libs/validationSchema";
 
 interface Props {
   Userlist: User[];
+  invoice?: Invoice;
 }
 
-const InvoiceForm = ({ Userlist }: Props) => {
+const InvoiceForm = ({ Userlist, invoice }: Props) => {
   const router = useRouter();
   const [userId, setUserId] = useState<string>();
   const organization = Userlist.find((user) => user.id == userId)?.companyName;
@@ -65,6 +66,8 @@ const InvoiceForm = ({ Userlist }: Props) => {
         <div className="grid grid-cols-4 grid-rows-2 gap-3 place-items-center">
           <div className="col-span-1 w-full">
             <Input
+              size="lg"
+              defaultValue={invoice?.invoiceNumber}
               {...register("invoiceNumber")}
               isRequired
               label="شماره فاکتور"
@@ -77,6 +80,7 @@ const InvoiceForm = ({ Userlist }: Props) => {
             <Controller
               name="assignedToUserId"
               control={control}
+              defaultValue={invoice?.organization}
               render={({ field: { onChange } }) => (
                 <Autocomplete
                   onSelectionChange={(value) => {
@@ -84,7 +88,7 @@ const InvoiceForm = ({ Userlist }: Props) => {
                     setUserId(value as string);
                   }}
                   isRequired
-                  size="md"
+                  size="lg"
                   label="نام سازمان"
                 >
                   {Userlist?.map((user) => (
@@ -103,9 +107,10 @@ const InvoiceForm = ({ Userlist }: Props) => {
 
           <div className="col-span-1 w-full">
             <Input
+              size="lg"
               {...register("organizationBranch")}
+              defaultValue={invoice?.organizationBranch}
               isRequired
-              size="md"
               label="نام شعبه"
             />
 
@@ -126,6 +131,8 @@ const InvoiceForm = ({ Userlist }: Props) => {
 
           <div className="col-span-4 w-full">
             <Input
+              size="lg"
+              defaultValue={invoice?.description}
               {...register("description")}
               isRequired
               label="توضیحات فاکتور"

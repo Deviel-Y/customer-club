@@ -10,23 +10,13 @@ const Navbar = () => {
   const { data: session } = useSession();
   const path = usePathname();
   const [pathName, setPathName] = useState<string>("");
-  const headingMapping: Record<string, { label: string }> = {
-    "/": { label: "داشبورد" },
-    "/userAuth/login": { label: "داشبورد" },
-    "/invoice": { label: "فاکتورها" },
-    "/proformaInvoice": { label: "پیش فاکتورها" },
-    "/editUserInfo": { label: "ویرایش اطلاعات کاربر" },
-    "/admin": { label: "پنل مدیریت" },
-    "/admin/invoice-issuing": { label: "صدور فاکتور" },
-    "/admin/proformaInvoice-issuing": { label: "صدور پیش فاکتور" },
-    "/admin/userList": { label: "مدیریت کاربران" },
-    "/admin/createNewUser": { label: "تعریف کاربر جدید" },
-    "/admin/editUser": { label: "ویرایش کاربر" },
-    "/admin/invoice-issuing/createNewInvoice": { label: "صدور فاکتور جدید" },
-  };
 
   useEffect(() => {
-    if (path.includes("/admin/editUser") || path.includes("/editUserInfo")) {
+    if (
+      path.includes("/admin/editUser") ||
+      path.includes("/editUserInfo") ||
+      path.includes("/admin/invoice-issuing/editInvoiceInfo")
+    ) {
       setPathName(removeLastSegmentURL(path));
     } else {
       setPathName(path);
@@ -51,3 +41,19 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
+const headingMapping: Record<string, { label: string }> = {
+  "/": { label: "داشبورد" },
+  "/userAuth/login": { label: "داشبورد" },
+  "/invoice": { label: "فاکتورها" },
+  "/proformaInvoice": { label: "پیش فاکتورها" },
+  "/editUserInfo": { label: "ویرایش اطلاعات کاربر" },
+  "/admin": { label: "پنل مدیریت" },
+  "/admin/invoice-issuing": { label: "صدور فاکتور" },
+  "/admin/proformaInvoice-issuing": { label: "صدور پیش فاکتور" },
+  "/admin/userList": { label: "مدیریت کاربران" },
+  "/admin/createNewUser": { label: "تعریف کاربر جدید" },
+  "/admin/editUser": { label: "ویرایش کاربر" },
+  "/admin/invoice-issuing/createNewInvoice": { label: "صدور فاکتور جدید" },
+  "/admin/invoice-issuing/editInvoiceInfo": { label: "ویرایش فاکتور" },
+};

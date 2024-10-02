@@ -59,7 +59,7 @@ const UserListTable = ({ users, totalPage }: Props) => {
                 />
                 <Button
                   onPress={() => router.push(`/admin/editUser/${user.id}`)}
-                  color="success"
+                  color="warning"
                   isIconOnly
                 >
                   <PencilSquareIcon className="min-w-5 w-4" />
@@ -86,7 +86,7 @@ const columns: {
   label: string | JSX.Element;
   value: keyof User | "editInfo";
 }[] = [
-  { label: "ویرایش اطلاعات", value: "editInfo" },
+  { label: "حذف / ویرایش", value: "editInfo" },
   { label: "نام سازمان", value: "companyName" },
   { label: "شعبه", value: "companyBranch" },
   { label: "آدرس ایمیل", value: "email" },
