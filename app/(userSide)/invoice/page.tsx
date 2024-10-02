@@ -1,8 +1,8 @@
 import prisma from "@/prisma/client";
 import { Invoice } from "@prisma/client";
-import ActionBar from "../components/ActionBar";
-import getSession from "../libs/getSession";
-import { authorizeUser } from "../utils/authorizeRole";
+import ActionBar from "../../components/ActionBar";
+import getSession from "../../libs/getSession";
+import { authorizeUser } from "../../utils/authorizeRole";
 import UserInvoiceTable from "./UserInvoiceTable";
 
 interface Props {

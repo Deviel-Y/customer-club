@@ -11,7 +11,7 @@ import {
 } from "@nextui-org/react";
 import { Invoice } from "@prisma/client";
 import moment from "moment-jalaali";
-import PaginationControl from "../components/PaginationControl";
+import PaginationControl from "../../components/PaginationControl";
 
 interface Props {
   invoices: Invoice[];
