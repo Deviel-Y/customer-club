@@ -1,3 +1,5 @@
+import getSession from "@/app/libs/getSession";
+import { authorizeAdmin } from "@/app/utils/authorizeRole";
 import prisma from "@/prisma/client";
 import UserForm from "../../../components/UserForm";
 
@@ -6,6 +8,9 @@ interface Props {
 }
 
 const EditUserPage = async ({ params: { id } }: Props) => {
+  const session = await getSession();
+  authorizeAdmin(session!);
+
   const user = await prisma.user.findUnique({ where: { id: id } });
 
   return (

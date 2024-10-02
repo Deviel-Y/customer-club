@@ -1,3 +1,5 @@
+import getSession from "@/app/libs/getSession";
+import { authorizeAdmin } from "@/app/utils/authorizeRole";
 import prisma from "@/prisma/client";
 import { User } from "@prisma/client";
 import UserListTable from "./UserListTable";
@@ -16,6 +18,9 @@ interface Props {
 const UserListPage = async ({
   searchParams: { companyBranch, companyName, email, itManager, pageNumber },
 }: Props) => {
+  const session = await getSession();
+  authorizeAdmin(session!);
+
   const currentPage = pageNumber || 1;
 
   const users: User[] = await prisma.user.findMany({
