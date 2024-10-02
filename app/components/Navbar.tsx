@@ -56,4 +56,7 @@ const headingMapping: Record<string, { label: string }> = {
   "/admin/editUser": { label: "ویرایش کاربر" },
   "/admin/invoice-issuing/createNewInvoice": { label: "صدور فاکتور جدید" },
   "/admin/invoice-issuing/editInvoiceInfo": { label: "ویرایش فاکتور" },
+  "/admin/porformaInvoice-issuing/createNewPorInvoice": {
+    label: "صدور پیش فاکتور جدید",
+  },
 };
