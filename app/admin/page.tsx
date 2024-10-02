@@ -8,8 +8,12 @@ const AdminPage = async () => {
   authorizeAdmin(session!);
 
   const invoiceCount: number = await prisma.invoice.count();
+  const userCount: number = await prisma.user.count({
+    where: { role: "USER" },
+  });
 
   const dashboardCardInfo: { label: string; amount: number }[] = [
+    { label: "adminUser", amount: userCount },
     { label: "adminInvoice", amount: invoiceCount },
     { label: "adminProformaInvoice", amount: 2 },
   ];

@@ -18,7 +18,7 @@ export const SignOutConfirmation = () => {
   return (
     <div>
       <Button color="danger" className="bg-transparent p-0" onPress={onOpen}>
-        <PowerIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8  " />
+        <PowerIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-9  ps-1" />
         <p className="whitespace-nowrap text-inherit tracking-wide text-neutral-600 text-[16px]">
           خروج
         </p>
