@@ -7,6 +7,8 @@ import {
 } from "@heroicons/react/24/outline";
 import { Card } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
+import { HiOutlineNewspaper, HiOutlineShoppingBag } from "react-icons/hi";
+import { VscAccount } from "react-icons/vsc";
 
 interface Props {
   label: string;
@@ -19,6 +21,7 @@ const dataMapping: Record<
     label: string;
     backgroundColor: string;
     icon: JSX.Element;
+    figure: JSX.Element;
     iconBackgroung: string;
     href: string;
   }
@@ -31,6 +34,9 @@ const dataMapping: Record<
     ),
     iconBackgroung: "bg-red-600/70",
     href: "/invoice",
+    figure: (
+      <HiOutlineShoppingBag className="figureIcon absolute bottom-3 left-6 scale-[6] stroke-[2px] opacity-10 w-6 overflow-visible h-8" />
+    ),
   },
 
   userProformaInvoice: {
@@ -41,6 +47,9 @@ const dataMapping: Record<
     ),
     iconBackgroung: "bg-yellow-400",
     href: "/proformaInvoice",
+    figure: (
+      <HiOutlineNewspaper className="figureIcon absolute bottom-4 left-10 scale-[6] stroke-[2px] opacity-10 w-6 overflow-visible h-8" />
+    ),
   },
   adminUser: {
     label: "تعداد کاربرها",
@@ -51,6 +60,9 @@ const dataMapping: Record<
     ),
     iconBackgroung: "bg-gray-400",
     href: "/admin/userList",
+    figure: (
+      <VscAccount className="figureIcon absolute bottom-2 left-4 scale-[6] stroke-[0.75px] opacity-10 w-6 overflow-visible h-8" />
+    ),
   },
   adminInvoice: {
     label: "تعداد فاکتورها",
@@ -60,16 +72,21 @@ const dataMapping: Record<
     ),
     iconBackgroung: "bg-red-600/70",
     href: "/admin/invoice-issuing",
+    figure: (
+      <HiOutlineShoppingBag className="figureIcon absolute bottom-3 left-6 scale-[6] stroke-[2px] opacity-10 w-6 overflow-visible h-8" />
+    ),
   },
-
   adminProformaInvoice: {
     label: "تعداد پیش فاکتورها",
     backgroundColor: "bg-gradient-to-r from-amber-200 to-yellow-500",
     icon: (
-      <NewspaperIcon className="fill-yellow-200 stroke-[0.75px] opacity-75 w-8 h-8 text-center " />
+      <NewspaperIcon className="fill-yellow-200 stroke-[0.75px] opacity-75 w-8 h-8 text-center" />
     ),
     iconBackgroung: "bg-yellow-400",
     href: "/admin/proformaInvoice-issuing",
+    figure: (
+      <HiOutlineNewspaper className="figureIcon absolute bottom-4 left-10 scale-[6] stroke-[2px] opacity-10 w-6 overflow-visible h-8" />
+    ),
   },
 };
 
@@ -80,7 +97,7 @@ const DashboardCard = ({ label, amount }: Props) => {
     <Card
       isPressable
       onClick={() => router.push(dataMapping[label].href)}
-      className={`hover:scale-105 transition-all w-1/5 h-36 p-5 ${dataMapping[label].backgroundColor}`}
+      className={`card hover:scale-105 transition-all w-1/5 h-36 p-5 ${dataMapping[label].backgroundColor}`}
     >
       <div className="flex flex-col h-full w-full justify-between">
         <div className="flex flex-row justify-between items-center">
@@ -93,7 +110,10 @@ const DashboardCard = ({ label, amount }: Props) => {
             </figure>
           </div>
         </div>
-        <p className="font-thin text-[35px] translate-x-[110px]">{amount}</p>
+        <div className="flex flex-row justify-between">
+          <p className="font-thin text-[35px]">{amount}</p>
+          <figure>{dataMapping[label].figure}</figure>
+        </div>
       </div>
     </Card>
   );
