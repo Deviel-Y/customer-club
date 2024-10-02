@@ -39,21 +39,34 @@ const InvoiceForm = ({ Userlist, invoice }: Props) => {
   return (
     <form
       onSubmit={handleSubmit(({ invoiceNumber, ...data }) => {
-        const promise = axios
-          .post("/api/invoice", {
-            invoiceNumber: invoiceNumber.trim(),
-            organization,
-            ...data,
-          })
-          .then(() => {
-            router.push("/admin/invoice-issuing");
-            router.refresh();
-          });
+        const promise = invoice
+          ? axios
+              .patch(`/api/invoice/${invoice.id}`, {
+                invoiceNumber: invoiceNumber.trim(),
+                organization,
+                ...data,
+              })
+              .then(() => {
+                router.push("/admin/invoice-issuing");
+                router.refresh();
+              })
+          : axios
+              .post("/api/invoice", {
+                invoiceNumber: invoiceNumber.trim(),
+                organization,
+                ...data,
+              })
+              .then(() => {
+                router.push("/admin/invoice-issuing");
+                router.refresh();
+              });
 
         toast.promise(promise, {
           error: (error: AxiosError) => error.response?.data as string,
-          loading: "در حال صدور فاکتور",
-          success: "فاکتور با موفقیت صادر شد",
+          loading: invoice ? "در حال ویرایش فاکتور" : "در حال صدور فاکتور",
+          success: invoice
+            ? "فاکتور با موفقیت ویرایش شد"
+            : "فاکتور با موفقیت صادر شد",
         });
       })}
       className="flex justify-center items-center"
@@ -144,7 +157,7 @@ const InvoiceForm = ({ Userlist, invoice }: Props) => {
 
         <div className="flex flex-row justify-start !items-center gap-5 mt-5">
           <Button type="submit" color="primary" variant="shadow">
-            صدور فاکتور جدید
+            {invoice ? "ویرایش فاکتور" : "صدور فاکتور جدید"}
           </Button>
 
           <Button
