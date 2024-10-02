@@ -53,6 +53,14 @@ export const PATCH = async (
     if (!validation.success)
       return NextResponse.json(validation.error.format(), { status: 400 });
 
+    const similarUser = await prisma.user.findFirst({
+      where: { OR: [{ email }, { companyName }], NOT: { id } },
+    });
+    if (similarUser)
+      return NextResponse.json("کاربر با این ایمیل یا نام سازمان وجود دارد", {
+        status: 400,
+      });
+
     //For when if user is a regular user
     if (currentPassword) {
       const isCurrentPasswordValid: boolean = await bcrypt.compare(
