@@ -12,17 +12,17 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
-import { Invoice } from "@prisma/client";
+import { PorformaInvoice } from "@prisma/client";
 import moment from "moment-jalaali";
 import { useRouter } from "next/navigation";
 import { BsDownload } from "react-icons/bs";
 
 interface Props {
-  invoices: Invoice[];
+  porformaInvoice: PorformaInvoice[];
   totalPage: number;
 }
 
-const AdminInvoiceTable = ({ invoices, totalPage }: Props) => {
+const AdminPorformaInvoiceTable = ({ porformaInvoice, totalPage }: Props) => {
   const router = useRouter();
 
   return (
@@ -46,22 +46,25 @@ const AdminInvoiceTable = ({ invoices, totalPage }: Props) => {
           </TableColumn>
         ))}
       </TableHeader>
-      <TableBody items={invoices} emptyContent="فاکتوری تعریف نشده است">
-        {invoices.map((invoice) => (
-          <TableRow key={invoice.id}>
+      <TableBody
+        items={porformaInvoice}
+        emptyContent="پیش فاکتوری تعریف نشده است"
+      >
+        {porformaInvoice.map((p_invoice) => (
+          <TableRow key={p_invoice.id}>
             <TableCell>
               <div className="flex flex-row justify-center items-center gap-x-3">
                 <DeleteConfirmationButton
                   successMessage="فاکتور با موفقیت حذف شد."
                   content="آیا از حذف این کاربر مطمئن اید؟"
                   title="حذف فاکتور"
-                  endpoint={`/api/invoice/${invoice.id}`}
+                  endpoint={`/api/invoice/${p_invoice.id}`}
                 />
 
                 <Button
                   onPress={() =>
                     router.push(
-                      `/admin/invoice-issuing/editInvoiceInfo/${invoice.id}`
+                      `/admin/invoice-issuing/editInvoiceInfo/${p_invoice.id}`
                     )
                   }
                   isIconOnly
@@ -76,15 +79,15 @@ const AdminInvoiceTable = ({ invoices, totalPage }: Props) => {
                 </Button>
               </div>
             </TableCell>
-            <TableCell>{invoice.invoiceNumber}</TableCell>
-            <TableCell>{invoice.organization}</TableCell>
-            <TableCell>{invoice.organizationBranch}</TableCell>
-            <TableCell>{invoice.description}</TableCell>
+            <TableCell>{p_invoice.proformaInvoiceNumber}</TableCell>
+            <TableCell>{p_invoice.organization}</TableCell>
+            <TableCell>{p_invoice.organizationBranch}</TableCell>
+            <TableCell>{p_invoice.description}</TableCell>
             <TableCell>
-              {moment(invoice.createdAt).format("jYYYY/jM/jD")}
+              {moment(p_invoice.createdAt).format("jYYYY/jM/jD")}
             </TableCell>
             <TableCell>
-              {moment(invoice.updatedAt).format("jYYYY/jM/jD")}
+              {moment(p_invoice.updatedAt).format("jYYYY/jM/jD")}
             </TableCell>
           </TableRow>
         ))}
@@ -93,14 +96,15 @@ const AdminInvoiceTable = ({ invoices, totalPage }: Props) => {
   );
 };
 
-export default AdminInvoiceTable;
+export default AdminPorformaInvoiceTable;
 
-const columns: { label: string; value: keyof Invoice | "operation" }[] = [
-  { label: "عملیات", value: "operation" },
-  { label: "شماره فاکتور", value: "invoiceNumber" },
-  { label: "سازمان", value: "organization" },
-  { label: "شعبه", value: "organizationBranch" },
-  { label: "توضیحات", value: "description" },
-  { label: "تاریخ صدور", value: "createdAt" },
-  { label: "تاریخ بروزسانی", value: "updatedAt" },
-];
+const columns: { label: string; value: keyof PorformaInvoice | "operation" }[] =
+  [
+    { label: "عملیات", value: "operation" },
+    { label: "شماره پیش فاکتور", value: "proformaInvoiceNumber" },
+    { label: "سازمان", value: "organization" },
+    { label: "شعبه", value: "organizationBranch" },
+    { label: "توضیحات", value: "description" },
+    { label: "تاریخ صدور", value: "createdAt" },
+    { label: "تاریخ انقضا", value: "expiredAt" },
+  ];

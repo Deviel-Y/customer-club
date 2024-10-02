@@ -40,7 +40,7 @@ const Sidebar = () => {
       ),
     },
     "پیش فاکتورها": {
-      href: "/proformaInvoice",
+      href: "/porformaInvoice",
       icon: (
         <NewspaperIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />
       ),
@@ -62,7 +62,7 @@ const Sidebar = () => {
       ),
     },
     "صدور پیش فاکتور": {
-      href: "/admin/proformaInvoice-issuing",
+      href: "/admin/porformaInvoice-issuing",
       icon: (
         <NewspaperIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />
       ),
