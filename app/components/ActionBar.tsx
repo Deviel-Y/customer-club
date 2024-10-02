@@ -5,20 +5,23 @@ import { useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ChangeEvent } from "react";
 
-const ActionBar = () => {
+interface Props {
+  endpoint?: string;
+  buttonLabel?: string;
+}
+
+const ActionBar = ({ endpoint, buttonLabel }: Props) => {
   const { data: session } = useSession();
   const searchParmas = useSearchParams();
   const router = useRouter();
 
-  const invoiceNumberOnChangeHandler = (
-    event: ChangeEvent<HTMLInputElement>
-  ) => {
+  const numberOnChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
     const newParams = new URLSearchParams(searchParmas);
 
     if (event.target.value) {
-      newParams.set("invoiceNumber", event.target.value as string);
+      newParams.set("number", event.target.value as string);
     } else {
-      newParams.delete("invoiceNumber");
+      newParams.delete("number");
     }
 
     if (searchParmas.get("description"))
@@ -47,8 +50,8 @@ const ActionBar = () => {
       newParams.delete("description");
     }
 
-    if (searchParmas.get("invoiceNumber"))
-      newParams.set("invoiceNumber", searchParmas.get("invoiceNumber")!);
+    if (searchParmas.get("number"))
+      newParams.set("number", searchParmas.get("number")!);
 
     if (searchParmas.get("organization"))
       newParams.set("organization", searchParmas.get("organization")!);
@@ -84,8 +87,8 @@ const ActionBar = () => {
         searchParmas.get("organizationBranch")!
       );
 
-    if (searchParmas.get("invoiceNumber"))
-      newParams.set("invoiceNumber", searchParmas.get("invoiceNumber")!);
+    if (searchParmas.get("number"))
+      newParams.set("number", searchParmas.get("number")!);
 
     if (searchParmas.get("pageNumber")) newParams.delete("pageNumber");
 
@@ -109,8 +112,8 @@ const ActionBar = () => {
     if (searchParmas.get("organization"))
       newParams.set("organization", searchParmas.get("organization")!);
 
-    if (searchParmas.get("invoiceNumber"))
-      newParams.set("invoiceNumber", searchParmas.get("invoiceNumber")!);
+    if (searchParmas.get("number"))
+      newParams.set("number", searchParmas.get("number")!);
 
     if (searchParmas.get("pageNumber")) newParams.delete("pageNumber");
 
@@ -123,14 +126,14 @@ const ActionBar = () => {
         className="self-center"
         color="secondary"
         variant="shadow"
-        onPress={() => router.push("/admin/invoice-issuing/createNewInvoice")}
+        onPress={() => router.push(endpoint!)}
       >
-        صدور فاکتور جدید
+        {buttonLabel}
       </Button>
 
       <div className="grid grid-cols-4 grid-rows-1 w-full gap-5 mb-5">
         <Input
-          onChange={invoiceNumberOnChangeHandler}
+          onChange={numberOnChangeHandler}
           label="شماره فاکتور"
           type="search"
           variant="underlined"

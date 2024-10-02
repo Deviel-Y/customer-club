@@ -6,7 +6,7 @@ import AdminInvoiceTable from "./AdminInvoiceTable";
 
 interface Props {
   searchParams: {
-    invoiceNumber: string;
+    number: string;
     description: string;
     organization: string;
     organizationBranch: string;
@@ -17,7 +17,7 @@ interface Props {
 const InvoiceIssuingPage = async ({
   searchParams: {
     description,
-    invoiceNumber,
+    number,
     organization,
     organizationBranch,
     pageNumber,
@@ -31,7 +31,7 @@ const InvoiceIssuingPage = async ({
   const invoiceCount: number = await prisma.invoice.count({
     where: {
       description: { contains: description },
-      invoiceNumber: { contains: invoiceNumber },
+      invoiceNumber: { contains: number },
       organization: { contains: organization },
       organizationBranch: { contains: organizationBranch },
     },
@@ -40,7 +40,7 @@ const InvoiceIssuingPage = async ({
   const adminSideInvoiceList = await prisma.invoice.findMany({
     where: {
       description: { contains: description },
-      invoiceNumber: { contains: invoiceNumber },
+      invoiceNumber: { contains: number },
       organization: { contains: organization },
       organizationBranch: { contains: organizationBranch },
     },
@@ -51,7 +51,10 @@ const InvoiceIssuingPage = async ({
 
   return (
     <div className="flex flex-col gap-1 px-5 py-2 w-full">
-      <ActionBar />
+      <ActionBar
+        buttonLabel="صدور فاکتور جدید"
+        endpoint="/admin/invoice-issuing/createNewInvoice"
+      />
 
       <AdminInvoiceTable
         totalPage={Math.ceil(invoiceCount / pageSize)}

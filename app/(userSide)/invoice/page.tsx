@@ -7,14 +7,14 @@ import UserInvoiceTable from "./UserInvoiceTable";
 
 interface Props {
   searchParams: {
-    invoiceNumber: string;
+    number: string;
     description: string;
     pageNumber: number;
   };
 }
 
 const InvoicePage = async ({
-  searchParams: { invoiceNumber, description, pageNumber },
+  searchParams: { number, description, pageNumber },
 }: Props) => {
   const session = await getSession();
   authorizeUser(session!);
@@ -24,14 +24,14 @@ const InvoicePage = async ({
   const invoiceCount: number = await prisma.invoice.count({
     where: {
       description: { contains: description },
-      invoiceNumber: { contains: invoiceNumber },
+      invoiceNumber: { contains: number },
     },
   });
 
   const userInvoice: Invoice[] = await prisma.invoice.findMany({
     where: {
       assignedToUserId: session?.user.id,
-      invoiceNumber: { contains: invoiceNumber },
+      invoiceNumber: { contains: number },
       description: { contains: description },
     },
     take: pageSize,
