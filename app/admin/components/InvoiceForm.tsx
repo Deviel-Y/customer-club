@@ -140,7 +140,11 @@ const InvoiceForm = ({ Userlist }: Props) => {
             صدور فاکتور جدید
           </Button>
 
-          <Button color="danger" variant="light">
+          <Button
+            onPress={() => router.push("/admin/invoice-issuing")}
+            color="danger"
+            variant="light"
+          >
             انصراف
           </Button>
         </div>

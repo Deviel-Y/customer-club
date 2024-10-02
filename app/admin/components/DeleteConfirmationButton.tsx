@@ -19,12 +19,14 @@ interface Props {
   endpoint: string;
   title: string;
   content: string;
+  successMessage: string;
 }
 
 export const DeleteConfirmationButton = ({
   endpoint,
   content,
   title,
+  successMessage,
 }: Props) => {
   const [isLoading, setisLoading] = useState<boolean>(false);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -59,7 +61,10 @@ export const DeleteConfirmationButton = ({
                     setisLoading(true);
                     axios
                       .delete(endpoint)
-                      .then(() => router.refresh())
+                      .then(() => {
+                        router.refresh();
+                        toast.success(successMessage);
+                      })
                       .catch((error: AxiosError) => {
                         setisLoading(false);
                         onClose();
@@ -73,8 +78,8 @@ export const DeleteConfirmationButton = ({
             </div>
           )}
         </ModalContent>
+        <Toaster />
       </Modal>
-      <Toaster />
     </div>
   );
 };

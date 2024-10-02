@@ -235,6 +235,7 @@ const UserForm = ({ user }: Props) => {
 
           <Button
             isDisabled={isLoading}
+            onPress={() => router.push("/admin/userList")}
             size="md"
             color="danger"
             variant="light"

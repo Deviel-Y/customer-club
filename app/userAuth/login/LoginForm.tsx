@@ -43,7 +43,8 @@ const LoginForm = () => {
           });
 
           res?.error
-            ? toast.error("رمز عبور یا آدرس ایمیل اشتباه است")
+            ? (toast.error("رمز عبور یا آدرس ایمیل اشتباه است"),
+              setLoading(false))
             : signIn("credentials", {
                 email: email.trim(),
                 password,

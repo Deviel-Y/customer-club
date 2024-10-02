@@ -47,6 +47,7 @@ const AdminInvoiceTable = ({ invoices, totalPage }: Props) => {
                   <BsDownload size={20} />
                 </Button>
                 <DeleteConfirmationButton
+                  successMessage="فاکتور با موفقیت حذف شد."
                   content="آیا از حذف این کاربر مطمئن اید؟"
                   title="حذف فاکتور"
                   endpoint={`/api/invoice/${invoice.id}`}
