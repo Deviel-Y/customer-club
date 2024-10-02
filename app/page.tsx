@@ -19,7 +19,7 @@ const HomePage = async () => {
   ];
 
   return (
-    <>
+    <div>
       <section className="flex flex-row justify-start gap-5 p-5">
         {dashboardCardInfo.map((info) => (
           <DashboardCard
@@ -29,7 +29,7 @@ const HomePage = async () => {
           />
         ))}
       </section>
-    </>
+    </div>
   );
 };
 

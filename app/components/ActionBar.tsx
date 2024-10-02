@@ -143,7 +143,7 @@ const ActionBar = () => {
           variant="underlined"
         />
 
-        {session?.user.role === "ADMIN" && (
+        {session?.user?.role === "ADMIN" && (
           <Input
             onChange={organizationOnChangeHandler}
             label="سازمان"
@@ -152,7 +152,7 @@ const ActionBar = () => {
           />
         )}
 
-        {session?.user.role === "ADMIN" && (
+        {session?.user?.role === "ADMIN" && (
           <Input
             onChange={componyBranchOnChangeHandler}
             label="شعبه"

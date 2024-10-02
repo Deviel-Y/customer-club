@@ -129,7 +129,7 @@ const Sidebar = () => {
       </div>
 
       <div className="flex flex-col gap-3 h-full">
-        {session.user.role === "USER" &&
+        {session.user?.role === "USER" &&
           userLinkLabels.map((label) => (
             <SidebarLink
               key={label}
@@ -140,7 +140,7 @@ const Sidebar = () => {
             </SidebarLink>
           ))}
 
-        {session.user.role === "ADMIN" &&
+        {session.user?.role === "ADMIN" &&
           adminLinkLabels.map((label) => (
             <SidebarLink
               key={label}

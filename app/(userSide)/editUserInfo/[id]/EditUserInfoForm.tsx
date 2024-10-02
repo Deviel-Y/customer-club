@@ -32,10 +32,10 @@ const EditUserInfoForm = ({ user }: Props) => {
         const promise = axios
           .patch(`/api/userAuth/${user.id}`, {
             ...data,
-            role: user.role,
-            companyName: user.companyName,
-            address: user.address,
-            email: user.email,
+            role: user?.role,
+            companyName: user?.companyName,
+            address: user?.address,
+            email: user?.email,
           })
           .then(() => {
             router.push("/");

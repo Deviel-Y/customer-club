@@ -56,11 +56,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (user) {
         return {
           ...token,
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          image: user.image,
-          role: user.role,
+          id: user?.id,
+          name: user?.name,
+          email: user?.email,
+          image: user?.image,
+          role: user?.role,
         };
       }
 
