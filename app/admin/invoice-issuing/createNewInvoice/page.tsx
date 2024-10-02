@@ -1,4 +1,4 @@
-import InvoiceForm from "@/app/components/InvoiceForm";
+import InvoiceForm from "@/app/admin/components/InvoiceForm";
 import getSession from "@/app/libs/getSession";
 import { authorizeAdmin } from "@/app/utils/authorizeRole";
 import prisma from "@/prisma/client";

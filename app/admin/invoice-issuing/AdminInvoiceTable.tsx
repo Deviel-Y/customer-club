@@ -1,6 +1,6 @@
 "use client";
 
-import { DeleteConfirmationButton } from "@/app/components/DeleteConfirmationButton";
+import { DeleteConfirmationButton } from "@/app/admin/components/DeleteConfirmationButton";
 import PaginationControl from "@/app/components/PaginationControl";
 import {
   Button,
