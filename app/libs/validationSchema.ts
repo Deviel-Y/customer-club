@@ -4,6 +4,7 @@ export type UserSide_userSchameType = z.infer<typeof userSide_userSchame>;
 export type FullUserSchameType = z.infer<typeof fullUserSchame>;
 export type SignInUserSchemaType = z.infer<typeof signInUserSchema>;
 export type InvoiceSchemaType = z.infer<typeof invoiceSchema>;
+export type PorInvoiceSchemaType = z.infer<typeof porInvoiceSchema>;
 
 export const userSide_userSchame = z
   .object({
@@ -166,4 +167,24 @@ export const invoiceSchema = z.object({
     .string()
     .min(1, { message: "وارد کردن این فیلد الزامی مبیاشد" })
     .max(50, { message: "نام شعبه تباید از 50 کاراکتر بیشتر باشد" }),
+});
+
+export const porInvoiceSchema = z.object({
+  invoiceNumber: z
+    .string()
+    .min(1, { message: "وارد کردن این فیلد الزامی مبیاشد" })
+    .max(30, { message: "شماره پیش فاکتور تباید از 30 کاراکتر بیشتر باشد" }),
+  assignedToUserId: z
+    .string({ message: "وارد کردن این فیلد الزامی مبیاشد" })
+    .min(1, { message: "وارد کردن این فیلد الزامی مبیاشد" })
+    .max(100, { message: "نام سازمان تباید از 100 کاراکتر بیشتر باشد" }),
+  description: z
+    .string()
+    .min(1, { message: "وارد کردن این فیلد الزامی مبیاشد" })
+    .max(200, { message: "توضیحات تباید از 200 کاراکتر بیشتر باشد" }),
+  organizationBranch: z
+    .string()
+    .min(1, { message: "وارد کردن این فیلد الزامی مبیاشد" })
+    .max(50, { message: "نام شعبه تباید از 50 کاراکتر بیشتر باشد" }),
+  expireDate: z.string().datetime(),
 });
