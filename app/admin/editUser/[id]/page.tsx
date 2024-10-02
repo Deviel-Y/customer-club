@@ -11,7 +11,7 @@ const EditUserPage = async ({ params: { id } }: Props) => {
   const session = await getSession();
   authorizeAdmin(session!);
 
-  const user = await prisma.user.findUnique({ where: { id: id } });
+  const user = await prisma.user.findUnique({ where: { id } });
 
   return (
     <div>

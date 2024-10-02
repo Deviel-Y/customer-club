@@ -42,7 +42,7 @@ export const PATCH = async (
       return NextResponse.json(validation.error.format(), { status: 400 });
 
     const similerInvoice = await prisma.invoice.findFirst({
-      where: { invoiceNumber: invoiceNumber.trim() },
+      where: { invoiceNumber: invoiceNumber.trim(), NOT: { id } },
     });
     if (similerInvoice)
       return NextResponse.json("فاکتور با این شماره فاکتور موجود میباشد.", {

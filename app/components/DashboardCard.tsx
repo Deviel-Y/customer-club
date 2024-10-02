@@ -51,6 +51,7 @@ const dataMapping: Record<
       <HiOutlineNewspaper className="figureIcon absolute bottom-4 left-10 scale-[6] stroke-[2px] opacity-10 w-6 overflow-visible h-8" />
     ),
   },
+
   adminUser: {
     label: "تعداد کاربرها",
     backgroundColor:
@@ -64,6 +65,7 @@ const dataMapping: Record<
       <VscAccount className="figureIcon absolute bottom-2 left-4 scale-[6] stroke-[0.75px] opacity-10 w-6 overflow-visible h-8" />
     ),
   },
+
   adminInvoice: {
     label: "تعداد فاکتورها",
     backgroundColor: "bg-gradient-to-r from-pink-500 to-rose-500",
@@ -76,6 +78,7 @@ const dataMapping: Record<
       <HiOutlineShoppingBag className="figureIcon absolute bottom-3 left-6 scale-[6] stroke-[2px] opacity-10 w-6 overflow-visible h-8" />
     ),
   },
+
   adminProformaInvoice: {
     label: "تعداد پیش فاکتورها",
     backgroundColor: "bg-gradient-to-r from-amber-200 to-yellow-500",
