@@ -28,6 +28,53 @@ const Sidebar = () => {
       : (containerControls.start("close"), svgControls.start("close"));
   }, [isOpen, svgControls, containerControls]);
 
+  const sidebarDataMap: Record<string, { icon: JSX.Element; href: string }> = {
+    داشبورد: {
+      href: "/",
+      icon: <HomeIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />,
+    },
+    فاکتورها: {
+      href: "/invoice",
+      icon: (
+        <ShoppingBagIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />
+      ),
+    },
+    "پیش فاکتورها": {
+      href: "/proformaInvoice",
+      icon: (
+        <NewspaperIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />
+      ),
+    },
+    "ویرایش اطلاعات کاربر": {
+      href: `/editUserInfo/${session?.user.id}`,
+      icon: (
+        <UserCircleIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />
+      ),
+    },
+    "پنل مدیریت": {
+      href: "/admin",
+      icon: <HomeIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />,
+    },
+    "صدور فاکتور": {
+      href: "/admin/invoice-issuing",
+      icon: (
+        <ShoppingBagIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />
+      ),
+    },
+    "صدور پیش فاکتور": {
+      href: "/admin/proformaInvoice-issuing",
+      icon: (
+        <NewspaperIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />
+      ),
+    },
+    "مدیریت کاربران": {
+      href: "/admin/userList",
+      icon: (
+        <UserCircleIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />
+      ),
+    },
+  };
+
   if (!session?.user) return null;
 
   return (
@@ -114,54 +161,6 @@ const Sidebar = () => {
 
 export default Sidebar;
 
-//Used for sidebarLinks
-const sidebarDataMap: Record<string, { icon: JSX.Element; href: string }> = {
-  داشبورد: {
-    href: "/",
-    icon: <HomeIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />,
-  },
-  فاکتورها: {
-    href: "/invoice",
-    icon: (
-      <ShoppingBagIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />
-    ),
-  },
-  "پیش فاکتورها": {
-    href: "/proformaInvoice",
-    icon: (
-      <NewspaperIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />
-    ),
-  },
-  "ویرایش اطلاعات کاربر": {
-    href: "/editUserInfo",
-    icon: (
-      <UserCircleIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />
-    ),
-  },
-  "پنل مدیریت": {
-    href: "/admin",
-    icon: <HomeIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />,
-  },
-  "صدور فاکتور": {
-    href: "/admin/invoice-issuing",
-    icon: (
-      <ShoppingBagIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />
-    ),
-  },
-  "صدور پیش فاکتور": {
-    href: "/admin/proformaInvoice-issuing",
-    icon: (
-      <NewspaperIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />
-    ),
-  },
-  "مدیریت کاربران": {
-    href: "/admin/userList",
-    icon: (
-      <UserCircleIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />
-    ),
-  },
-};
-
 // Framer motion variants
 const containerVariant = {
   open: {
@@ -211,6 +210,7 @@ const userLinkLabels: string[] = [
   "پیش فاکتورها",
   "ویرایش اطلاعات کاربر",
 ];
+
 const adminLinkLabels: string[] = [
   "پنل مدیریت",
   "صدور فاکتور",

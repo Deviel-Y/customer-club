@@ -15,6 +15,7 @@ const Navbar = () => {
     "/userAuth/login": { label: "داشبورد" },
     "/invoice": { label: "فاکتورها" },
     "/proformaInvoice": { label: "پیش فاکتورها" },
+    "/editUserInfo": { label: "ویرایش اطلاعات کاربر" },
     "/admin": { label: "پنل مدیریت" },
     "/admin/invoice-issuing": { label: "صدور فاکتور" },
     "/admin/proformaInvoice-issuing": { label: "صدور پیش فاکتور" },
@@ -25,7 +26,7 @@ const Navbar = () => {
   };
 
   useEffect(() => {
-    if (path.includes("/admin/editUser")) {
+    if (path.includes("/admin/editUser") || path.includes("/editUserInfo")) {
       setPathName(removeLastSegmentURL(path));
     } else {
       setPathName(path);
