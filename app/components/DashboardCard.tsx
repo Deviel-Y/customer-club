@@ -62,7 +62,7 @@ const dataMapping: Record<
     iconBackgroung: "bg-gray-400",
     href: "/admin/userList",
     figure: (
-      <VscAccount className="figureIcon absolute bottom-2 left-4 scale-[6] stroke-[0.75px] opacity-10 w-6 overflow-visible h-8" />
+      <VscAccount className="figureIcon absolute bottom-2 left-4 scale-[5] stroke-[0.75px] opacity-10 w-6 overflow-visible h-8" />
     ),
   },
 
