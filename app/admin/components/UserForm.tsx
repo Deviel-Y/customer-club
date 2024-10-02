@@ -135,7 +135,7 @@ const UserForm = ({ user }: Props) => {
                     )}
                   </Button>
                 }
-                {...register("password")}
+                {...register("newPassword")}
                 isRequired
                 size="md"
                 type={isPasswordsVisible.password ? "text" : "password"}
@@ -143,7 +143,9 @@ const UserForm = ({ user }: Props) => {
               />
             </div>
 
-            <FormErrorMessage errorMessage={errors.password?.message || ""} />
+            <FormErrorMessage
+              errorMessage={errors.newPassword?.message || ""}
+            />
           </div>
 
           <div className="col-span-2 w-full">

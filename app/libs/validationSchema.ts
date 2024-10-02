@@ -12,7 +12,13 @@ export const userSchame = z
       .min(6)
       .max(50, { message: "ایمیل باید کمتر از 50 کاراکتر باشد" })
       .optional(),
-    password: z
+    currentPassword: z
+      .string()
+      .min(8, { message: "گذرواژه باید بیشتر از 8 کاراکتر باشد" })
+      .max(120, { message: "گذرواژه باید کمتر از 120 کاراکتر باشد" })
+      .optional()
+      .or(literal("")),
+    newPassword: z
       .string()
       .min(8, { message: "گذرواژه باید بیشتر از 8 کاراکتر باشد" })
       .max(120, { message: "گذرواژه باید کمتر از 120 کاراکتر باشد" })
@@ -40,10 +46,13 @@ export const userSchame = z
       errorMap: () => ({ message: "تعیین سطح درسترسی الزامی است" }),
     }),
   })
-  .refine(({ password, confirmPassword }) => password === confirmPassword, {
-    message: "گذرواژه ها با یکدیگر مطابقت ندارند",
-    path: ["confirmPassword"],
-  })
+  .refine(
+    ({ newPassword, confirmPassword }) => newPassword === confirmPassword,
+    {
+      message: "گذرواژه ها با یکدیگر مطابقت ندارند",
+      path: ["confirmPassword"],
+    }
+  )
   .refine(
     ({ role, companyName, companyBranch, address, itManager }) => {
       if (role === "USER") {

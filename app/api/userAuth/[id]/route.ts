@@ -28,45 +28,62 @@ export const PATCH = async (
   request: NextRequest,
   { params: { id } }: Props
 ) => {
-  const body: UserSchameType = await request.json();
-  const {
-    email,
-    password,
-    confirmPassword,
-    role,
-    address,
-    companyName,
-    companyBranch,
-    itManager,
-    image,
-  } = body;
-
-  const user = await prisma.user.findUnique({ where: { id } });
-  if (!user) return NextResponse.json("User not found", { status: 404 });
-
-  const validation = userSchame.safeParse(body);
-  if (!validation.success)
-    return NextResponse.json(validation.error.format(), { status: 400 });
-
-  if (password !== confirmPassword)
-    return NextResponse.json("گذرواژه ها با یکدیگر مطابقت ندارند", {
-      status: 400,
-    });
-
-  const hashedPassword = await bcrypt.hash(password!, 10);
-
-  const updatedUser = await prisma.user.update({
-    where: { id },
-    data: {
-      email: email?.toLocaleLowerCase()!,
-      hashedPassword,
+  try {
+    const body: UserSchameType = await request.json();
+    const {
+      email,
+      currentPassword,
+      newPassword,
+      confirmPassword,
       role,
       address,
       companyName,
       companyBranch,
       itManager,
       image,
-    },
-  });
-  return NextResponse.json(updatedUser);
+    } = body;
+
+    const user = await prisma.user.findUnique({ where: { id } });
+    if (!user) return NextResponse.json("User not found", { status: 404 });
+
+    const validation = userSchame.safeParse(body);
+    if (!validation.success)
+      return NextResponse.json(validation.error.format(), { status: 400 });
+
+    //For when if user is a regular user
+    if (currentPassword) {
+      const isCurrentPasswordValid: boolean = await bcrypt.compare(
+        currentPassword,
+        user.hashedPassword
+      );
+      if (!isCurrentPasswordValid)
+        return NextResponse.json("گذرواژه فعلی خود را به درستی وارد کنید", {
+          status: 400,
+        });
+    }
+
+    if (newPassword !== confirmPassword)
+      return NextResponse.json("گذرواژه ها با یکدیگر مطابقت ندارند", {
+        status: 400,
+      });
+
+    const hashedPassword = await bcrypt.hash(newPassword!, 10);
+
+    const updatedUser = await prisma.user.update({
+      where: { id },
+      data: {
+        email: email?.toLocaleLowerCase()!,
+        hashedPassword,
+        role,
+        address: role === "ADMIN" ? null : address,
+        companyName: role === "ADMIN" ? null : companyName,
+        companyBranch: role === "ADMIN" ? null : companyBranch,
+        itManager: role === "ADMIN" ? null : itManager,
+        image,
+      },
+    });
+    return NextResponse.json(updatedUser);
+  } catch (error) {
+    return NextResponse.json(error);
+  }
 };

@@ -12,7 +12,7 @@ export const POST = async (request: NextRequest) => {
       companyName,
       email,
       itManager,
-      password,
+      newPassword,
       address,
       image,
       role,
@@ -30,17 +30,17 @@ export const POST = async (request: NextRequest) => {
         status: 400,
       });
 
-    if (!password || !confirmPassword)
+    if (!newPassword || !confirmPassword)
       return NextResponse.json("وارد کردن گذرواژه الزامی است", {
         status: 400,
       });
 
-    if (password !== confirmPassword)
+    if (newPassword !== confirmPassword)
       return NextResponse.json("گذرواژه ها با یکدیگر مطابقت ندارند", {
         status: 400,
       });
 
-    const hashedPassword = await bcrypt.hash(password!, 10);
+    const hashedPassword = await bcrypt.hash(newPassword!, 10);
 
     const newUser = await prisma.user.create({
       data: {
