@@ -79,7 +79,7 @@ const AdminPorformaInvoiceTable = ({ porformaInvoice, totalPage }: Props) => {
                 </Button>
               </div>
             </TableCell>
-            <TableCell>{p_invoice.proformaInvoiceNumber}</TableCell>
+            <TableCell>{p_invoice.porformaInvoiceNumber}</TableCell>
             <TableCell>{p_invoice.organization}</TableCell>
             <TableCell>{p_invoice.organizationBranch}</TableCell>
             <TableCell>{p_invoice.description}</TableCell>
@@ -87,7 +87,7 @@ const AdminPorformaInvoiceTable = ({ porformaInvoice, totalPage }: Props) => {
               {moment(p_invoice.createdAt).format("jYYYY/jM/jD")}
             </TableCell>
             <TableCell>
-              {moment(p_invoice.updatedAt).format("jYYYY/jM/jD")}
+              {moment(p_invoice.expiredAt).format("jYYYY/jM/jD")}
             </TableCell>
           </TableRow>
         ))}
@@ -101,7 +101,7 @@ export default AdminPorformaInvoiceTable;
 const columns: { label: string; value: keyof PorformaInvoice | "operation" }[] =
   [
     { label: "عملیات", value: "operation" },
-    { label: "شماره پیش فاکتور", value: "proformaInvoiceNumber" },
+    { label: "شماره پیش فاکتور", value: "porformaInvoiceNumber" },
     { label: "سازمان", value: "organization" },
     { label: "شعبه", value: "organizationBranch" },
     { label: "توضیحات", value: "description" },

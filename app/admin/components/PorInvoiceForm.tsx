@@ -11,10 +11,11 @@ import {
   Input,
 } from "@nextui-org/react";
 import { PorformaInvoice, User } from "@prisma/client";
+import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import FormErrorMessage from "../../components/FormErrorMessage";
 import {
   porInvoiceSchema,
@@ -42,37 +43,36 @@ const PorInvoiceForm = ({ Userlist, PorInvoice }: Props) => {
 
   return (
     <form
-      onSubmit={handleSubmit((data) => {
-        console.log(data);
-        // const promise = PorInvoice
-        //   ? axios
-        //       .patch(`/api/invoice/${PorInvoice.id}`, {
-        //         invoiceNumber: invoiceNumber.trim(),
-        //         organization,
-        //         ...data,
-        //       })
-        //       .then(() => {
-        //         router.push("/admin/invoice-issuing");
-        //         router.refresh();
-        //       })
-        //   : axios
-        //       .post("/api/invoice", {
-        //         invoiceNumber: invoiceNumber.trim(),
-        //         organization,
-        //         ...data,
-        //       })
-        //       .then(() => {
-        //         router.push("/admin/invoice-issuing");
-        //         router.refresh();
-        //       });
+      onSubmit={handleSubmit(({ porformaInvoiceNumber, ...data }) => {
+        const promise = PorInvoice
+          ? axios
+              .patch(`/api/porformaInvoice/${PorInvoice.id}`, {
+                porformaInvoiceNumber: porformaInvoiceNumber.trim(),
+                organization,
+                ...data,
+              })
+              .then(() => {
+                router.push("/admin/porformaInvoice-issuing");
+                router.refresh();
+              })
+          : axios
+              .post("/api/porformaInvoice", {
+                porformaInvoiceNumber: porformaInvoiceNumber.trim(),
+                organization,
+                ...data,
+              })
+              .then(() => {
+                router.push("/admin/porformaInvoice-issuing");
+                router.refresh();
+              });
 
-        // toast.promise(promise, {
-        //   error: (error: AxiosError) => error.response?.data as string,
-        //   loading: PorInvoice ? "در حال ویرایش فاکتور" : "در حال صدور فاکتور",
-        //   success: PorInvoice
-        //     ? "فاکتور با موفقیت ویرایش شد"
-        //     : "فاکتور با موفقیت صادر شد",
-        // });
+        toast.promise(promise, {
+          error: (error: AxiosError) => error.response?.data as string,
+          loading: PorInvoice ? "در حال ویرایش فاکتور" : "در حال صدور فاکتور",
+          success: PorInvoice
+            ? "فاکتور با موفقیت ویرایش شد"
+            : "فاکتور با موفقیت صادر شد",
+        });
       })}
       className="flex justify-center items-center"
     >

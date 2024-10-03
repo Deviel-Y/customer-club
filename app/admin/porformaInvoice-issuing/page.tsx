@@ -31,7 +31,7 @@ const porformaInvoiceListPage = async ({
   const porformaInvoiceCount: number = await prisma.porformaInvoice.count({
     where: {
       description: { contains: description },
-      proformaInvoiceNumber: { contains: number },
+      porformaInvoiceNumber: { contains: number },
       organization: { contains: organization },
       organizationBranch: { contains: organizationBranch },
     },
@@ -40,7 +40,7 @@ const porformaInvoiceListPage = async ({
   const adminSidePorformaInvoiceList = await prisma.porformaInvoice.findMany({
     where: {
       description: { contains: description },
-      proformaInvoiceNumber: { contains: number },
+      porformaInvoiceNumber: { contains: number },
       organization: { contains: organization },
       organizationBranch: { contains: organizationBranch },
     },
