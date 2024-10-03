@@ -73,7 +73,7 @@ const InvoiceForm = ({ Userlist, invoice }: Props) => {
     >
       <Card className="flex flex-col p-5 gap-2 w-4/5">
         <div>
-          <h2 className="text-[25px]">اطلاعات فاکتور</h2>
+          <h2 className="text-[25px] mb-5">اطلاعات فاکتور</h2>
         </div>
 
         <div className="grid grid-cols-4 grid-rows-2 gap-3 place-items-center">

@@ -7,7 +7,7 @@ const CreateNewUserPage = async () => {
   authorizeAdmin(session!);
 
   return (
-    <div>
+    <div className="py-5 px-2">
       <UserForm />
     </div>
   );
