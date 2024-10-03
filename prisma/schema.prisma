@@ -48,7 +48,7 @@ model Invoice {
 
 model PorformaInvoice {
   id                    String   @id @default(cuid())
-  proformaInvoiceNumber String   @unique
+  porformaInvoiceNumber String   @unique
   organization          String
   description           String
   organizationBranch    String

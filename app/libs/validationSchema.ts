@@ -170,7 +170,7 @@ export const invoiceSchema = z.object({
 });
 
 export const porInvoiceSchema = z.object({
-  invoiceNumber: z
+  porformaInvoiceNumber: z
     .string()
     .min(1, { message: "وارد کردن این فیلد الزامی مبیاشد" })
     .max(30, { message: "شماره پیش فاکتور تباید از 30 کاراکتر بیشتر باشد" }),
@@ -186,5 +186,5 @@ export const porInvoiceSchema = z.object({
     .string()
     .min(1, { message: "وارد کردن این فیلد الزامی مبیاشد" })
     .max(50, { message: "نام شعبه تباید از 50 کاراکتر بیشتر باشد" }),
-  expireDate: z.string().datetime(),
+  expiredAt: z.string().datetime(),
 });

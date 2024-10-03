@@ -85,13 +85,15 @@ const PorInvoiceForm = ({ Userlist, PorInvoice }: Props) => {
           <div className="col-span-1 w-full">
             <Input
               size="lg"
-              defaultValue={PorInvoice?.proformaInvoiceNumber}
-              {...register("invoiceNumber")}
+              defaultValue={PorInvoice?.porformaInvoiceNumber}
+              {...register("porformaInvoiceNumber")}
               isRequired
               label="شماره فاکتور"
             />
 
-            <FormErrorMessage errorMessage={errors.invoiceNumber?.message!} />
+            <FormErrorMessage
+              errorMessage={errors.porformaInvoiceNumber?.message!}
+            />
           </div>
 
           <div className="col-span-1 w-full">
@@ -145,7 +147,7 @@ const PorInvoiceForm = ({ Userlist, PorInvoice }: Props) => {
           <div className="col-span-1 w-full">
             <Controller
               control={control}
-              name="expireDate"
+              name="expiredAt"
               render={({ field: { onChange } }) => (
                 <DatePicker
                   minValue={today(getLocalTimeZone())}
@@ -162,7 +164,7 @@ const PorInvoiceForm = ({ Userlist, PorInvoice }: Props) => {
               )}
             />
 
-            <FormErrorMessage errorMessage={errors.expireDate?.message!} />
+            <FormErrorMessage errorMessage={errors.expiredAt?.message!} />
           </div>
 
           <div className="col-span-4 w-full">
