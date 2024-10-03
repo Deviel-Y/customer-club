@@ -8,6 +8,22 @@ interface Props {
   params: { id: string };
 }
 
+export const DELETE = async (
+  request: NextRequest,
+  { params: { id } }: Props
+) => {
+  const porformaInvoice = await prisma.porformaInvoice.findUnique({
+    where: { id },
+  });
+  if (!porformaInvoice)
+    return NextResponse.json("پیش فاکتوری یافت نشد.", { status: 404 });
+
+  const deletedPorInvoice = await prisma.porformaInvoice.delete({
+    where: { id },
+  });
+  return NextResponse.json(deletedPorInvoice);
+};
+
 export const PATCH = async (
   request: NextRequest,
   { params: { id } }: Props
