@@ -142,7 +142,6 @@ const PorInvoiceForm = ({ Userlist, PorInvoice }: Props) => {
 
           <div className="col-span-1 w-full">
             <Controller
-              // defaultValue={PorInvoice?.expiredAt.toISOString()}
               control={control}
               name="expiredAt"
               render={({ field: { onChange } }) => (

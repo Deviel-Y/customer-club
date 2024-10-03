@@ -122,14 +122,16 @@ const ActionBar = ({ endpoint, buttonLabel }: Props) => {
 
   return (
     <div className=" flex flex-row gap-5 w-full place-content-center place-items-center">
-      <Button
-        className="self-center"
-        color="secondary"
-        variant="shadow"
-        onPress={() => router.push(endpoint!)}
-      >
-        {buttonLabel}
-      </Button>
+      {session?.user.role === "ADMIN" && (
+        <Button
+          className="self-center"
+          color="secondary"
+          variant="shadow"
+          onPress={() => router.push(endpoint!)}
+        >
+          {buttonLabel}
+        </Button>
+      )}
 
       <div className="grid grid-cols-4 grid-rows-1 w-full gap-5 mb-5">
         <Input
