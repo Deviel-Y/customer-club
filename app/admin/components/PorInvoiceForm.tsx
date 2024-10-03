@@ -12,6 +12,7 @@ import {
 } from "@nextui-org/react";
 import { PorformaInvoice, User } from "@prisma/client";
 import axios, { AxiosError } from "axios";
+import moment from "moment-jalaali";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -28,6 +29,9 @@ interface Props {
 }
 
 const PorInvoiceForm = ({ Userlist, PorInvoice }: Props) => {
+  const [date, setDate] = useState(
+    moment(PorInvoice?.expiredAt).format("jYYYY/jMM/jDD")
+  );
   const router = useRouter();
   const [userId, setUserId] = useState<string>();
   const organization = Userlist.find((user) => user.id == userId)?.companyName;
@@ -80,7 +84,7 @@ const PorInvoiceForm = ({ Userlist, PorInvoice }: Props) => {
     >
       <Card className="flex flex-col p-5 gap-2 w-4/5">
         <div>
-          <h2 className="text-[25px]">اطلاعات پیش فاکتور</h2>
+          <h2 className="text-[25px] mb-5">اطلاعات پیش فاکتور</h2>
         </div>
 
         <div className="grid grid-cols-4 grid-rows-2 gap-3 place-items-center">
@@ -146,6 +150,8 @@ const PorInvoiceForm = ({ Userlist, PorInvoice }: Props) => {
               name="expiredAt"
               render={({ field: { onChange } }) => (
                 <DatePicker
+                  className="translate-y-3"
+                  description={`تاریخ شمسی : ${date}`}
                   minValue={today(getLocalTimeZone())}
                   defaultValue={today(getLocalTimeZone())}
                   onChange={(value) => {
@@ -153,6 +159,7 @@ const PorInvoiceForm = ({ Userlist, PorInvoice }: Props) => {
                       .toDate(getLocalTimeZone())
                       .toISOString();
                     onChange(formattedDate);
+                    setDate(moment(formattedDate).format("jYYYY/jMM/jDD"));
                   }}
                   size="lg"
                   label="تاریخ انقضا"
