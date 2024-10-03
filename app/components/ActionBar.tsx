@@ -1,17 +1,16 @@
 "use client";
 
 import { Button, Input } from "@nextui-org/react";
-import { useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ChangeEvent } from "react";
 
 interface Props {
   endpoint?: string;
   buttonLabel?: string;
+  isAdmin?: boolean;
 }
 
-const ActionBar = ({ endpoint, buttonLabel }: Props) => {
-  const { data: session } = useSession();
+const ActionBar = ({ endpoint, buttonLabel, isAdmin = true }: Props) => {
   const searchParmas = useSearchParams();
   const router = useRouter();
 
@@ -122,7 +121,7 @@ const ActionBar = ({ endpoint, buttonLabel }: Props) => {
 
   return (
     <div className=" flex flex-row gap-5 w-full place-content-center place-items-center">
-      {session?.user.role === "ADMIN" && (
+      {isAdmin && (
         <Button
           className="self-center"
           color="secondary"
@@ -136,7 +135,11 @@ const ActionBar = ({ endpoint, buttonLabel }: Props) => {
       <div className="grid grid-cols-4 grid-rows-1 w-full gap-5 mb-5">
         <Input
           onChange={numberOnChangeHandler}
-          label="شماره فاکتور"
+          label={
+            buttonLabel?.includes("پیش فاکتور")
+              ? "شماره پیش فاکتور"
+              : "شماره فاکتور"
+          }
           type="search"
           variant="underlined"
         />
@@ -148,7 +151,7 @@ const ActionBar = ({ endpoint, buttonLabel }: Props) => {
           variant="underlined"
         />
 
-        {session?.user?.role === "ADMIN" && (
+        {isAdmin && (
           <Input
             onChange={organizationOnChangeHandler}
             label="سازمان"
@@ -157,7 +160,7 @@ const ActionBar = ({ endpoint, buttonLabel }: Props) => {
           />
         )}
 
-        {session?.user?.role === "ADMIN" && (
+        {isAdmin && (
           <Input
             onChange={componyBranchOnChangeHandler}
             label="شعبه"

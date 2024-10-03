@@ -40,7 +40,7 @@ const InvoicePage = async ({
 
   return (
     <div className="flex flex-col gap-5 p-10 w-full">
-      <ActionBar />
+      <ActionBar isAdmin={false} />
 
       <UserInvoiceTable
         totalPage={Math.ceil(invoiceCount / pageSize)}
