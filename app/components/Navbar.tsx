@@ -15,7 +15,8 @@ const Navbar = () => {
     if (
       path.includes("/admin/editUser") ||
       path.includes("/editUserInfo") ||
-      path.includes("/admin/invoice-issuing/editInvoiceInfo")
+      path.includes("/admin/invoice-issuing/editInvoiceInfo") ||
+      path.includes("/admin/porformaInvoice-issuing/editPorInvoiceInfo")
     ) {
       setPathName(removeLastSegmentURL(path));
     } else {
@@ -58,5 +59,8 @@ const headingMapping: Record<string, { label: string }> = {
   "/admin/invoice-issuing/editInvoiceInfo": { label: "ویرایش فاکتور" },
   "/admin/porformaInvoice-issuing/createNewPorInvoice": {
     label: "صدور پیش فاکتور جدید",
+  },
+  "/admin/porformaInvoice-issuing/editPorInvoiceInfo": {
+    label: "ویرایش پیش فاکتور",
   },
 };

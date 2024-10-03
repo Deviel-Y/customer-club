@@ -41,7 +41,7 @@ export const POST = async (request: NextRequest) => {
         issuerId: session?.user.id!,
       },
     });
-    return NextResponse.json(newPorformaInvoice);
+    return NextResponse.json(newPorformaInvoice, { status: 201 });
   } catch (error) {
     return NextResponse.json(error);
   }

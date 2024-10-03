@@ -55,16 +55,16 @@ const AdminPorformaInvoiceTable = ({ porformaInvoice, totalPage }: Props) => {
             <TableCell>
               <div className="flex flex-row justify-center items-center gap-x-3">
                 <DeleteConfirmationButton
-                  successMessage="فاکتور با موفقیت حذف شد."
-                  content="آیا از حذف این کاربر مطمئن اید؟"
-                  title="حذف فاکتور"
-                  endpoint={`/api/invoice/${p_invoice.id}`}
+                  successMessage="پیش فاکتور با موفقیت حذف شد."
+                  content="آیا از حذف این پیش فاکتور مطمئن اید؟"
+                  title="حذف پیش فاکتور"
+                  endpoint={`/api/porformaInvoice/${p_invoice.id}`}
                 />
 
                 <Button
                   onPress={() =>
                     router.push(
-                      `/admin/invoice-issuing/editInvoiceInfo/${p_invoice.id}`
+                      `/admin/porformaInvoice-issuing/editPorInvoiceInfo/${p_invoice.id}`
                     )
                   }
                   isIconOnly

@@ -68,17 +68,19 @@ const PorInvoiceForm = ({ Userlist, PorInvoice }: Props) => {
 
         toast.promise(promise, {
           error: (error: AxiosError) => error.response?.data as string,
-          loading: PorInvoice ? "در حال ویرایش فاکتور" : "در حال صدور فاکتور",
+          loading: PorInvoice
+            ? "در حال ویرایش پیش فاکتور"
+            : "در حال صدور پیش فاکتور",
           success: PorInvoice
-            ? "فاکتور با موفقیت ویرایش شد"
-            : "فاکتور با موفقیت صادر شد",
+            ? "پیش فاکتور با موفقیت ویرایش شد"
+            : "پیش فاکتور با موفقیت صادر شد",
         });
       })}
       className="flex justify-center items-center"
     >
       <Card className="flex flex-col p-5 gap-2 w-4/5">
         <div>
-          <h2 className="text-[25px]">اطلاعات فاکتور</h2>
+          <h2 className="text-[25px]">اطلاعات پیش فاکتور</h2>
         </div>
 
         <div className="grid grid-cols-4 grid-rows-2 gap-3 place-items-center">
@@ -100,14 +102,8 @@ const PorInvoiceForm = ({ Userlist, PorInvoice }: Props) => {
             <Controller
               name="assignedToUserId"
               control={control}
-              defaultValue={PorInvoice?.organization}
               render={({ field: { onChange } }) => (
                 <Autocomplete
-                  errorMessage={(value) =>
-                    value.validationDetails.badInput
-                      ? "تاریج معتبر نیست"
-                      : undefined
-                  }
                   onSelectionChange={(value) => {
                     onChange(value);
                     setUserId(value as string);
@@ -146,6 +142,7 @@ const PorInvoiceForm = ({ Userlist, PorInvoice }: Props) => {
 
           <div className="col-span-1 w-full">
             <Controller
+              // defaultValue={PorInvoice?.expiredAt.toISOString()}
               control={control}
               name="expiredAt"
               render={({ field: { onChange } }) => (
@@ -173,7 +170,7 @@ const PorInvoiceForm = ({ Userlist, PorInvoice }: Props) => {
               defaultValue={PorInvoice?.description}
               {...register("description")}
               isRequired
-              label="توضیحات فاکتور"
+              label="توضیحات پیش فاکتور"
             />
 
             <FormErrorMessage errorMessage={errors?.description?.message!} />
@@ -183,7 +180,7 @@ const PorInvoiceForm = ({ Userlist, PorInvoice }: Props) => {
         <div className="flex flex-row justify-between items-center gap-5 mt-5">
           <div className="flex flex-row gap-5">
             <Button type="submit" color="primary" variant="shadow">
-              {PorInvoice ? "ویرایش فاکتور" : "صدور فاکتور جدید"}
+              {PorInvoice ? "ویرایش پیش فاکتور" : "صدور پیش فاکتور جدید"}
             </Button>
 
             <Button
@@ -195,10 +192,10 @@ const PorInvoiceForm = ({ Userlist, PorInvoice }: Props) => {
             </Button>
           </div>
 
-          <Button color="secondary">بارگذاری فایل فاکتور</Button>
+          <Button color="secondary">بارگذاری فایل پیش فاکتور</Button>
         </div>
+        <Toaster />
       </Card>
-      <Toaster />
     </form>
   );
 };

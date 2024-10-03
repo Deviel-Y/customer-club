@@ -1,7 +1,7 @@
+import getSession from "@/app/libs/getSession";
 import { porInvoiceSchema } from "@/app/libs/validationSchema";
 import prisma from "@/prisma/client";
 import { PorformaInvoice } from "@prisma/client";
-import { getSession } from "next-auth/react";
 import { NextRequest, NextResponse } from "next/server";
 
 interface Props {
@@ -40,7 +40,9 @@ export const PATCH = async (
     porformaInvoiceNumber,
   } = body;
 
-  const porInvoice = await prisma.porformaInvoice.findUnique({ where: { id } });
+  const porInvoice = await prisma.porformaInvoice.findUnique({
+    where: { id },
+  });
   if (!porInvoice)
     return NextResponse.json("پیش فاکتوری یافت نشد.", { status: 404 });
 
@@ -50,7 +52,7 @@ export const PATCH = async (
 
   const similarPorInvoice = await prisma.porformaInvoice.findFirst({
     where: {
-      porformaInvoiceNumber,
+      porformaInvoiceNumber: porformaInvoiceNumber.trim(),
       NOT: { id },
     },
   });
