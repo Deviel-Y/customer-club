@@ -79,14 +79,14 @@ const dataMapping: Record<
     ),
   },
 
-  adminProformaInvoice: {
+  adminPorformaInvoice: {
     label: "تعداد پیش فاکتورها",
     backgroundColor: "bg-gradient-to-r from-amber-200 to-yellow-500",
     icon: (
       <NewspaperIcon className="fill-yellow-200 stroke-[0.75px] opacity-75 w-8 h-8 text-center" />
     ),
     iconBackgroung: "bg-yellow-400",
-    href: "/admin/proformaInvoice-issuing",
+    href: "/admin/porformaInvoice-issuing",
     figure: (
       <HiOutlineNewspaper className="figureIcon absolute bottom-4 left-10 scale-[6] stroke-[2px] opacity-10 w-6 overflow-visible h-8" />
     ),
