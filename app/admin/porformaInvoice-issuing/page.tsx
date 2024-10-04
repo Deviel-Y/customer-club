@@ -2,6 +2,7 @@ import ActionBar from "@/app/components/ActionBar";
 import getSession from "@/app/libs/getSession";
 import { authorizeAdmin } from "@/app/utils/authorizeRole";
 import prisma from "@/prisma/client";
+import { Status } from "@prisma/client";
 import AdminPorformaInvoiceTable from "./AdminPorformaInvoiceTable";
 
 interface Props {
@@ -11,6 +12,7 @@ interface Props {
     organization: string;
     organizationBranch: string;
     pageNumber: number;
+    statusFilter: string;
   };
 }
 
@@ -21,6 +23,7 @@ const porformaInvoiceListPage = async ({
     organization,
     organizationBranch,
     pageNumber,
+    statusFilter,
   },
 }: Props) => {
   const session = await getSession();
@@ -35,6 +38,12 @@ const porformaInvoiceListPage = async ({
       status: "EXPIRED",
     },
   });
+  const prismaStatus = Object.values(Status);
+  const allStatuses = [...prismaStatus, "ALL"];
+  const statusFilterEnum =
+    statusFilter === "ALL" || !allStatuses.includes(statusFilter)
+      ? undefined
+      : (statusFilter as Status);
 
   const currentPage = pageNumber || 1;
   const pageSize: number = 6;
@@ -44,6 +53,7 @@ const porformaInvoiceListPage = async ({
       porformaInvoiceNumber: { contains: number },
       organization: { contains: organization },
       organizationBranch: { contains: organizationBranch },
+      status: statusFilterEnum,
     },
   });
 
@@ -53,6 +63,7 @@ const porformaInvoiceListPage = async ({
       porformaInvoiceNumber: { contains: number },
       organization: { contains: organization },
       organizationBranch: { contains: organizationBranch },
+      status: statusFilterEnum,
     },
     take: pageSize,
     skip: (currentPage - 1) * pageSize,

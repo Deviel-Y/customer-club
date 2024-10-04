@@ -1,5 +1,5 @@
 import prisma from "@/prisma/client";
-import { PorformaInvoice } from "@prisma/client";
+import { PorformaInvoice, Status } from "@prisma/client";
 import ActionBar from "../../components/ActionBar";
 import getSession from "../../libs/getSession";
 import { authorizeUser } from "../../utils/authorizeRole";
@@ -10,11 +10,12 @@ interface Props {
     number: string;
     description: string;
     pageNumber: number;
+    statusFilter: string;
   };
 }
 
 const PorformaInvoicePage = async ({
-  searchParams: { number, description, pageNumber },
+  searchParams: { number, description, pageNumber, statusFilter },
 }: Props) => {
   const session = await getSession();
   authorizeUser(session!);
@@ -29,12 +30,16 @@ const PorformaInvoicePage = async ({
     },
   });
 
+  const statusFilterEnum =
+    statusFilter === "ALL" ? undefined : (statusFilter as Status);
+
   const currentPage = pageNumber || 1;
 
   const porInvoiceCount: number = await prisma.porformaInvoice.count({
     where: {
       description: { contains: description },
       porformaInvoiceNumber: { contains: number },
+      status: statusFilterEnum,
     },
   });
 
@@ -44,9 +49,11 @@ const PorformaInvoicePage = async ({
         assignedToUserId: session?.user.id,
         porformaInvoiceNumber: { contains: number },
         description: { contains: description },
+        status: statusFilterEnum,
       },
       take: pageSize,
       skip: (currentPage - 1) * pageSize,
+      orderBy: { createdAt: "desc" },
     });
 
   return (
