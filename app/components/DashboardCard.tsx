@@ -46,7 +46,7 @@ const dataMapping: Record<
       <NewspaperIcon className="stroke-[0.75px] opacity-75 w-8 h-8 text-center " />
     ),
     iconBackgroung: "bg-yellow-400",
-    href: "/proformaInvoice",
+    href: "/porformaInvoice",
     figure: (
       <HiOutlineNewspaper className="figureIcon absolute bottom-4 left-10 scale-[6] stroke-[2px] opacity-10 w-6 overflow-visible h-8" />
     ),

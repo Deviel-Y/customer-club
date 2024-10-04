@@ -1,4 +1,6 @@
 import PorInvoiceForm from "@/app/admin/components/PorInvoiceForm";
+import getSession from "@/app/libs/getSession";
+import { authorizeAdmin } from "@/app/utils/authorizeRole";
 import prisma from "@/prisma/client";
 import { notFound } from "next/navigation";
 
@@ -6,7 +8,10 @@ interface Props {
   params: { id: string };
 }
 
-const EditInvoiceInfoPage = async ({ params: { id } }: Props) => {
+const EditPorInvoiceInfoPage = async ({ params: { id } }: Props) => {
+  const session = await getSession();
+  authorizeAdmin(session!);
+
   const porformaInvoice = await prisma.porformaInvoice.findUnique({
     where: { id },
   });
@@ -21,4 +26,4 @@ const EditInvoiceInfoPage = async ({ params: { id } }: Props) => {
   );
 };
 
-export default EditInvoiceInfoPage;
+export default EditPorInvoiceInfoPage;
