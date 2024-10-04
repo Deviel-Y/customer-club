@@ -25,6 +25,7 @@ const PorformaInvoicePage = async ({
     where: {
       description: { contains: description },
       porformaInvoiceNumber: { contains: number },
+      expiredAt: { gt: new Date() },
     },
   });
 
@@ -34,6 +35,7 @@ const PorformaInvoicePage = async ({
         assignedToUserId: session?.user.id,
         porformaInvoiceNumber: { contains: number },
         description: { contains: description },
+        expiredAt: { gt: new Date() },
       },
       take: pageSize,
       skip: (currentPage - 1) * pageSize,
