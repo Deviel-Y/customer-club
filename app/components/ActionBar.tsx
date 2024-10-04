@@ -1,7 +1,7 @@
 "use client";
 
 import { Button, Input } from "@nextui-org/react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { ChangeEvent } from "react";
 
 interface Props {
@@ -11,6 +11,7 @@ interface Props {
 }
 
 const ActionBar = ({ endpoint, buttonLabel, isAdmin = true }: Props) => {
+  const pathname = usePathname();
   const searchParmas = useSearchParams();
   const router = useRouter();
 
@@ -136,7 +137,7 @@ const ActionBar = ({ endpoint, buttonLabel, isAdmin = true }: Props) => {
         <Input
           onChange={numberOnChangeHandler}
           label={
-            buttonLabel?.includes("پیش فاکتور")
+            pathname?.includes("porformaInvoice")
               ? "شماره پیش فاکتور"
               : "شماره فاکتور"
           }
