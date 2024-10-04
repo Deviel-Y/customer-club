@@ -1,8 +1,14 @@
 "use client";
 
-import { Button, Input } from "@nextui-org/react";
+import {
+  Autocomplete,
+  AutocompleteItem,
+  Button,
+  Input,
+} from "@nextui-org/react";
+import { Status } from "@prisma/client";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { ChangeEvent } from "react";
+import { ChangeEvent, Key } from "react";
 
 interface Props {
   endpoint?: string;
@@ -36,6 +42,9 @@ const ActionBar = ({ endpoint, buttonLabel, isAdmin = true }: Props) => {
         searchParmas.get("organizationBranch")!
       );
 
+    if (searchParmas.get("StatusFilter"))
+      newParams.set("StatusFilter", searchParmas.get("StatusFilter")!);
+
     if (searchParmas.get("pageNumber")) newParams.delete("pageNumber");
 
     router.push(`?${newParams.toString()}`);
@@ -61,6 +70,9 @@ const ActionBar = ({ endpoint, buttonLabel, isAdmin = true }: Props) => {
         "organizationBranch",
         searchParmas.get("organizationBranch")!
       );
+
+    if (searchParmas.get("StatusFilter"))
+      newParams.set("StatusFilter", searchParmas.get("StatusFilter")!);
 
     if (searchParmas.get("pageNumber")) newParams.delete("pageNumber");
 
@@ -90,6 +102,9 @@ const ActionBar = ({ endpoint, buttonLabel, isAdmin = true }: Props) => {
     if (searchParmas.get("number"))
       newParams.set("number", searchParmas.get("number")!);
 
+    if (searchParmas.get("StatusFilter"))
+      newParams.set("StatusFilter", searchParmas.get("StatusFilter")!);
+
     if (searchParmas.get("pageNumber")) newParams.delete("pageNumber");
 
     router.push(`?${newParams.toString()}`);
@@ -115,6 +130,38 @@ const ActionBar = ({ endpoint, buttonLabel, isAdmin = true }: Props) => {
     if (searchParmas.get("number"))
       newParams.set("number", searchParmas.get("number")!);
 
+    if (searchParmas.get("StatusFilter"))
+      newParams.set("StatusFilter", searchParmas.get("StatusFilter")!);
+
+    if (searchParmas.get("pageNumber")) newParams.delete("pageNumber");
+
+    router.push(`?${newParams.toString()}`);
+  };
+
+  const statusFilterOnChangeHandler = (event: Key | null) => {
+    const newParams = new URLSearchParams(searchParmas);
+
+    if (event) {
+      newParams.set("statusFilter", event as string);
+    } else {
+      newParams.delete("statusFilter");
+    }
+
+    if (searchParmas.get("description"))
+      newParams.set("description", searchParmas.get("description")!);
+
+    if (searchParmas.get("organization"))
+      newParams.set("organization", searchParmas.get("organization")!);
+
+    if (searchParmas.get("number"))
+      newParams.set("number", searchParmas.get("number")!);
+
+    if (searchParmas.get("organizationBranch"))
+      newParams.set(
+        "organizationBranch",
+        searchParmas.get("organizationBranch")!
+      );
+
     if (searchParmas.get("pageNumber")) newParams.delete("pageNumber");
 
     router.push(`?${newParams.toString()}`);
@@ -133,7 +180,7 @@ const ActionBar = ({ endpoint, buttonLabel, isAdmin = true }: Props) => {
         </Button>
       )}
 
-      <div className="grid grid-cols-4 grid-rows-1 w-full gap-5 mb-5">
+      <div className="grid grid-cols-5 grid-rows-1 w-full gap-5 mb-5">
         <Input
           onChange={numberOnChangeHandler}
           label={
@@ -169,9 +216,29 @@ const ActionBar = ({ endpoint, buttonLabel, isAdmin = true }: Props) => {
             variant="underlined"
           />
         )}
+
+        {pathname.includes("porformaInvoice") && (
+          <Autocomplete
+            onSelectionChange={statusFilterOnChangeHandler}
+            variant="underlined"
+            label="وضعیت اعتبار"
+          >
+            {statusFilter.map((status) => (
+              <AutocompleteItem key={status.value}>
+                {status.label}
+              </AutocompleteItem>
+            ))}
+          </Autocomplete>
+        )}
       </div>
     </div>
   );
 };
 
 export default ActionBar;
+
+const statusFilter: { label: string; value: Status | "ALL" }[] = [
+  { label: "همه پیش فاکتورها", value: "ALL" },
+  { label: "دارای اعتبار", value: "IN_PROGRESS" },
+  { label: "منقضی شده", value: "EXPIRED" },
+];
