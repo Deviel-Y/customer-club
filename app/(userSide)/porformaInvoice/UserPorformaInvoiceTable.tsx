@@ -1,5 +1,6 @@
 "use client";
 
+import StatusBadge from "@/app/admin/components/StatusBadge";
 import {
   Button,
   Table,
@@ -14,11 +15,11 @@ import moment from "moment-jalaali";
 import PaginationControl from "../../components/PaginationControl";
 
 interface Props {
-  invoices: PorformaInvoice[];
+  porInvoices: PorformaInvoice[];
   totalPage: number;
 }
 
-const UserInvoiceTable = ({ invoices, totalPage }: Props) => {
+const UserInvoiceTable = ({ porInvoices, totalPage }: Props) => {
   return (
     <Table
       bottomContent={
@@ -41,23 +42,26 @@ const UserInvoiceTable = ({ invoices, totalPage }: Props) => {
         ))}
       </TableHeader>
       <TableBody
-        items={invoices}
+        items={porInvoices}
         emptyContent="پیش فاکتوری برای شما وجود ندارد"
       >
-        {invoices.map((invoice) => (
-          <TableRow key={invoice.id}>
+        {porInvoices.map((porInvoice) => (
+          <TableRow key={porInvoice.id}>
             <TableCell>
               <Button color="primary" variant="shadow">
                 دانلود
               </Button>
             </TableCell>
-            <TableCell>{invoice.porformaInvoiceNumber}</TableCell>
-            <TableCell>{invoice.description}</TableCell>
+            <TableCell>{porInvoice.porformaInvoiceNumber}</TableCell>
+            <TableCell>{porInvoice.description}</TableCell>
             <TableCell>
-              {moment(invoice.createdAt).format("jYYYY/jM/jD")}
+              <StatusBadge status={porInvoice.status} />
             </TableCell>
             <TableCell>
-              {moment(invoice.expiredAt).format("jYYYY/jM/jD")}
+              {moment(porInvoice.createdAt).format("jYYYY/jM/jD")}
+            </TableCell>
+            <TableCell>
+              {moment(porInvoice.expiredAt).format("jYYYY/jM/jD")}
             </TableCell>
           </TableRow>
         ))}
@@ -75,6 +79,7 @@ const columns: {
   { label: "دریافت پیش فاکتور", value: "downloadInvoice" },
   { label: "شماره پیش فاکتور", value: "porformaInvoiceNumber" },
   { label: "توضیحات", value: "description" },
+  { label: "وضعیت اعتبار", value: "status" },
   { label: "تاریخ صدور", value: "createdAt" },
   { label: "تاریخ انقضا", value: "expiredAt" },
 ];

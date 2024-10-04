@@ -16,6 +16,7 @@ import { PorformaInvoice } from "@prisma/client";
 import moment from "moment-jalaali";
 import { useRouter } from "next/navigation";
 import { BsDownload } from "react-icons/bs";
+import StatusBadge from "../components/StatusBadge";
 
 interface Props {
   porformaInvoice: PorformaInvoice[];
@@ -84,6 +85,9 @@ const AdminPorformaInvoiceTable = ({ porformaInvoice, totalPage }: Props) => {
             <TableCell>{p_invoice.organizationBranch}</TableCell>
             <TableCell>{p_invoice.description}</TableCell>
             <TableCell>
+              <StatusBadge status={p_invoice.status} />
+            </TableCell>
+            <TableCell>
               {moment(p_invoice.createdAt).format("jYYYY/jM/jD")}
             </TableCell>
             <TableCell>
@@ -105,6 +109,7 @@ const columns: { label: string; value: keyof PorformaInvoice | "operation" }[] =
     { label: "سازمان", value: "organization" },
     { label: "شعبه", value: "organizationBranch" },
     { label: "توضیحات", value: "description" },
+    { label: "وضعیت انقضا", value: "status" },
     { label: "تاریخ صدور", value: "createdAt" },
     { label: "تاریخ انقضا", value: "expiredAt" },
   ];

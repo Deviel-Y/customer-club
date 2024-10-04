@@ -13,9 +13,15 @@ const HomePage = async () => {
     },
   });
 
+  const porInvoiceCount = await prisma.porformaInvoice.count({
+    where: {
+      assignedToUserId: session?.user.id,
+    },
+  });
+
   const dashboardCardInfo: { label: string; amount: number }[] = [
     { label: "userInvoice", amount: invoiceCount },
-    { label: "userProformaInvoice", amount: 2 },
+    { label: "userProformaInvoice", amount: porInvoiceCount },
   ];
 
   return (
