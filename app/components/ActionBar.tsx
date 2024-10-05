@@ -80,6 +80,7 @@ const ActionBar = ({ endpoint, buttonLabel, isAdmin = true }: Props) => {
 
         {pathname.includes("porformaInvoice") && (
           <Autocomplete
+            listboxProps={{ emptyContent: "نتیجه ای یافت نشد" }}
             onSelectionChange={statusFilterOnChangeHandler}
             variant="underlined"
             label="وضعیت اعتبار"

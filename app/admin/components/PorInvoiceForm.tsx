@@ -129,6 +129,9 @@ const PorInvoiceForm = ({ Userlist, PorInvoice }: Props) => {
               defaultValue={PorInvoice?.organization}
               render={({ field: { onChange } }) => (
                 <Autocomplete
+                  listboxProps={{
+                    emptyContent: "سازمانی یافت نشد",
+                  }}
                   defaultSelectedKey={PorInvoice?.organization}
                   onSelectionChange={(value) => {
                     onChange(value);
@@ -157,6 +160,9 @@ const PorInvoiceForm = ({ Userlist, PorInvoice }: Props) => {
               control={control}
               render={({ field: { onChange } }) => (
                 <Autocomplete
+                  listboxProps={{
+                    emptyContent: "شعبه ای یافت نشد",
+                  }}
                   defaultSelectedKey={PorInvoice?.organizationBranch}
                   onSelectionChange={(value) => {
                     onChange(value);

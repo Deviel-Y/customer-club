@@ -116,6 +116,9 @@ const InvoiceForm = ({ Userlist, invoice }: Props) => {
               defaultValue={invoice?.organization}
               render={({ field: { onChange } }) => (
                 <Autocomplete
+                  listboxProps={{
+                    emptyContent: "سازمانی یافت نشد",
+                  }}
                   defaultSelectedKey={invoice?.organization}
                   onSelectionChange={(value) => {
                     onChange(value);
@@ -144,6 +147,9 @@ const InvoiceForm = ({ Userlist, invoice }: Props) => {
               control={control}
               render={({ field: { onChange } }) => (
                 <Autocomplete
+                  listboxProps={{
+                    emptyContent: "شعبه ای یافت نشد",
+                  }}
                   defaultSelectedKey={invoice?.organizationBranch}
                   onSelectionChange={(value) => {
                     onChange(value);
@@ -164,20 +170,6 @@ const InvoiceForm = ({ Userlist, invoice }: Props) => {
 
             <FormErrorMessage errorMessage={errors.organization?.message!} />
           </div>
-
-          {/* <div className="col-span-1 w-full">
-            <Input
-              size="lg"
-              {...register("organizationBranch")}
-              defaultValue={invoice?.organizationBranch}
-              isRequired
-              label="نام شعبه"
-            />
-
-            <FormErrorMessage
-              errorMessage={errors.organizationBranch?.message!}
-            />
-          </div> */}
 
           <div className="col-span-1 w-full">
             <Button
