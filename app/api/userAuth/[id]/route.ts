@@ -62,16 +62,19 @@ export const PATCH = async (
       });
 
     //For when if user is a regular user
-    if (currentPassword) {
-      const isCurrentPasswordValid: boolean = await bcrypt.compare(
-        currentPassword,
-        user.hashedPassword
-      );
-      if (!isCurrentPasswordValid)
-        return NextResponse.json("گذرواژه فعلی خود را به درستی وارد کنید", {
-          status: 400,
-        });
-    }
+    if (!currentPassword)
+      return NextResponse.json("گذرواژه فعلی خود را وارد کنید", {
+        status: 400,
+      });
+
+    const isCurrentPasswordValid: boolean = await bcrypt.compare(
+      currentPassword,
+      user.hashedPassword
+    );
+    if (!isCurrentPasswordValid)
+      return NextResponse.json("گذرواژه فعلی خود را به درستی وارد کنید", {
+        status: 400,
+      });
 
     if (newPassword !== confirmPassword)
       return NextResponse.json("گذرواژه ها با یکدیگر مطابقت ندارند", {
