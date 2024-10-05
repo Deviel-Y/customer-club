@@ -176,7 +176,7 @@ export const porInvoiceSchema = z.object({
     .string()
     .min(1, { message: "وارد کردن این فیلد الزامی مبیاشد" })
     .max(30, { message: "شماره پیش فاکتور تباید از 30 کاراکتر بیشتر باشد" }),
-  assignedToUserId: z
+  organization: z
     .string({ message: "وارد کردن این فیلد الزامی مبیاشد" })
     .min(1, { message: "وارد کردن این فیلد الزامی مبیاشد" })
     .max(100, { message: "نام سازمان تباید از 100 کاراکتر بیشتر باشد" }),

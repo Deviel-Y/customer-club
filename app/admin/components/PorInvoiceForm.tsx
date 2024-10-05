@@ -14,7 +14,7 @@ import { PorformaInvoice, User } from "@prisma/client";
 import axios, { AxiosError } from "axios";
 import moment from "moment-jalaali";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { Key, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
 import FormErrorMessage from "../../components/FormErrorMessage";
@@ -33,8 +33,21 @@ const PorInvoiceForm = ({ Userlist, PorInvoice }: Props) => {
     moment(PorInvoice?.expiredAt).format("jYYYY/jMM/jDD")
   );
   const router = useRouter();
-  const [userId, setUserId] = useState<string>();
-  const organization = Userlist.find((user) => user.id == userId)?.companyName;
+  const [companyBranch, setCompanyBranch] = useState<Key | null>(
+    PorInvoice?.organizationBranch || ""
+  );
+  const [companyName, setCompanyName] = useState<Key>(
+    PorInvoice?.organization || ""
+  );
+
+  const companyNames = Userlist.map((user) => user.companyName);
+  const uniqueCompanyName = companyNames.filter((value, index, self) => {
+    return self.indexOf(value) === index;
+  });
+
+  const organizationBranch = Userlist.filter(
+    (user) => user.companyName === companyName
+  ).map((companyName) => companyName.companyBranch);
 
   const {
     register,
@@ -48,11 +61,18 @@ const PorInvoiceForm = ({ Userlist, PorInvoice }: Props) => {
   return (
     <form
       onSubmit={handleSubmit(({ porformaInvoiceNumber, ...data }) => {
+        const assignedToUserId = Userlist.find(
+          (user) =>
+            user.companyName === companyName &&
+            user.companyBranch === companyBranch
+        )?.id;
+        if (!assignedToUserId) return toast("کاربر با این نام یافت نشد");
+
         const promise = PorInvoice
           ? axios
               .patch(`/api/porformaInvoice/${PorInvoice.id}`, {
                 porformaInvoiceNumber: porformaInvoiceNumber.trim(),
-                organization,
+                assignedToUserId,
                 ...data,
               })
               .then(() => {
@@ -62,7 +82,7 @@ const PorInvoiceForm = ({ Userlist, PorInvoice }: Props) => {
           : axios
               .post("/api/porformaInvoice", {
                 porformaInvoiceNumber: porformaInvoiceNumber.trim(),
-                organization,
+                assignedToUserId,
                 ...data,
               })
               .then(() => {
@@ -104,44 +124,58 @@ const PorInvoiceForm = ({ Userlist, PorInvoice }: Props) => {
 
           <div className="col-span-1 w-full">
             <Controller
-              name="assignedToUserId"
+              name="organization"
               control={control}
+              defaultValue={PorInvoice?.organization}
               render={({ field: { onChange } }) => (
                 <Autocomplete
+                  defaultSelectedKey={PorInvoice?.organization}
                   onSelectionChange={(value) => {
                     onChange(value);
-                    setUserId(value as string);
+                    setCompanyName(value!);
                   }}
                   isRequired
                   size="lg"
                   label="نام سازمان"
                 >
-                  {Userlist?.map((user) => (
-                    <AutocompleteItem key={user.id}>
-                      {user.companyName}
+                  {uniqueCompanyName?.map((uniqueCompanyName) => (
+                    <AutocompleteItem key={uniqueCompanyName!}>
+                      {uniqueCompanyName}
                     </AutocompleteItem>
                   ))}
                 </Autocomplete>
               )}
             />
 
-            <FormErrorMessage
-              errorMessage={errors.assignedToUserId?.message!}
-            />
+            <FormErrorMessage errorMessage={errors.organization?.message!} />
           </div>
 
           <div className="col-span-1 w-full">
-            <Input
-              size="lg"
-              {...register("organizationBranch")}
+            <Controller
+              name="organizationBranch"
               defaultValue={PorInvoice?.organizationBranch}
-              isRequired
-              label="نام شعبه"
+              control={control}
+              render={({ field: { onChange } }) => (
+                <Autocomplete
+                  defaultSelectedKey={PorInvoice?.organizationBranch}
+                  onSelectionChange={(value) => {
+                    onChange(value);
+                    setCompanyBranch(value);
+                  }}
+                  isRequired
+                  size="lg"
+                  label="نام شعبه"
+                >
+                  {organizationBranch?.map((organizationBranch) => (
+                    <AutocompleteItem key={organizationBranch!}>
+                      {organizationBranch}
+                    </AutocompleteItem>
+                  ))}
+                </Autocomplete>
+              )}
             />
 
-            <FormErrorMessage
-              errorMessage={errors.organizationBranch?.message!}
-            />
+            <FormErrorMessage errorMessage={errors.organization?.message!} />
           </div>
 
           <div className="col-span-1 w-full">
