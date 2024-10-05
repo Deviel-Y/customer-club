@@ -10,13 +10,13 @@ export const userSide_userSchame = z
   .object({
     currentPassword: z
       .string()
-      .min(5, { message: "گذرواژه باید بیشتر از 5 کاراکتر باشد" })
+      .min(8, { message: "گذرواژه باید بیشتر از 8 کاراکتر باشد" })
       .max(120, { message: "گذرواژه باید کمتر از 120 کاراکتر باشد" })
       .optional()
       .or(literal("")),
     newPassword: z
       .string()
-      .min(5, { message: "گذرواژه باید بیشتر از 5 کاراکتر باشد" })
+      .min(8, { message: "گذرواژه باید بیشتر از 8 کاراکتر باشد" })
       .max(120, { message: "گذرواژه باید کمتر از 120 کاراکتر باشد" })
       .regex(/\d.*\d/, { message: "گذرواژه باید حداقل شامل دو عدد باشد" })
       .optional()
@@ -55,7 +55,7 @@ export const fullUserSchame = z
       .or(literal("")),
     newPassword: z
       .string()
-      .min(5, { message: "گذرواژه باید بیشتر از 5 کاراکتر باشد" })
+      .min(8, { message: "گذرواژه باید بیشتر از 8 کاراکتر باشد" })
       .max(120, { message: "گذرواژه باید کمتر از 120 کاراکتر باشد" })
       .regex(/\d.*\d/, { message: "گذرواژه باید حداقل شامل دو عدد باشد" })
       .optional()
@@ -148,7 +148,7 @@ export const signInUserSchema = z.object({
     .email({ message: "ایمیل خود را به درستی وارد کنید" }),
   password: z
     .string()
-    .min(5, { message: "رمز عبور باید بیشتر از 5 کاراکتر باشد" })
+    .min(8, { message: "رمز عبور باید بیشتر از 8 کاراکتر باشد" })
     .max(120, { message: "رمز عبور باید کمتر از 120 کاراکتر باشد" }),
 });
 

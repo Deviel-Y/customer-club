@@ -100,7 +100,7 @@ const DashboardCard = ({ label, amount }: Props) => {
     <Card
       isPressable
       onClick={() => router.push(dataMapping[label].href)}
-      className={`card hover:scale-105 transition-all w-1/5 h-36 p-5 ${dataMapping[label].backgroundColor}`}
+      className={`card hover:scale-105 w-full transition-all h-36 p-5 ${dataMapping[label].backgroundColor}`}
     >
       <div className="flex flex-col h-full w-full justify-between">
         <div className="flex flex-row justify-between items-center">

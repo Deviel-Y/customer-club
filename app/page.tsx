@@ -26,7 +26,7 @@ const HomePage = async () => {
 
   return (
     <div>
-      <section className="flex flex-row justify-start gap-5 p-5">
+      <section className="grid grid-cols-4 max-lg:grid-cols-3 grid-rows-1 max-sm:grid-rows-3 max-sm:grid-cols-1 gap-5 p-5">
         {dashboardCardInfo.map((info) => (
           <DashboardCard
             amount={info.amount}
