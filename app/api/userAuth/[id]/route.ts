@@ -1,3 +1,4 @@
+import getSession from "@/app/libs/getSession";
 import {
   FullUserSchameType,
   fullUserSchame,
@@ -31,6 +32,7 @@ export const PATCH = async (
   request: NextRequest,
   { params: { id } }: Props
 ) => {
+  const session = await getSession();
   try {
     const body: FullUserSchameType = await request.json();
     const {
@@ -53,30 +55,42 @@ export const PATCH = async (
     if (!validation.success)
       return NextResponse.json(validation.error.format(), { status: 400 });
 
-    const similarUser = await prisma.user.findFirst({
-      where: { OR: [{ email }, { companyName }], NOT: { id } },
+    const similarEmail = await prisma.user.findFirst({
+      where: { email, NOT: { id } },
     });
-    if (similarUser)
-      return NextResponse.json("کاربر با این ایمیل یا نام سازمان وجود دارد", {
+    if (similarEmail)
+      return NextResponse.json("کاربر با این ایمیل وجود دارد", {
         status: 400,
       });
 
-    //For when if user is a regular user
-    if (!currentPassword)
-      return NextResponse.json("گذرواژه فعلی خود را وارد کنید", {
-        status: 400,
-      });
+    const similarNameAndBranch = await prisma.user.findFirst({
+      where: { AND: [{ companyName, companyBranch }], NOT: { id } },
+    });
+    if (similarNameAndBranch)
+      return NextResponse.json(
+        "نام سازمان و نام شعبه برای ایمیل دیگر ثبت شده است",
+        {
+          status: 400,
+        }
+      );
 
-    const isCurrentPasswordValid: boolean = await bcrypt.compare(
-      currentPassword,
-      user.hashedPassword
-    );
-    if (!isCurrentPasswordValid)
-      return NextResponse.json("گذرواژه فعلی خود را به درستی وارد کنید", {
-        status: 400,
-      });
+    if (session?.user.role === "USER") {
+      if (!currentPassword)
+        return NextResponse.json("گذرواژه فعلی خود را وارد کنید", {
+          status: 400,
+        });
 
-    if (newPassword !== confirmPassword)
+      const isCurrentPasswordValid: boolean = await bcrypt.compare(
+        currentPassword,
+        user.hashedPassword
+      );
+      if (!isCurrentPasswordValid)
+        return NextResponse.json("گذرواژه فعلی خود را به درستی وارد کنید", {
+          status: 400,
+        });
+    }
+
+    if (newPassword && confirmPassword && newPassword !== confirmPassword)
       return NextResponse.json("گذرواژه ها با یکدیگر مطابقت ندارند", {
         status: 400,
       });

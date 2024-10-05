@@ -26,12 +26,28 @@ export const POST = async (request: NextRequest) => {
       return NextResponse.json(validation.error.format(), { status: 400 });
 
     const user = await prisma.user.findFirst({
-      where: { OR: [{ email: email! }, { companyName }] },
+      where: {
+        email,
+      },
     });
     if (user)
-      return NextResponse.json("کاربر با این ایمیل یا نام سازمان وجود دارد", {
+      return NextResponse.json("کاربر با این ایمیل وجود دارد", {
         status: 400,
       });
+
+    const similarUser = await prisma.user.findFirst({
+      where: {
+        NOT: { role: "ADMIN" },
+        AND: [{ companyName }, { companyBranch }],
+      },
+    });
+    if (similarUser)
+      return NextResponse.json(
+        "نام سازمان و نام شعبه برای ایمیل دیگر ثبت شده است",
+        {
+          status: 400,
+        }
+      );
 
     if (!newPassword || !confirmPassword)
       return NextResponse.json("وارد کردن گذرواژه الزامی است", {
