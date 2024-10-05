@@ -11,7 +11,7 @@ import {
 import { Invoice, User } from "@prisma/client";
 import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { Key, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
 import FormErrorMessage from "../../components/FormErrorMessage";
@@ -24,8 +24,21 @@ interface Props {
 
 const InvoiceForm = ({ Userlist, invoice }: Props) => {
   const router = useRouter();
-  const [userId, setUserId] = useState<string>();
-  const organization = Userlist.find((user) => user.id == userId)?.companyName;
+  const [companyBranch, setCompanyBranch] = useState<Key | null>(
+    invoice?.organizationBranch || ""
+  );
+  const [companyName, setCompanyName] = useState<Key>(
+    invoice?.organization || ""
+  );
+
+  const companyNames = Userlist.map((user) => user.companyName);
+  const uniqueCompanyName = companyNames.filter((value, index, self) => {
+    return self.indexOf(value) === index;
+  });
+
+  const organizationBranch = Userlist.filter(
+    (user) => user.companyName === companyName
+  ).map((companyName) => companyName.companyBranch);
 
   const {
     register,
@@ -39,11 +52,18 @@ const InvoiceForm = ({ Userlist, invoice }: Props) => {
   return (
     <form
       onSubmit={handleSubmit(({ invoiceNumber, ...data }) => {
+        const assignedToUserId = Userlist.find(
+          (user) =>
+            user.companyName === companyName &&
+            user.companyBranch === companyBranch
+        )?.id;
+        if (!assignedToUserId) return toast("کاربر با این نام یافت نشد");
+
         const promise = invoice
           ? axios
               .patch(`/api/invoice/${invoice.id}`, {
                 invoiceNumber: invoiceNumber.trim(),
-                organization,
+                assignedToUserId,
                 ...data,
               })
               .then(() => {
@@ -53,7 +73,7 @@ const InvoiceForm = ({ Userlist, invoice }: Props) => {
           : axios
               .post("/api/invoice", {
                 invoiceNumber: invoiceNumber.trim(),
-                organization,
+                assignedToUserId,
                 ...data,
               })
               .then(() => {
@@ -91,34 +111,61 @@ const InvoiceForm = ({ Userlist, invoice }: Props) => {
 
           <div className="col-span-1 w-full">
             <Controller
-              name="assignedToUserId"
+              name="organization"
               control={control}
               defaultValue={invoice?.organization}
               render={({ field: { onChange } }) => (
                 <Autocomplete
+                  defaultSelectedKey={invoice?.organization}
                   onSelectionChange={(value) => {
                     onChange(value);
-                    setUserId(value as string);
+                    setCompanyName(value!);
                   }}
                   isRequired
                   size="lg"
                   label="نام سازمان"
                 >
-                  {Userlist?.map((user) => (
-                    <AutocompleteItem key={user.id}>
-                      {user.companyName}
+                  {uniqueCompanyName?.map((uniqueCompanyName) => (
+                    <AutocompleteItem key={uniqueCompanyName!}>
+                      {uniqueCompanyName}
                     </AutocompleteItem>
                   ))}
                 </Autocomplete>
               )}
             />
 
-            <FormErrorMessage
-              errorMessage={errors.assignedToUserId?.message!}
-            />
+            <FormErrorMessage errorMessage={errors.organization?.message!} />
           </div>
 
           <div className="col-span-1 w-full">
+            <Controller
+              name="organizationBranch"
+              defaultValue={invoice?.organizationBranch}
+              control={control}
+              render={({ field: { onChange } }) => (
+                <Autocomplete
+                  defaultSelectedKey={invoice?.organizationBranch}
+                  onSelectionChange={(value) => {
+                    onChange(value);
+                    setCompanyBranch(value);
+                  }}
+                  isRequired
+                  size="lg"
+                  label="نام شعبه"
+                >
+                  {organizationBranch?.map((organizationBranch) => (
+                    <AutocompleteItem key={organizationBranch!}>
+                      {organizationBranch}
+                    </AutocompleteItem>
+                  ))}
+                </Autocomplete>
+              )}
+            />
+
+            <FormErrorMessage errorMessage={errors.organization?.message!} />
+          </div>
+
+          {/* <div className="col-span-1 w-full">
             <Input
               size="lg"
               {...register("organizationBranch")}
@@ -130,7 +177,7 @@ const InvoiceForm = ({ Userlist, invoice }: Props) => {
             <FormErrorMessage
               errorMessage={errors.organizationBranch?.message!}
             />
-          </div>
+          </div> */}
 
           <div className="col-span-1 w-full">
             <Button

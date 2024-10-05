@@ -1,6 +1,7 @@
 import getSession from "@/app/libs/getSession";
-import { invoiceSchema, InvoiceSchemaType } from "@/app/libs/validationSchema";
+import { invoiceSchema } from "@/app/libs/validationSchema";
 import prisma from "@/prisma/client";
+import { Invoice } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
 interface Props {
@@ -25,13 +26,20 @@ export const PATCH = async (
   try {
     const session = await getSession();
 
-    const body: InvoiceSchemaType = await request.json();
-    const { assignedToUserId, description, invoiceNumber, organizationBranch } =
-      body;
+    const body: Invoice = await request.json();
+    const {
+      organization,
+      assignedToUserId,
+      description,
+      invoiceNumber,
+      organizationBranch,
+    } = body;
 
-    const organization = await prisma.user.findUnique({
+    const user = await prisma.user.findUnique({
       where: { id: assignedToUserId },
     });
+    if (!user)
+      return NextResponse.json("سازمان مورد نظر یافت نشد", { status: 404 });
 
     const invoice = await prisma.invoice.findUnique({ where: { id } });
     if (!invoice)
@@ -53,11 +61,11 @@ export const PATCH = async (
       where: { id },
       data: {
         assignedToUserId,
-        description,
-        invoiceNumber,
+        description: description.trim(),
+        invoiceNumber: invoiceNumber.trim(),
         organizationBranch,
         issuerId: session?.user.id,
-        organization: organization?.companyName as string,
+        organization,
       },
     });
 
