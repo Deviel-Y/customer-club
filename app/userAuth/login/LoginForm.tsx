@@ -33,7 +33,7 @@ const LoginForm = () => {
   return (
     <div className="w-full flex justify-center items-center">
       <form
-        className="w-2/3"
+        className="w-3/4 max-lg:w-5/6"
         onSubmit={handleSubmit(async ({ email, password }) => {
           setLoading(true);
           const res = await signIn("credentials", {
@@ -56,9 +56,9 @@ const LoginForm = () => {
         })}
       >
         <Card isBlurred className="flex flex-col p-5" shadow="lg">
-          <h1 className="font-bold text-[25px]">ورود</h1>
+          <h1 className="font-bold text-[30px]">ورود</h1>
 
-          <p className="text-[13px] mt-2 mb-5">برای ادامه وارد شوید</p>
+          <p className="text-[15px] mt-2 mb-5">برای ادامه وارد شوید</p>
 
           <Input
             {...register("email")}
@@ -68,7 +68,7 @@ const LoginForm = () => {
             type="email"
             className="mb-3 !transition-all"
             label="آدرس ایمیل"
-            placeholder="ایمیل خود را وارد کنید"
+            placeholder="domin@example.com"
             variant="underlined"
             isInvalid={!!errors.email?.message}
           />
