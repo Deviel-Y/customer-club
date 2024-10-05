@@ -68,7 +68,7 @@ const LoginForm = () => {
             type="email"
             className="mb-3 !transition-all"
             label="آدرس ایمیل"
-            placeholder="domin@example.com"
+            placeholder="example@domain.com"
             variant="underlined"
             isInvalid={!!errors.email?.message}
           />
