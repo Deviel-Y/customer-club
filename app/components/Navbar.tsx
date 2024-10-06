@@ -28,7 +28,9 @@ const Navbar = () => {
 
   return (
     <div className="flex flex-row justify-between items-center px-5 py-2">
-      <h1 className="text-[40px]">{headingMapping[pathName].label}</h1>
+      <h1 className="text-[40px] max-md:text-[30px]">
+        {headingMapping[pathName].label}
+      </h1>
 
       <Avatar
         alt="Profile Avater"
