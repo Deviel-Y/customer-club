@@ -54,6 +54,7 @@ model PorformaInvoice {
   organizationBranch    String
   assignedToUserId      String
   issuerId              String
+  status                Status   @default(IN_PROGRESS)
   expiredAt             DateTime
   // image String
 
@@ -61,4 +62,9 @@ model PorformaInvoice {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+enum Status {
+  IN_PROGRESS
+  EXPIRED
 }
