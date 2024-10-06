@@ -1,4 +1,5 @@
-import { Status } from "@prisma/client";
+import { Chip } from "@nextui-org/react";
+import { Status, TicketStatus } from "@prisma/client";
 
 interface Props {
   status: Status;
@@ -6,15 +7,21 @@ interface Props {
 
 const StatusBadge = ({ status }: Props) => {
   return (
-    <p className={`px-2 py-1 rounded-full ${statusMapping[status].className}`}>
+    <Chip color={statusMapping[status].color}>
       {statusMapping[status].label}
-    </p>
+    </Chip>
   );
 };
 
 export default StatusBadge;
 
-const statusMapping: Record<Status, { label: string; className: string }> = {
-  EXPIRED: { className: "bg-red-200", label: "منقضی شده" },
-  IN_PROGRESS: { className: "bg-green-200", label: "دارای اعتبار" },
+const statusMapping: Record<
+  Status | TicketStatus,
+  { label: string; color: "danger" | "success" | "warning" | "primary" }
+> = {
+  EXPIRED: { color: "danger", label: "منقضی شده" },
+  IN_PROGRESS: { color: "success", label: "دارای اعتبار" },
+  CLOSED: { color: "success", label: "پایان یافته" },
+  OPEN: { color: "danger", label: "جدید" },
+  INVESTIGATING: { color: "primary", label: "در حال بررسی" },
 };

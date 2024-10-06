@@ -96,6 +96,6 @@ model TicketMessage {
 
 enum TicketStatus {
   OPEN
-  IN_PROGRESS
+  INVESTIGATING
   CLOSED
 }

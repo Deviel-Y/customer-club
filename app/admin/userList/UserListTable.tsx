@@ -83,7 +83,7 @@ const UserListTable = ({ users, totalPage }: Props) => {
 export default UserListTable;
 
 const columns: {
-  label: string | JSX.Element;
+  label: string;
   value: keyof User | "editInfo";
 }[] = [
   { label: "حذف / ویرایش", value: "editInfo" },
