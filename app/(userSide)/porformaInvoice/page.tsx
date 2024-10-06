@@ -19,6 +19,16 @@ const PorformaInvoicePage = async ({
   const session = await getSession();
   authorizeUser(session!);
 
+  await prisma.porformaInvoice.updateMany({
+    where: {
+      expiredAt: { lt: new Date(new Date().setHours(0, 0, 0, 0)) },
+      status: "IN_PROGRESS",
+    },
+    data: {
+      status: "EXPIRED",
+    },
+  });
+
   const currentPage = pageNumber || 1;
 
   const porInvoiceCount: number = await prisma.porformaInvoice.count({

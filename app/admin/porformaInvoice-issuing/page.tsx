@@ -26,6 +26,16 @@ const porformaInvoiceListPage = async ({
   const session = await getSession();
   authorizeAdmin(session!);
 
+  await prisma.porformaInvoice.updateMany({
+    where: {
+      expiredAt: { lt: new Date(new Date().setHours(0, 0, 0, 0)) },
+      status: "IN_PROGRESS",
+    },
+    data: {
+      status: "EXPIRED",
+    },
+  });
+
   const currentPage = pageNumber || 1;
   const pageSize: number = 6;
   const porformaInvoiceCount: number = await prisma.porformaInvoice.count({

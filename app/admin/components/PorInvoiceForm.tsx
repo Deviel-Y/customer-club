@@ -150,6 +150,7 @@ const PorInvoiceForm = ({ Userlist, PorInvoice }: Props) => {
               name="expiredAt"
               render={({ field: { onChange } }) => (
                 <DatePicker
+                  isRequired
                   className="translate-y-3"
                   description={`تاریخ شمسی : ${date}`}
                   minValue={today(getLocalTimeZone())}
@@ -190,7 +191,7 @@ const PorInvoiceForm = ({ Userlist, PorInvoice }: Props) => {
             </Button>
 
             <Button
-              onPress={() => router.push("/admin/invoice-issuing")}
+              onPress={() => router.push("/admin/porformaInvoice-issuing")}
               color="danger"
               variant="light"
             >
