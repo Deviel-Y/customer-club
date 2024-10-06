@@ -18,8 +18,8 @@ const PaginationControl = ({ totalPage }: Props) => {
       showControls
       variant="flat"
       size="md"
-      page={!searchParams.get("pageNumber") ? 1 : undefined}
-      initialPage={1}
+      page={parseInt(searchParams.get("pageNumber")!) || 1}
+      initialPage={parseInt(searchParams.get("pageNumber")!) || 1}
       total={totalPage}
       onChange={(value) => {
         const newParams = new URLSearchParams(searchParams.toString());
