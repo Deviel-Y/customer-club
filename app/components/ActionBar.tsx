@@ -8,7 +8,7 @@ import {
 } from "@nextui-org/react";
 import { Status } from "@prisma/client";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import actionBarOnChangeHandlers from "../utils/actionBarOnChangeHandlers";
+import { actionBarOnChangeHandlers } from "../utils/onChangeHandlers";
 
 interface Props {
   endpoint?: string;
@@ -43,6 +43,7 @@ const ActionBar = ({ endpoint, buttonLabel, isAdmin = true }: Props) => {
 
       <div className="grid grid-cols-5 grid-rows-1 w-full gap-5 mb-5">
         <Input
+          defaultValue={searchParmas?.get("number") || ""}
           onChange={numberOnChangeHandler}
           label={
             pathname?.includes("porformaInvoice")
@@ -53,15 +54,9 @@ const ActionBar = ({ endpoint, buttonLabel, isAdmin = true }: Props) => {
           variant="underlined"
         />
 
-        <Input
-          onChange={descriptionOnChangeHandler}
-          label="توضیحات"
-          type="search"
-          variant="underlined"
-        />
-
         {isAdmin && (
           <Input
+            defaultValue={searchParmas?.get("organization") || ""}
             onChange={organizationOnChangeHandler}
             label="سازمان"
             type="search"
@@ -71,15 +66,24 @@ const ActionBar = ({ endpoint, buttonLabel, isAdmin = true }: Props) => {
 
         {isAdmin && (
           <Input
+            defaultValue={searchParmas?.get("organizationBranch") || ""}
             onChange={componyBranchOnChangeHandler}
             label="شعبه"
             type="search"
             variant="underlined"
           />
         )}
+        <Input
+          defaultValue={searchParmas?.get("description") || ""}
+          onChange={descriptionOnChangeHandler}
+          label="توضیحات"
+          type="search"
+          variant="underlined"
+        />
 
         {pathname.includes("porformaInvoice") && (
           <Autocomplete
+            defaultSelectedKey={searchParmas?.get("statusFilter") || ""}
             listboxProps={{ emptyContent: "نتیجه ای یافت نشد" }}
             onSelectionChange={statusFilterOnChangeHandler}
             variant="underlined"

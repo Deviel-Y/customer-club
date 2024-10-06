@@ -2,7 +2,7 @@ import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.share
 import { ReadonlyURLSearchParams } from "next/navigation";
 import { ChangeEvent, Key } from "react";
 
-const actionBarOnChangeHandlers = (
+export const actionBarOnChangeHandlers = (
   searchParmas: ReadonlyURLSearchParams,
   router: AppRouterInstance
 ) => {
@@ -161,4 +161,110 @@ const actionBarOnChangeHandlers = (
   };
 };
 
-export default actionBarOnChangeHandlers;
+export const userSearchFieldOnchangeHandlers = (
+  searchParmas: ReadonlyURLSearchParams,
+  router: AppRouterInstance
+) => {
+  const componyNameOnChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+    const newParams = new URLSearchParams(searchParmas);
+
+    if (event.target.value) {
+      newParams.set("companyName", event.target.value as string);
+    } else {
+      newParams.delete("companyName");
+    }
+
+    if (searchParmas.get("companyBranch"))
+      newParams.set("companyBranch", searchParmas.get("companyBranch")!);
+
+    if (searchParmas.get("itManager"))
+      newParams.set("itManager", searchParmas.get("itManager")!);
+
+    if (searchParmas.get("email"))
+      newParams.set("email", searchParmas.get("email")!);
+
+    if (searchParmas.get("pageNumber")) newParams.delete("pageNumber");
+
+    router.push(`?${newParams.toString()}`);
+  };
+
+  const componyBranchOnChangeHandler = (
+    event: ChangeEvent<HTMLInputElement>
+  ) => {
+    const newParams = new URLSearchParams(searchParmas);
+
+    if (event.target.value) {
+      newParams.set("companyBranch", event.target.value as string);
+    } else {
+      newParams.delete("companyBranch");
+    }
+
+    if (searchParmas.get("companyName"))
+      newParams.set("companyName", searchParmas.get("companyName")!);
+
+    if (searchParmas.get("itManager"))
+      newParams.set("itManager", searchParmas.get("itManager")!);
+
+    if (searchParmas.get("email"))
+      newParams.set("email", searchParmas.get("email")!);
+
+    if (searchParmas.get("pageNumber")) newParams.delete("pageNumber");
+
+    router.push(`?${newParams.toString()}`);
+  };
+
+  const emailAddressOnChangeHandler = (
+    event: ChangeEvent<HTMLInputElement>
+  ) => {
+    const newParams = new URLSearchParams(searchParmas);
+
+    if (event.target.value) {
+      newParams.set("email", event.target.value as string);
+    } else {
+      newParams.delete("email");
+    }
+
+    if (searchParmas.get("companyBranch"))
+      newParams.set("companyBranch", searchParmas.get("companyBranch")!);
+
+    if (searchParmas.get("itManager"))
+      newParams.set("itManager", searchParmas.get("itManager")!);
+
+    if (searchParmas.get("companyName"))
+      newParams.set("companyName", searchParmas.get("companyName")!);
+
+    if (searchParmas.get("pageNumber")) newParams.delete("pageNumber");
+
+    router.push(`?${newParams.toString()}`);
+  };
+
+  const itMnagerOnChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+    const newParams = new URLSearchParams(searchParmas);
+
+    if (event.target.value) {
+      newParams.set("itManager", event.target.value as string);
+    } else {
+      newParams.delete("itManager");
+    }
+
+    if (searchParmas.get("companyBranch"))
+      newParams.set("companyBranch", searchParmas.get("companyBranch")!);
+
+    if (searchParmas.get("email"))
+      newParams.set("email", searchParmas.get("email")!);
+
+    if (searchParmas.get("companyName"))
+      newParams.set("companyName", searchParmas.get("companyName")!);
+
+    if (searchParmas.get("pageNumber")) newParams.delete("pageNumber");
+
+    router.push(`?${newParams.toString()}`);
+  };
+
+  return {
+    componyNameOnChangeHandler,
+    componyBranchOnChangeHandler,
+    emailAddressOnChangeHandler,
+    itMnagerOnChangeHandler,
+  };
+};
