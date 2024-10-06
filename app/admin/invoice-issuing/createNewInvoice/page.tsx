@@ -11,7 +11,7 @@ const CreateNewInvoicePage = async () => {
   const users: User[] = await prisma.user.findMany({ where: { role: "USER" } });
 
   return (
-    <div className="py-5 px-2">
+    <div className="py-5 max-sm:py-2 px-2">
       <InvoiceForm Userlist={users} />
     </div>
   );

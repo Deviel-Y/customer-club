@@ -89,15 +89,17 @@ const InvoiceForm = ({ Userlist, invoice }: Props) => {
             : "فاکتور با موفقیت صادر شد",
         });
       })}
-      className="flex justify-center items-center"
+      className="flex justify-center items-center max-sm:w-full"
     >
-      <Card className="flex flex-col p-5 gap-2 w-4/5">
+      <Card className="flex flex-col p-5 max-sm:p-2 gap-2 w-4/5">
         <div>
-          <h2 className="text-[25px] mb-5">اطلاعات فاکتور</h2>
+          <h2 className="text-[25px] max-sm:text-[20px] mb-5">
+            اطلاعات فاکتور
+          </h2>
         </div>
 
-        <div className="grid grid-cols-4 grid-rows-2 gap-3 place-items-center">
-          <div className="col-span-1 w-full">
+        <div className="grid grid-cols-3 grid-rows-2 max-md:grid-cols-1 max-md:grid-rows-4 gap-3 max-md:gap-0 place-items-center">
+          <div className="w-full">
             <Input
               size="lg"
               defaultValue={invoice?.invoiceNumber}
@@ -109,7 +111,7 @@ const InvoiceForm = ({ Userlist, invoice }: Props) => {
             <FormErrorMessage errorMessage={errors.invoiceNumber?.message!} />
           </div>
 
-          <div className="col-span-1 w-full">
+          <div className="w-full">
             <Controller
               name="organization"
               control={control}
@@ -140,7 +142,7 @@ const InvoiceForm = ({ Userlist, invoice }: Props) => {
             <FormErrorMessage errorMessage={errors.organization?.message!} />
           </div>
 
-          <div className="col-span-1 w-full">
+          <div className="w-full">
             <Controller
               name="organizationBranch"
               defaultValue={invoice?.organizationBranch}
@@ -171,17 +173,7 @@ const InvoiceForm = ({ Userlist, invoice }: Props) => {
             <FormErrorMessage errorMessage={errors.organization?.message!} />
           </div>
 
-          <div className="col-span-1 w-full">
-            <Button
-              className="w-full -translate-y-3"
-              size="lg"
-              color="secondary"
-            >
-              بارگذاری فایل فاکتور
-            </Button>
-          </div>
-
-          <div className="col-span-4 w-full">
+          <div className="col-span-3 max-md:col-span-1 w-full">
             <Input
               size="lg"
               defaultValue={invoice?.description}
@@ -194,17 +186,24 @@ const InvoiceForm = ({ Userlist, invoice }: Props) => {
           </div>
         </div>
 
-        <div className="flex flex-row justify-start !items-center gap-5 mt-5">
-          <Button type="submit" color="primary" variant="shadow">
-            {invoice ? "ویرایش فاکتور" : "صدور فاکتور جدید"}
-          </Button>
+        <div className="flex flex-row max-sm:flex-col-reverse justify-between items-center gap-5 mt-5 max-sm:-mt-3">
+          <div className="flex flex-row gap-5 max-sm:gap-0 max-sm:mt-3">
+            <Button size="lg" type="submit" color="primary" variant="shadow">
+              {invoice ? "ویرایش فاکتور" : "صدور فاکتور جدید"}
+            </Button>
 
-          <Button
-            onPress={() => router.push("/admin/invoice-issuing")}
-            color="danger"
-            variant="light"
-          >
-            انصراف
+            <Button
+              onPress={() => router.push("/admin/invoice-issuing")}
+              size="lg"
+              color="danger"
+              variant="light"
+            >
+              انصراف
+            </Button>
+          </div>
+
+          <Button size="lg" color="secondary" className="max-sm:w-full">
+            بارگذاری فایل فاکتور
           </Button>
         </div>
       </Card>
