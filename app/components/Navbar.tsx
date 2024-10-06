@@ -51,6 +51,7 @@ const headingMapping: Record<string, { label: string }> = {
   "/invoice": { label: "فاکتورها" },
   "/porformaInvoice": { label: "پیش فاکتورها" },
   "/editUserInfo": { label: "ویرایش اطلاعات کاربر" },
+  "/ticket": { label: "لیست تیکت ها" },
   "/admin": { label: "پنل مدیریت" },
   "/admin/invoice-issuing": { label: "صدور فاکتور" },
   "/admin/porformaInvoice-issuing": { label: "صدور پیش فاکتور" },
@@ -64,5 +65,8 @@ const headingMapping: Record<string, { label: string }> = {
   },
   "/admin/porformaInvoice-issuing/editPorInvoiceInfo": {
     label: "ویرایش پیش فاکتور",
+  },
+  "/admin/ticket": {
+    label: "لیست تیکت ها",
   },
 };
