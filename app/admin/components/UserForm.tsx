@@ -98,7 +98,7 @@ const UserForm = ({ user }: Props) => {
 
             <FormErrorMessage errorMessage={errors.email?.message || ""} />
           </div>
-          <div className="max-md:col-span-2">
+          <div className="max-md:col-span-2 w-full">
             <Controller
               name="role"
               control={control}
