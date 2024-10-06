@@ -89,10 +89,9 @@ model TicketMessage {
   message           String @db.Text
   assignetoTicketId String @unique
 
-  ticket Ticket @relation(fields: [assignetoTicketId], references: [id])
+  Ticket Ticket @relation(fields: [assignetoTicketId], references: [id])
 
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
 
 enum TicketStatus {
