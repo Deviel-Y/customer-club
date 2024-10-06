@@ -7,7 +7,7 @@ const FormErrorMessage = ({ errorMessage }: Props) => {
     <p
       className={`${
         errorMessage?.length ? "opacity-100" : "opacity-0"
-      } transition-opacity duration-250 ease-in-out mt-1 mb-3 text-[13px] text-[#F31260] h-2`}
+      } transition-opacity duration-250 ease-in-out mt-1 mb-3 text-[13px] text-[#F31260] h-2 translate-y-1`}
     >
       {errorMessage}
     </p>

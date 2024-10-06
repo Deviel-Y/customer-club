@@ -66,7 +66,7 @@ const PorInvoiceForm = ({ Userlist, PorInvoice }: Props) => {
             user.companyName === companyName &&
             user.companyBranch === companyBranch
         )?.id;
-        if (!assignedToUserId) return toast("کاربر با این نام یافت نشد");
+        if (!assignedToUserId) return toast("سازمانی با این نام یافت نشد");
 
         const promise = PorInvoice
           ? axios
@@ -102,13 +102,15 @@ const PorInvoiceForm = ({ Userlist, PorInvoice }: Props) => {
       })}
       className="flex justify-center items-center"
     >
-      <Card className="flex flex-col p-5 gap-2 w-4/5">
+      <Card className="flex flex-col p-5 max-sm:p-2 w-4/5">
         <div>
-          <h2 className="text-[25px] mb-5">اطلاعات پیش فاکتور</h2>
+          <h2 className="text-[25px] max-sm:text-[18px] mb-5 max-sm:mb-2">
+            اطلاعات پیش فاکتور
+          </h2>
         </div>
 
-        <div className="grid grid-cols-4 grid-rows-2 gap-3 place-items-center">
-          <div className="col-span-1 w-full">
+        <div className="grid grid-cols-4 max-md:grid-cols-2 max-sm:grid-cols-1 grid-rows-2 max-md:grid-rows-3 max-sm:grid-rows-5 gap-3 max-sm:gap-0 place-items-center">
+          <div className="w-full">
             <Input
               size="lg"
               defaultValue={PorInvoice?.porformaInvoiceNumber}
@@ -122,7 +124,7 @@ const PorInvoiceForm = ({ Userlist, PorInvoice }: Props) => {
             />
           </div>
 
-          <div className="col-span-1 w-full">
+          <div className="w-full">
             <Controller
               name="organization"
               control={control}
@@ -153,7 +155,7 @@ const PorInvoiceForm = ({ Userlist, PorInvoice }: Props) => {
             <FormErrorMessage errorMessage={errors.organization?.message!} />
           </div>
 
-          <div className="col-span-1 w-full">
+          <div className="w-full">
             <Controller
               name="organizationBranch"
               defaultValue={PorInvoice?.organizationBranch}
@@ -184,7 +186,7 @@ const PorInvoiceForm = ({ Userlist, PorInvoice }: Props) => {
             <FormErrorMessage errorMessage={errors.organization?.message!} />
           </div>
 
-          <div className="col-span-1 w-full">
+          <div className="w-full">
             <Controller
               control={control}
               name="expiredAt"
@@ -213,7 +215,7 @@ const PorInvoiceForm = ({ Userlist, PorInvoice }: Props) => {
             <FormErrorMessage errorMessage={errors.expiredAt?.message!} />
           </div>
 
-          <div className="col-span-4 w-full">
+          <div className="col-span-4 max-md:col-span-2 max-sm:col-span-1 w-full">
             <Input
               size="lg"
               defaultValue={PorInvoice?.description}
@@ -226,8 +228,8 @@ const PorInvoiceForm = ({ Userlist, PorInvoice }: Props) => {
           </div>
         </div>
 
-        <div className="flex flex-row justify-between items-center gap-5 mt-5">
-          <div className="flex flex-row gap-5">
+        <div className="flex flex-row max-sm:flex-col-reverse justify-between items-center gap-5 mt-5 max-sm:mt-1 max-sm:gap-8">
+          <div className="flex flex-row gap-5 max-sm:gap-0">
             <Button type="submit" color="primary" variant="shadow">
               {PorInvoice ? "ویرایش پیش فاکتور" : "صدور پیش فاکتور جدید"}
             </Button>
@@ -241,7 +243,9 @@ const PorInvoiceForm = ({ Userlist, PorInvoice }: Props) => {
             </Button>
           </div>
 
-          <Button color="secondary">بارگذاری فایل پیش فاکتور</Button>
+          <Button className="max-sm:w-full" color="secondary">
+            بارگذاری فایل پیش فاکتور
+          </Button>
         </div>
         <Toaster />
       </Card>

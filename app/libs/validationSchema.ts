@@ -188,5 +188,7 @@ export const porInvoiceSchema = z.object({
     .string()
     .min(1, { message: "وارد کردن این فیلد الزامی مبیاشد" })
     .max(50, { message: "نام شعبه تباید از 50 کاراکتر بیشتر باشد" }),
-  expiredAt: z.string().datetime(),
+  expiredAt: z
+    .string({ message: "وارد کردن این فیلد الزامی مبیاشد" })
+    .datetime(),
 });

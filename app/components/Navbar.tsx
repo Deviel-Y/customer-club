@@ -28,7 +28,7 @@ const Navbar = () => {
 
   return (
     <div className="flex flex-row justify-between items-center px-5 py-2">
-      <h1 className="text-[40px] max-md:text-[30px]">
+      <h1 className="text-[40px] max-md:text-[30px] max-sm:text-[23px]">
         {headingMapping[pathName].label}
       </h1>
 

@@ -188,13 +188,12 @@ const InvoiceForm = ({ Userlist, invoice }: Props) => {
 
         <div className="flex flex-row max-sm:flex-col-reverse justify-between items-center gap-5 mt-5 max-sm:-mt-3">
           <div className="flex flex-row gap-5 max-sm:gap-0 max-sm:mt-3">
-            <Button size="lg" type="submit" color="primary" variant="shadow">
+            <Button type="submit" color="primary" variant="shadow">
               {invoice ? "ویرایش فاکتور" : "صدور فاکتور جدید"}
             </Button>
 
             <Button
               onPress={() => router.push("/admin/invoice-issuing")}
-              size="lg"
               color="danger"
               variant="light"
             >
@@ -202,7 +201,7 @@ const InvoiceForm = ({ Userlist, invoice }: Props) => {
             </Button>
           </div>
 
-          <Button size="lg" color="secondary" className="max-sm:w-full">
+          <Button color="secondary" className="max-sm:w-full">
             بارگذاری فایل فاکتور
           </Button>
         </div>
