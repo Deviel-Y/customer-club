@@ -81,13 +81,13 @@ const UserForm = ({ user }: Props) => {
 
   return (
     <form onSubmit={onSubmit} className="flex justify-center items-center">
-      <Card className="flex flex-col p-5 gap-3 w-4/5">
+      <Card className="flex flex-col p-5 max-sm:p-2 gap-3 w-4/5">
         <div>
           <h2 className="text-[25px]">اطلاعات کاربر</h2>
         </div>
 
-        <div className="grid grid-cols-4 grid-rows-4 gap-3 place-items-center">
-          <div className="col-span-3 w-full">
+        <div className="grid grid-cols-4 max-sm:grid-cols-1 grid-rows-4 max-sm:grid-rows-8 gap-3 max-sm:gap-1 place-items-center">
+          <div className="col-span-3 max-md:col-span-2 w-full">
             <Input
               {...register("email")}
               defaultValue={user?.email}
@@ -98,8 +98,7 @@ const UserForm = ({ user }: Props) => {
 
             <FormErrorMessage errorMessage={errors.email?.message || ""} />
           </div>
-
-          <div>
+          <div className="max-md:col-span-2">
             <Controller
               name="role"
               control={control}
@@ -116,7 +115,6 @@ const UserForm = ({ user }: Props) => {
 
             <FormErrorMessage errorMessage={errors.role?.message || ""} />
           </div>
-
           <div className="col-span-2 w-full">
             <div className="flex flex-row justify-center items-center">
               <Input
@@ -150,7 +148,6 @@ const UserForm = ({ user }: Props) => {
               errorMessage={errors.newPassword?.message || ""}
             />
           </div>
-
           <div className="col-span-2 w-full">
             <Input
               {...register("confirmPassword")}
@@ -164,7 +161,6 @@ const UserForm = ({ user }: Props) => {
               errorMessage={errors.confirmPassword?.message || ""}
             />
           </div>
-
           <div className="col-span-2 w-full">
             <Input
               defaultValue={user?.companyName!}
@@ -179,7 +175,6 @@ const UserForm = ({ user }: Props) => {
               errorMessage={errors.companyName?.message || ""}
             />
           </div>
-
           <div className="col-span-2 w-full">
             <Input
               defaultValue={user?.companyBranch!}
@@ -194,8 +189,7 @@ const UserForm = ({ user }: Props) => {
               errorMessage={errors.companyBranch?.message || ""}
             />
           </div>
-
-          <div className="col-span-1 w-full">
+          <div className="col-span-1 max-md:col-span-2 w-full">
             <Input
               defaultValue={user?.itManager!}
               {...register("itManager")}
@@ -207,8 +201,7 @@ const UserForm = ({ user }: Props) => {
 
             <FormErrorMessage errorMessage={errors.itManager?.message || ""} />
           </div>
-
-          <div className="col-span-3 w-full">
+          <div className="col-span-3 max-md:col-span-2 w-full">
             <Input
               defaultValue={user?.address!}
               {...register("address")}
@@ -222,7 +215,7 @@ const UserForm = ({ user }: Props) => {
           </div>
         </div>
 
-        <div className="flex flex-row gap-5">
+        <div className="flex flex-row max-sm:justify-center max-sm:mt-5 gap-5">
           <Button
             isLoading={isLoading}
             type="submit"

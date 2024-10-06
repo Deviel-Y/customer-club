@@ -28,8 +28,8 @@ export const userSide_userSchame = z
       .min(1, { message: "فیلد نام شعبه الزامی می باشد" }),
     itManager: z
       .string()
-      .max(50, { message: "نام مسئول انفوماتیک باید کمتر از 50 کاراکتر باشد" })
-      .min(1, { message: "فیلد مسئول انفوماتیک الزامی می باشد" }),
+      .max(50, { message: "نام مسئول باید کمتر از 50 کاراکتر باشد" })
+      .min(1, { message: "فیلد مسئول الزامی می باشد" }),
   })
   .refine(
     ({ newPassword, confirmPassword }) => newPassword === confirmPassword,
@@ -71,7 +71,7 @@ export const fullUserSchame = z
       .optional(),
     itManager: z
       .string()
-      .max(50, { message: "نام مسئول انفوماتیک باید کمتر از 50 کاراکتر باشد" })
+      .max(50, { message: "نام مسئول باید کمتر از 50 کاراکتر باشد" })
       .optional(),
     address: z
       .string()
@@ -126,7 +126,7 @@ export const fullUserSchame = z
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
             path: ["itManager"],
-            message: "وارد کردن نام مسئول انفوماتیک الزامی است",
+            message: "وارد کردن نام مسئول الزامی است",
           });
         }
         if (!address || address.length === 0) {

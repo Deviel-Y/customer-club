@@ -16,17 +16,17 @@ const UserSearchField = () => {
   } = userSearchFieldOnchangeHandlers(searchParmas, router);
 
   return (
-    <div className=" flex flex-row gap-5">
+    <div className=" flex flex-row max-sm:flex-col gap-5 max-sm:gap-1 max-sm:mt-2">
       <Button
         onPress={() => router.push("/admin/createNewUser")}
-        className="self-center"
+        className="self-center max-sm:self-start"
         color="secondary"
         variant="shadow"
       >
         تعریف کاربر جدید
       </Button>
 
-      <div className="grid grid-cols-4 grid-rows-1 gap-5 mb-5 w-full">
+      <div className="grid grid-cols-4 grid-rows-1 max-sm:grid-cols-1 max-sm:grid-rows-4 gap-5 max-sm:gap-0 mb-5 w-full">
         <Input
           defaultValue={searchParmas.get("companyName") || ""}
           onChange={componyNameOnChangeHandler}
