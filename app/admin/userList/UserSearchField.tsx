@@ -1,108 +1,19 @@
 "use client";
 
+import { userSearchFieldOnchangeHandlers } from "@/app/utils/onChangeHandlers";
 import { Button, Input } from "@nextui-org/react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { ChangeEvent } from "react";
 
 const UserSearchField = () => {
   const searchParmas = useSearchParams();
   const router = useRouter();
 
-  const componyNameOnChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
-    const newParams = new URLSearchParams(searchParmas);
-
-    if (event.target.value) {
-      newParams.set("companyName", event.target.value as string);
-    } else {
-      newParams.delete("companyName");
-    }
-
-    if (searchParmas.get("companyBranch"))
-      newParams.set("companyBranch", searchParmas.get("companyBranch")!);
-
-    if (searchParmas.get("itManager"))
-      newParams.set("itManager", searchParmas.get("itManager")!);
-
-    if (searchParmas.get("email"))
-      newParams.set("email", searchParmas.get("email")!);
-
-    if (searchParmas.get("pageNumber")) newParams.delete("pageNumber");
-
-    router.push(`?${newParams.toString()}`);
-  };
-
-  const componyBranchOnChangeHandler = (
-    event: ChangeEvent<HTMLInputElement>
-  ) => {
-    const newParams = new URLSearchParams(searchParmas);
-
-    if (event.target.value) {
-      newParams.set("companyBranch", event.target.value as string);
-    } else {
-      newParams.delete("companyBranch");
-    }
-
-    if (searchParmas.get("companyName"))
-      newParams.set("companyName", searchParmas.get("companyName")!);
-
-    if (searchParmas.get("itManager"))
-      newParams.set("itManager", searchParmas.get("itManager")!);
-
-    if (searchParmas.get("email"))
-      newParams.set("email", searchParmas.get("email")!);
-
-    if (searchParmas.get("pageNumber")) newParams.delete("pageNumber");
-
-    router.push(`?${newParams.toString()}`);
-  };
-
-  const emailAddressOnChangeHandler = (
-    event: ChangeEvent<HTMLInputElement>
-  ) => {
-    const newParams = new URLSearchParams(searchParmas);
-
-    if (event.target.value) {
-      newParams.set("email", event.target.value as string);
-    } else {
-      newParams.delete("email");
-    }
-
-    if (searchParmas.get("companyBranch"))
-      newParams.set("companyBranch", searchParmas.get("companyBranch")!);
-
-    if (searchParmas.get("itManager"))
-      newParams.set("itManager", searchParmas.get("itManager")!);
-
-    if (searchParmas.get("companyName"))
-      newParams.set("companyName", searchParmas.get("companyName")!);
-
-    if (searchParmas.get("pageNumber")) newParams.delete("pageNumber");
-
-    router.push(`?${newParams.toString()}`);
-  };
-
-  const itMnagerOnChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
-    const newParams = new URLSearchParams(searchParmas);
-
-    if (event.target.value) {
-      newParams.set("itManager", event.target.value as string);
-    } else {
-      newParams.delete("itManager");
-    }
-
-    if (searchParmas.get("companyBranch"))
-      newParams.set("companyBranch", searchParmas.get("companyBranch")!);
-
-    if (searchParmas.get("email"))
-      newParams.set("email", searchParmas.get("email")!);
-
-    if (searchParmas.get("companyName"))
-      newParams.set("companyName", searchParmas.get("companyName")!);
-
-    if (searchParmas.get("pageNumber")) newParams.delete("pageNumber");
-
-    router.push(`?${newParams.toString()}`);
-  };
+  const {
+    componyBranchOnChangeHandler,
+    componyNameOnChangeHandler,
+    emailAddressOnChangeHandler,
+    itMnagerOnChangeHandler,
+  } = userSearchFieldOnchangeHandlers(searchParmas, router);
 
   return (
     <div className=" flex flex-row gap-5">
@@ -117,6 +28,7 @@ const UserSearchField = () => {
 
       <div className="grid grid-cols-4 grid-rows-1 gap-5 mb-5 w-full">
         <Input
+          defaultValue={searchParmas.get("companyName") || ""}
           onChange={componyNameOnChangeHandler}
           label="نام سازمان"
           type="search"
@@ -124,6 +36,7 @@ const UserSearchField = () => {
         />
 
         <Input
+          defaultValue={searchParmas.get("companyBranch") || ""}
           onChange={componyBranchOnChangeHandler}
           label="شعبه"
           type="search"
@@ -131,6 +44,7 @@ const UserSearchField = () => {
         />
 
         <Input
+          defaultValue={searchParmas.get("email") || ""}
           onChange={emailAddressOnChangeHandler}
           label="آدرس ایمیل"
           type="search"
@@ -138,6 +52,7 @@ const UserSearchField = () => {
         />
 
         <Input
+          defaultValue={searchParmas.get("itManager") || ""}
           onChange={itMnagerOnChangeHandler}
           label="مسئول انفوماتیک"
           type="search"
