@@ -6,11 +6,9 @@ interface Props {
 
 const StatusBadge = ({ status }: Props) => {
   return (
-    <span
-      className={`px-2 py-1 rounded-full ${statusMapping[status].className}`}
-    >
+    <p className={`px-2 py-1 rounded-full ${statusMapping[status].className}`}>
       {statusMapping[status].label}
-    </span>
+    </p>
   );
 };
 

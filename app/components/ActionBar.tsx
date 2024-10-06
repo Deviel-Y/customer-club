@@ -29,10 +29,10 @@ const ActionBar = ({ endpoint, buttonLabel, isAdmin = true }: Props) => {
   } = actionBarOnChangeHandlers(searchParmas, router);
 
   return (
-    <div className=" flex flex-row gap-5 w-full place-content-center place-items-center">
+    <div className=" flex flex-row max-sm:flex-col gap-5 max-sm:gap-0 max-sm:mt-5 w-full place-content-center place-items-center">
       {isAdmin && (
         <Button
-          className="self-center"
+          className="self-center max-sm:self-start"
           color="secondary"
           variant="shadow"
           onPress={() => router.push(endpoint!)}
@@ -41,7 +41,11 @@ const ActionBar = ({ endpoint, buttonLabel, isAdmin = true }: Props) => {
         </Button>
       )}
 
-      <div className="grid grid-cols-5 grid-rows-1 w-full gap-5 mb-5">
+      <div
+        className={`grid ${
+          pathname === "/admin/invoice-issuing" ? "grid-cols-4" : "grid-cols-5"
+        }  grid-rows-1 w-full gap-5 max-sm:gap-0 mb-5 max-sm:grid-cols-1`}
+      >
         <Input
           defaultValue={searchParmas?.get("number") || ""}
           onChange={numberOnChangeHandler}
