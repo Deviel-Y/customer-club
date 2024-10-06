@@ -83,7 +83,7 @@ const UserForm = ({ user }: Props) => {
     <form onSubmit={onSubmit} className="flex justify-center items-center">
       <Card className="flex flex-col p-5 max-sm:p-2 gap-3 w-4/5">
         <div>
-          <h2 className="text-[25px]">اطلاعات کاربر</h2>
+          <h2 className="text-[25px] max-sm:text-[18px]">اطلاعات کاربر</h2>
         </div>
 
         <div className="grid grid-cols-4 max-sm:grid-cols-1 grid-rows-4 max-sm:grid-rows-8 gap-3 max-sm:gap-1 place-items-center">

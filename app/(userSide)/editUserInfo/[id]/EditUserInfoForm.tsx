@@ -49,85 +49,93 @@ const EditUserInfoForm = ({ user }: Props) => {
         });
       })}
     >
-      <Card className="flex flex-col gap-5 p-5">
-        <h2 className="text-[25px] mb-5">اطلاعات کاربر</h2>
+      <Card className="flex flex-col gap-5 max-sm:gap-1 p-5 max-sm:p-2">
+        <h2 className="text-[25px] max-sm:text-[18px]">اطلاعات کاربر</h2>
 
-        <div className="grid grid-cols-3 grid-rows-2 gap-5 place-content-center place-items-center">
-          <div className="w-full">
-            <Input
-              {...register("companyBranch")}
-              defaultValue={user?.companyBranch!}
-              size="lg"
-              label="نام شعبه"
-            />
+        <div className="grid grid-cols-1 grid-rows-2 place-content-center place-items-center">
+          <div className="grid grid-cols-2 max-sm:grid-cols-1 grid-rows-1 max-sm:grid-rows-2 gap-5 max-sm:gap-0 w-full">
+            <div className="w-full">
+              <Input
+                {...register("companyBranch")}
+                defaultValue={user?.companyBranch!}
+                size="lg"
+                label="نام شعبه"
+              />
+              <FormErrorMessage
+                errorMessage={errors.companyBranch?.message || ""}
+              />
+            </div>
 
-            <FormErrorMessage
-              errorMessage={errors.companyBranch?.message || ""}
-            />
+            <div className="w-full">
+              <Input
+                {...register("itManager")}
+                defaultValue={user?.itManager!}
+                size="lg"
+                label="مسئول انفوماتیک"
+              />
+              <FormErrorMessage
+                errorMessage={errors.itManager?.message || ""}
+              />
+            </div>
           </div>
 
-          <div className="w-full">
-            <Input
-              {...register("itManager")}
-              defaultValue={user?.itManager!}
-              size="lg"
-              label="مسئول انفوماتیک"
-            />
+          <div className="grid grid-cols-3 max-sm:-translate-y-11 max-sm:grid-cols-1 grid-rows-1 max-sm:grid-rows-3 gap-5 max-sm:gap-0 w-full">
+            <div className="w-full">
+              <Input
+                {...register("currentPassword")}
+                type="password"
+                size="lg"
+                label="گذرواژه فعلی"
+              />
+              <FormErrorMessage
+                errorMessage={errors.currentPassword?.message || ""}
+              />
+            </div>
 
-            <FormErrorMessage errorMessage={errors.itManager?.message || ""} />
+            <div className="w-full">
+              <Input
+                {...register("newPassword")}
+                type="password"
+                size="lg"
+                label="گذرواژه جدید"
+              />
+              <FormErrorMessage
+                errorMessage={errors.newPassword?.message || ""}
+              />
+            </div>
+
+            <div className="w-full">
+              <Input
+                {...register("confirmPassword")}
+                type="password"
+                size="lg"
+                label="تکرار گذرواژه جدید"
+              />
+              <FormErrorMessage
+                errorMessage={errors.confirmPassword?.message || ""}
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="flex flex-row max-sm:flex-col-reverse justify-between gap-5 w-full">
+          <div className="flex flex-row max-sm:justify-center gap-5">
+            <Button type="submit" size="lg" color="primary" variant="shadow">
+              ویرایش اطلاعات
+            </Button>
+
+            <Button
+              onPress={() => router.push("/")}
+              size="lg"
+              variant="light"
+              color="danger"
+            >
+              انصراف
+            </Button>
           </div>
 
           <Button color="secondary" size="lg">
             ویرایش عکس پروفایل
-          </Button>
-
-          <div className="w-full">
-            <Input
-              {...register("currentPassword")}
-              type="password"
-              size="lg"
-              label="گذرواژه فعلی"
-            />
-
-            <FormErrorMessage
-              errorMessage={errors.currentPassword?.message || ""}
-            />
-          </div>
-
-          <div className="w-full">
-            <Input
-              {...register("newPassword")}
-              type="password"
-              size="lg"
-              label="گذرواژه جدید"
-            />
-
-            <FormErrorMessage
-              errorMessage={errors.newPassword?.message || ""}
-            />
-          </div>
-
-          <div className="w-full">
-            <Input
-              {...register("confirmPassword")}
-              type="password"
-              size="lg"
-              label="تکرار گذرواژه جدید"
-            />
-
-            <FormErrorMessage
-              errorMessage={errors.confirmPassword?.message || ""}
-            />
-          </div>
-        </div>
-
-        <div className="flex flex-row mt-5 gap-5">
-          <Button type="submit" size="lg" color="primary" variant="shadow">
-            ویرایش اطلاعات
-          </Button>
-
-          <Button onPress={() => router.push("/")} size="lg" color="danger">
-            انصراف
           </Button>
         </div>
       </Card>
