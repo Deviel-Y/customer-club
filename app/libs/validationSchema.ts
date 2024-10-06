@@ -5,6 +5,8 @@ export type FullUserSchameType = z.infer<typeof fullUserSchame>;
 export type SignInUserSchemaType = z.infer<typeof signInUserSchema>;
 export type InvoiceSchemaType = z.infer<typeof invoiceSchema>;
 export type PorInvoiceSchemaType = z.infer<typeof porInvoiceSchema>;
+export type TicketSchemaType = z.infer<typeof ticketSchema>;
+export type TicketMessageSchema = z.infer<typeof ticketMessageSchema>;
 
 export const userSide_userSchame = z
   .object({
@@ -191,4 +193,13 @@ export const porInvoiceSchema = z.object({
   expiredAt: z
     .string({ message: "وارد کردن این فیلد الزامی مبیاشد" })
     .datetime(),
+});
+
+export const ticketSchema = z.object({
+  subject: z.string().min(1),
+  title: z.string().min(1).max(255),
+});
+
+export const ticketMessageSchema = z.object({
+  message: z.string().min(1).max(60_000),
 });
