@@ -21,7 +21,7 @@ const statusMapping: Record<
 > = {
   EXPIRED: { color: "danger", label: "منقضی شده" },
   IN_PROGRESS: { color: "success", label: "دارای اعتبار" },
-  CLOSED: { color: "success", label: "پایان یافته" },
+  CLOSED: { color: "success", label: "بسته شده" },
   OPEN: { color: "danger", label: "جدید" },
-  INVESTIGATING: { color: "primary", label: "در حال بررسی" },
+  INVESTIGATING: { color: "warning", label: "در حال بررسی" },
 };
