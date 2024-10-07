@@ -1,14 +1,13 @@
-import { ticketSchema } from "@/app/libs/validationSchema";
+import getSession from "@/app/libs/getSession";
+import { ticketSchema, TicketSchemaType } from "@/app/libs/validationSchema";
 import prisma from "@/prisma/client";
-import { Ticket } from "@prisma/client";
-import { getSession } from "next-auth/react";
 import { NextRequest, NextResponse } from "next/server";
 
 export const POST = async (request: NextRequest) => {
   try {
     const session = await getSession();
 
-    const body: Ticket = await request.json();
+    const body: TicketSchemaType = await request.json();
     const { subject, title } = body;
 
     const validation = ticketSchema.safeParse(body);
@@ -24,6 +23,7 @@ export const POST = async (request: NextRequest) => {
     });
     return NextResponse.json(newTicket, { status: 201 });
   } catch (error) {
+    console.log(error);
     return NextResponse.json(error, { status: 500 });
   }
 };
