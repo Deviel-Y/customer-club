@@ -1,6 +1,7 @@
 "use client";
 
 import StatusBadge from "@/app/admin/components/StatusBadge";
+import PaginationControl from "@/app/components/PaginationControl";
 import {
   Button,
   Table,
@@ -15,11 +16,20 @@ import moment from "moment-jalaali";
 
 interface Props {
   tickets: any[];
+  totalPage: number;
 }
 
-const UserTicketListTable = ({ tickets }: Props) => {
+const UserTicketListTable = ({ tickets, totalPage }: Props) => {
   return (
-    <Table isStriped aria-label="Ticket list table">
+    <Table
+      bottomContent={
+        <div className="flex justify-center w-full">
+          <PaginationControl totalPage={totalPage} />
+        </div>
+      }
+      isStriped
+      aria-label="Ticket list table"
+    >
       <TableHeader>
         {columns.map((column) => (
           <TableColumn

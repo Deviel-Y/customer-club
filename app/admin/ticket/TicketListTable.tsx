@@ -1,5 +1,6 @@
 "use client";
 
+import PaginationControl from "@/app/components/PaginationControl";
 import {
   Button,
   Table,
@@ -15,11 +16,20 @@ import StatusBadge from "../components/StatusBadge";
 
 interface Props {
   tickets: any[];
+  totalPage: number;
 }
 
-const TicketListTable = ({ tickets }: Props) => {
+const TicketListTable = ({ tickets, totalPage }: Props) => {
   return (
-    <Table isStriped aria-label="Ticket list table">
+    <Table
+      bottomContent={
+        <div className="flex justify-center w-full">
+          <PaginationControl totalPage={totalPage} />
+        </div>
+      }
+      isStriped
+      aria-label="Ticket list table"
+    >
       <TableHeader>
         {columns.map((column) => (
           <TableColumn
