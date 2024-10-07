@@ -28,7 +28,7 @@ const TicketActionBar = ({ isAdmin = true }: Props) => {
 
       <div
         className={`grid ${
-          pathname === "/admin/ticket" ? "grid-cols-4" : "grid-cols-5"
+          pathname === "/admin/ticket" ? "grid-cols-5" : "grid-cols-5"
         }  grid-rows-1 w-full gap-5 max-sm:gap-0 mb-5 max-sm:grid-cols-1`}
       >
         <Input

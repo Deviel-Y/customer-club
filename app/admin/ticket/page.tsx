@@ -1,21 +1,82 @@
+import TicketActionBar from "@/app/components/TicketActionBar";
 import getSession from "@/app/libs/getSession";
 import { authorizeAdmin } from "@/app/utils/authorizeRole";
 import prisma from "@/prisma/client";
+import { TicketStatus } from "@prisma/client";
 import TicketListTable from "./TicketListTable";
 
-const AdminTicketListPage = async () => {
+interface Props {
+  searchParams: {
+    subject: string;
+    title: string;
+    statusFilter: string;
+    companyName: string;
+    companyBranch: string;
+    pageNumber: number;
+  };
+}
+
+const AdminTicketIssuingPage = async ({
+  searchParams: {
+    companyBranch,
+    companyName,
+    pageNumber,
+    statusFilter,
+    subject,
+    title,
+  },
+}: Props) => {
   const session = await getSession();
   authorizeAdmin(session!);
 
+  const prismaStatus = Object.values(TicketStatus);
+  const allStatuses = [...prismaStatus, "ALL"];
+  const statusFilterEnum =
+    statusFilter === "ALL" || !allStatuses.includes(statusFilter)
+      ? undefined
+      : (statusFilter as TicketStatus);
+
+  const currentPage = pageNumber || 1;
+  const pageSize: number = 6;
+
   const tickets = await prisma.ticket.findMany({
+    where: {
+      title: { contains: title },
+      subject: { contains: subject },
+      User: {
+        companyName: { contains: companyName },
+        companyBranch: { contains: companyBranch },
+      },
+      status: { equals: statusFilterEnum },
+    },
+    take: pageSize,
+    skip: (currentPage - 1) * pageSize,
+    orderBy: { createdAt: "desc" },
     include: { User: true },
   });
 
+  const ticketCountCount: number = await prisma.ticket.count({
+    where: {
+      subject: { contains: subject },
+      title: { contains: title },
+      User: {
+        companyName: { contains: companyName },
+        companyBranch: { contains: companyBranch },
+      },
+      status: statusFilterEnum,
+    },
+  });
+
   return (
-    <div className="px-5 py-2 w-full">
-      <TicketListTable tickets={tickets} />
+    <div className="flex flex-col gap-5 px-5 py-2 w-full">
+      <TicketActionBar isAdmin />
+
+      <TicketListTable
+        totalPage={Math.ceil(ticketCountCount / pageSize)}
+        tickets={tickets}
+      />
     </div>
   );
 };
 
-export default AdminTicketListPage;
+export default AdminTicketIssuingPage;

@@ -44,19 +44,19 @@ const TicketListTable = ({ tickets, totalPage }: Props) => {
 
       <TableBody>
         {tickets.map((ticket) => (
-          <TableRow key={ticket.id}>
+          <TableRow key={ticket?.id}>
             <TableCell>
               <Button color="primary">نمایش تیکت</Button>
             </TableCell>
-            <TableCell>{ticket.subject}</TableCell>
-            <TableCell>{ticket.title}</TableCell>
+            <TableCell>{ticket?.subject}</TableCell>
+            <TableCell>{ticket?.title}</TableCell>
             <TableCell>
-              <StatusBadge status={ticket.status} />
+              <StatusBadge status={ticket?.status} />
             </TableCell>
-            <TableCell>{ticket.User.companyName}</TableCell>
-            <TableCell>{ticket.User.companyBranch}</TableCell>
+            <TableCell>{ticket?.User?.companyName}</TableCell>
+            <TableCell>{ticket?.User?.companyBranch}</TableCell>
             <TableCell>
-              {moment(ticket.createdAt).format("jYYYY/jM/jD")}
+              {moment(ticket?.createdAt).format("jYYYY/jM/jD")}
             </TableCell>
           </TableRow>
         ))}
