@@ -1,5 +1,6 @@
 "use client";
 
+import StatusBadge from "@/app/admin/components/StatusBadge";
 import {
   Button,
   Table,
@@ -11,13 +12,12 @@ import {
 } from "@nextui-org/react";
 import { Ticket } from "@prisma/client";
 import moment from "moment-jalaali";
-import StatusBadge from "../components/StatusBadge";
 
 interface Props {
   tickets: any[];
 }
 
-const TicketListTable = ({ tickets }: Props) => {
+const UserTicketListTable = ({ tickets }: Props) => {
   return (
     <Table isStriped aria-label="Ticket list table">
       <TableHeader>
@@ -43,8 +43,6 @@ const TicketListTable = ({ tickets }: Props) => {
             <TableCell>
               <StatusBadge status={ticket.status} />
             </TableCell>
-            <TableCell>{ticket.User.companyName}</TableCell>
-            <TableCell>{ticket.User.companyBranch}</TableCell>
             <TableCell>
               {moment(ticket.createdAt).format("jYYYY/jM/jD")}
             </TableCell>
@@ -55,17 +53,15 @@ const TicketListTable = ({ tickets }: Props) => {
   );
 };
 
-export default TicketListTable;
+export default UserTicketListTable;
 
 const columns: {
   label: string;
-  value: keyof Ticket | "detail" | "companyName" | "companyBranch";
+  value: keyof Ticket | "detail";
 }[] = [
   { label: "مشاهده جزئیات", value: "detail" },
   { label: "موضوع", value: "subject" },
   { label: "عنوان تیکت", value: "title" },
   { label: "وضعیت تیکت", value: "status" },
-  { label: "نام سازمان", value: "companyName" },
-  { label: "شعبه", value: "companyBranch" },
   { label: "تاریخ ایجاد", value: "createdAt" },
 ];

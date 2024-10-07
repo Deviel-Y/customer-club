@@ -80,7 +80,7 @@ const Sidebar = () => {
         <TicketIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />
       ),
     },
-    "ثبت تیکت": {
+    "مدیریت تیکت ها": {
       href: "/admin/ticket",
       icon: (
         <TicketIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />
@@ -230,5 +230,5 @@ const adminLinkLabels: string[] = [
   "صدور فاکتور",
   "صدور پیش فاکتور",
   "مدیریت کاربران",
-  "ثبت تیکت",
+  "مدیریت تیکت ها",
 ];

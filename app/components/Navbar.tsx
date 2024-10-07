@@ -33,6 +33,7 @@ const Navbar = () => {
       </h1>
 
       <Avatar
+        src={session.user.image || undefined}
         alt="Profile Avater"
         fallback="?"
         size="lg"
@@ -51,7 +52,7 @@ const headingMapping: Record<string, { label: string }> = {
   "/invoice": { label: "فاکتورها" },
   "/porformaInvoice": { label: "پیش فاکتورها" },
   "/editUserInfo": { label: "ویرایش اطلاعات کاربر" },
-  "/ticket": { label: "لیست تیکت ها" },
+  "/ticket": { label: "تیکت های من" },
   "/admin": { label: "پنل مدیریت" },
   "/admin/invoice-issuing": { label: "صدور فاکتور" },
   "/admin/porformaInvoice-issuing": { label: "صدور پیش فاکتور" },
@@ -67,6 +68,6 @@ const headingMapping: Record<string, { label: string }> = {
     label: "ویرایش پیش فاکتور",
   },
   "/admin/ticket": {
-    label: "لیست تیکت ها",
+    label: "مدیریت تیکت ها",
   },
 };
