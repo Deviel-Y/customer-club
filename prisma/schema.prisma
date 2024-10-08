@@ -85,13 +85,19 @@ model Ticket {
 }
 
 model TicketMessage {
-  id                String @id @default(cuid())
-  message           String @db.Text
-  assignetoTicketId String @unique
+  id                String      @id @default(cuid())
+  message           String      @db.Text
+  assignetoTicketId String      @unique
+  messageType       MessageType
 
   Ticket Ticket @relation(fields: [assignetoTicketId], references: [id])
 
   createdAt DateTime @default(now())
+}
+
+enum MessageType {
+  REQUEST
+  RESPONCE
 }
 
 enum TicketStatus {

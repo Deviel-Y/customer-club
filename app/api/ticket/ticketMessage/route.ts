@@ -1,3 +1,4 @@
+import getSession from "@/app/libs/getSession";
 import { ticketMessageSchema } from "@/app/libs/validationSchema";
 import prisma from "@/prisma/client";
 import { TicketMessage } from "@prisma/client";
@@ -5,6 +6,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const POST = async (request: NextRequest) => {
   try {
+    const session = await getSession();
+
     const body: TicketMessage = await request.json();
     const { assignetoTicketId, message } = body;
 
@@ -13,7 +16,11 @@ export const POST = async (request: NextRequest) => {
       return NextResponse.json(validation.error.format(), { status: 400 });
 
     const newMesaage = await prisma.ticketMessage.create({
-      data: { message, assignetoTicketId },
+      data: {
+        message,
+        assignetoTicketId,
+        messageType: session?.user.role === "ADMIN" ? "RESPONCE" : "REQUEST",
+      },
     });
 
     return NextResponse.json(newMesaage);
