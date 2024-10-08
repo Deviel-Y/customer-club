@@ -14,7 +14,7 @@ const MessageCard = ({ ticket, ticketMessages, users }: Props) => {
   )!;
 
   return (
-    <div className={`w-full`}>
+    <div className="w-full my-5">
       <div
         className={`flex flex-row w-full ${
           ticketMessages.messageType === "REQUEST"
@@ -24,7 +24,7 @@ const MessageCard = ({ ticket, ticketMessages, users }: Props) => {
       >
         <div>
           <Avatar
-            className="me-2"
+            className="mx-2"
             alt="Profile picture"
             src={messageIssuer.image || undefined}
           />

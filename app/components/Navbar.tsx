@@ -13,6 +13,7 @@ const Navbar = () => {
 
   useEffect(() => {
     if (
+      path.includes("/admin/ticket/ticketDetail") ||
       path.includes("/admin/editUser") ||
       path.includes("/editUserInfo") ||
       path.includes("/admin/invoice-issuing/editInvoiceInfo") ||
@@ -67,7 +68,6 @@ const headingMapping: Record<string, { label: string }> = {
   "/admin/porformaInvoice-issuing/editPorInvoiceInfo": {
     label: "ویرایش پیش فاکتور",
   },
-  "/admin/ticket": {
-    label: "مدیریت تیکت ها",
-  },
+  "/admin/ticket": { label: "مدیریت تیکت ها" },
+  "/admin/ticket/ticketDetail": { label: "جزئیات تیکت" },
 };

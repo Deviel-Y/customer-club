@@ -12,6 +12,7 @@ import {
 } from "@nextui-org/react";
 import { Ticket } from "@prisma/client";
 import moment from "moment-jalaali";
+import { useRouter } from "next/navigation";
 import StatusBadge from "../components/StatusBadge";
 
 interface Props {
@@ -20,6 +21,8 @@ interface Props {
 }
 
 const TicketListTable = ({ tickets, totalPage }: Props) => {
+  const router = useRouter();
+
   return (
     <Table
       bottomContent={
@@ -46,7 +49,14 @@ const TicketListTable = ({ tickets, totalPage }: Props) => {
         {tickets.map((ticket) => (
           <TableRow key={ticket?.id}>
             <TableCell>
-              <Button color="primary">نمایش تیکت</Button>
+              <Button
+                onPress={() =>
+                  router.push(`/admin/ticket/ticketDetail/${ticket?.id}`)
+                }
+                color="primary"
+              >
+                نمایش تیکت
+              </Button>
             </TableCell>
             <TableCell>{ticket?.subject}</TableCell>
             <TableCell>{ticket?.title}</TableCell>
