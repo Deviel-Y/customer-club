@@ -89,6 +89,7 @@ model TicketMessage {
   message           String      @db.Text
   assignetoTicketId String      @unique
   messageType       MessageType
+  issuerId          String
 
   Ticket Ticket @relation(fields: [assignetoTicketId], references: [id])
 
