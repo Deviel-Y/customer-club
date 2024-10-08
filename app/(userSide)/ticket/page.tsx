@@ -2,12 +2,12 @@ import TicketActionBar from "@/app/components/TicketActionBar";
 import getSession from "@/app/libs/getSession";
 import { authorizeUser } from "@/app/utils/authorizeRole";
 import prisma from "@/prisma/client";
-import { TicketStatus } from "@prisma/client";
+import { Category, TicketStatus } from "@prisma/client";
 import UserTicketListTable from "./UserTicketListTable";
 
 interface Props {
   searchParams: {
-    subject: string;
+    category: Category;
     title: string;
     statusFilter: string;
     pageNumber: number;
@@ -15,10 +15,15 @@ interface Props {
 }
 
 const TicketIssuingPage = async ({
-  searchParams: { pageNumber, statusFilter, subject, title },
+  searchParams: { pageNumber, statusFilter, category, title },
 }: Props) => {
   const session = await getSession();
   authorizeUser(session!);
+
+  const prismaCategory = Object.values(Category);
+  const categoryFilterEnum = prismaCategory.includes(category)
+    ? category
+    : undefined;
 
   const prismaStatus = Object.values(TicketStatus);
   const allStatuses = [...prismaStatus, "ALL"];
@@ -33,7 +38,7 @@ const TicketIssuingPage = async ({
   const tickets = await prisma.ticket.findMany({
     where: {
       title: { contains: title },
-      subject: { contains: subject },
+      category: { equals: categoryFilterEnum },
       status: { equals: statusFilterEnum },
 
       issuerId: session?.user.id,
@@ -45,7 +50,7 @@ const TicketIssuingPage = async ({
 
   const ticketCountCount: number = await prisma.ticket.count({
     where: {
-      subject: { contains: subject },
+      category: { equals: categoryFilterEnum },
       title: { contains: title },
       status: statusFilterEnum,
     },

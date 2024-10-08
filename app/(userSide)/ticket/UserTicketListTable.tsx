@@ -44,17 +44,19 @@ const UserTicketListTable = ({ tickets, totalPage }: Props) => {
 
       <TableBody>
         {tickets.map((ticket) => (
-          <TableRow key={ticket.id}>
+          <TableRow key={ticket?.id}>
             <TableCell>
               <Button color="primary">نمایش تیکت</Button>
             </TableCell>
-            <TableCell>{ticket.subject}</TableCell>
-            <TableCell>{ticket.title}</TableCell>
+            <TableCell className="text-nowrap">
+              {categoryMapping[ticket.category]?.label}
+            </TableCell>
+            <TableCell>{ticket?.title}</TableCell>
             <TableCell>
-              <StatusBadge status={ticket.status} />
+              <StatusBadge status={ticket?.status} />
             </TableCell>
             <TableCell>
-              {moment(ticket.createdAt).format("jYYYY/jM/jD")}
+              {moment(ticket?.createdAt).format("jYYYY/jM/jD")}
             </TableCell>
           </TableRow>
         ))}
@@ -70,8 +72,21 @@ const columns: {
   value: keyof Ticket | "detail";
 }[] = [
   { label: "مشاهده جزئیات", value: "detail" },
-  { label: "موضوع", value: "subject" },
+  { label: "دسته بندی", value: "category" },
   { label: "عنوان تیکت", value: "title" },
   { label: "وضعیت تیکت", value: "status" },
   { label: "تاریخ ایجاد", value: "createdAt" },
 ];
+
+const categoryMapping: Record<any, { label: any }> = {
+  FEATURE_REQUEST: {
+    label: "درخواست ویژگی جدید",
+  },
+  GENERAL_INQUIRY: { label: "سوالات عمومی" },
+  PAYMENT: {
+    label: "صورتحساب و پردخت ها",
+  },
+  TECHNICAL_SUPPORT: {
+    label: "پشتیبانی فنی",
+  },
+};

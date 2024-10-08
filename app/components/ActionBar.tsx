@@ -21,7 +21,7 @@ const ActionBar = ({ endpoint, buttonLabel, isAdmin = true }: Props) => {
   const searchParmas = useSearchParams();
   const router = useRouter();
   const {
-    componyBranchOnChangeHandler,
+    companyBranchOnChangeHandler,
     descriptionOnChangeHandler,
     numberOnChangeHandler,
     organizationOnChangeHandler,
@@ -71,7 +71,7 @@ const ActionBar = ({ endpoint, buttonLabel, isAdmin = true }: Props) => {
         {isAdmin && (
           <Input
             defaultValue={searchParmas?.get("organizationBranch") || ""}
-            onChange={componyBranchOnChangeHandler}
+            onChange={companyBranchOnChangeHandler}
             label="شعبه"
             type="search"
             variant="underlined"

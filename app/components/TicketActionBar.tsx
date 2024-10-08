@@ -1,7 +1,7 @@
 "use client";
 
 import { Autocomplete, AutocompleteItem, Input } from "@nextui-org/react";
-import { TicketStatus } from "@prisma/client";
+import { Category, TicketStatus } from "@prisma/client";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import NewTicketPopoverButton from "../(userSide)/ticket/NewTicketPopoverButton";
 import { ticketActionBarOnchangeHandlers } from "../utils/onChangeHandlers";
@@ -11,6 +11,7 @@ interface Props {
 }
 
 const TicketActionBar = ({ isAdmin = true }: Props) => {
+  const ticketCategories = Object.values(Category);
   const pathname = usePathname();
   const searchParmas = useSearchParams();
   const router = useRouter();
@@ -18,7 +19,7 @@ const TicketActionBar = ({ isAdmin = true }: Props) => {
     companyBranchOnChangeHandler,
     companyNameOnChangeHandler,
     statusOnChangeHandler,
-    subjectOnChangeHandler,
+    categoryOnChangeHandler,
     titleOnChangeHandler,
   } = ticketActionBarOnchangeHandlers(searchParmas, router);
 
@@ -31,13 +32,17 @@ const TicketActionBar = ({ isAdmin = true }: Props) => {
           pathname === "/admin/ticket" ? "grid-cols-5" : "grid-cols-5"
         }  grid-rows-1 w-full gap-5 max-sm:gap-0 mb-5 max-sm:grid-cols-1`}
       >
-        <Input
-          defaultValue={searchParmas?.get("subject") || ""}
-          onChange={subjectOnChangeHandler}
-          label="موضوع"
-          type="search"
-          variant="underlined"
-        />
+        <Autocomplete
+          onSelectionChange={categoryOnChangeHandler}
+          label="دسته بندی"
+          listboxProps={{ emptyContent: "دسته بندی یافت نشد" }}
+        >
+          {ticketCategories.map((category) => (
+            <AutocompleteItem key={category}>
+              {categoryMapping[category].label}
+            </AutocompleteItem>
+          ))}
+        </Autocomplete>
 
         <Input
           defaultValue={searchParmas?.get("title") || ""}
@@ -93,3 +98,16 @@ const statusFilter: { label: string; value: TicketStatus | "ALL" }[] = [
   { label: "در حال بررسی", value: "INVESTIGATING" },
   { label: "جدید", value: "OPEN" },
 ];
+
+const categoryMapping: Record<Category, { label: string }> = {
+  FEATURE_REQUEST: {
+    label: "درخواست ویژگی جدید",
+  },
+  GENERAL_INQUIRY: { label: "سوالات عمومی" },
+  PAYMENT: {
+    label: "صورتحساب و پردخت ها",
+  },
+  TECHNICAL_SUPPORT: {
+    label: "پشتیبانی فنی",
+  },
+};

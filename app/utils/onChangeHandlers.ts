@@ -95,7 +95,7 @@ export const actionBarOnChangeHandlers = (
     router.push(`?${newParams.toString()}`);
   };
 
-  const componyBranchOnChangeHandler = (
+  const companyBranchOnChangeHandler = (
     event: ChangeEvent<HTMLInputElement>
   ) => {
     const newParams = new URLSearchParams(searchParmas);
@@ -156,7 +156,7 @@ export const actionBarOnChangeHandlers = (
     numberOnChangeHandler,
     descriptionOnChangeHandler,
     organizationOnChangeHandler,
-    componyBranchOnChangeHandler,
+    companyBranchOnChangeHandler,
     statusFilterOnChangeHandler,
   };
 };
@@ -268,17 +268,18 @@ export const userSearchFieldOnchangeHandlers = (
     itMnagerOnChangeHandler,
   };
 };
+
 export const ticketActionBarOnchangeHandlers = (
   searchParmas: ReadonlyURLSearchParams,
   router: AppRouterInstance
 ) => {
-  const subjectOnChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+  const categoryOnChangeHandler = (event: Key | null) => {
     const newParams = new URLSearchParams(searchParmas);
 
-    if (event.target.value) {
-      newParams.set("subject", event.target.value as string);
+    if (event) {
+      newParams.set("category", event as string);
     } else {
-      newParams.delete("subject");
+      newParams.delete("category");
     }
 
     if (searchParmas.get("title"))
@@ -307,8 +308,8 @@ export const ticketActionBarOnchangeHandlers = (
       newParams.delete("title");
     }
 
-    if (searchParmas.get("subject"))
-      newParams.set("subject", searchParmas.get("subject")!);
+    if (searchParmas.get("category"))
+      newParams.set("category", searchParmas.get("category")!);
 
     if (searchParmas.get("companyName"))
       newParams.set("companyName", searchParmas.get("companyName")!);
@@ -333,8 +334,8 @@ export const ticketActionBarOnchangeHandlers = (
       newParams.delete("companyName");
     }
 
-    if (searchParmas.get("subject"))
-      newParams.set("subject", searchParmas.get("subject")!);
+    if (searchParmas.get("category"))
+      newParams.set("category", searchParmas.get("category")!);
 
     if (searchParmas.get("title"))
       newParams.set("title", searchParmas.get("title")!);
@@ -361,8 +362,8 @@ export const ticketActionBarOnchangeHandlers = (
       newParams.delete("companyBranch");
     }
 
-    if (searchParmas.get("subject"))
-      newParams.set("subject", searchParmas.get("subject")!);
+    if (searchParmas.get("category"))
+      newParams.set("category", searchParmas.get("category")!);
 
     if (searchParmas.get("title"))
       newParams.set("title", searchParmas.get("title")!);
@@ -387,8 +388,8 @@ export const ticketActionBarOnchangeHandlers = (
       newParams.delete("statusFilter");
     }
 
-    if (searchParmas.get("subject"))
-      newParams.set("subject", searchParmas.get("subject")!);
+    if (searchParmas.get("category"))
+      newParams.set("category", searchParmas.get("category")!);
 
     if (searchParmas.get("title"))
       newParams.set("title", searchParmas.get("title")!);
@@ -405,7 +406,7 @@ export const ticketActionBarOnchangeHandlers = (
   };
 
   return {
-    subjectOnChangeHandler,
+    categoryOnChangeHandler,
     titleOnChangeHandler,
     companyNameOnChangeHandler,
     companyBranchOnChangeHandler,

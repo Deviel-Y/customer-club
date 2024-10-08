@@ -58,7 +58,7 @@ const TicketListTable = ({ tickets, totalPage }: Props) => {
                 نمایش تیکت
               </Button>
             </TableCell>
-            <TableCell>{ticket?.subject}</TableCell>
+            <TableCell>{categoryMapping[ticket?.category].label}</TableCell>
             <TableCell>{ticket?.title}</TableCell>
             <TableCell>
               <StatusBadge status={ticket?.status} />
@@ -82,10 +82,23 @@ const columns: {
   value: keyof Ticket | "detail" | "companyName" | "companyBranch";
 }[] = [
   { label: "مشاهده جزئیات", value: "detail" },
-  { label: "موضوع", value: "subject" },
+  { label: "دسته بندی", value: "category" },
   { label: "عنوان تیکت", value: "title" },
   { label: "وضعیت تیکت", value: "status" },
   { label: "نام سازمان", value: "companyName" },
   { label: "شعبه", value: "companyBranch" },
   { label: "تاریخ ایجاد", value: "createdAt" },
 ];
+
+const categoryMapping: Record<any, { label: any }> = {
+  FEATURE_REQUEST: {
+    label: "درخواست ویژگی جدید",
+  },
+  GENERAL_INQUIRY: { label: "سوالات عمومی" },
+  PAYMENT: {
+    label: "صورتحساب و پردخت ها",
+  },
+  TECHNICAL_SUPPORT: {
+    label: "پشتیبانی فنی",
+  },
+};

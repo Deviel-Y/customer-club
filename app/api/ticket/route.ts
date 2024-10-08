@@ -8,7 +8,7 @@ export const POST = async (request: NextRequest) => {
     const session = await getSession();
 
     const body: TicketSchemaType = await request.json();
-    const { subject, title } = body;
+    const { category, title } = body;
 
     const validation = ticketSchema.safeParse(body);
     if (!validation.success)
@@ -16,7 +16,7 @@ export const POST = async (request: NextRequest) => {
 
     const newTicket = await prisma.ticket.create({
       data: {
-        subject,
+        category,
         title: title.trim(),
         issuerId: session?.user.id!,
       },

@@ -1,8 +1,9 @@
 "use client";
 
-import { ticketSchema, TicketSchemaType } from "@/app/libs/validationSchema";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { TicketSchemaType } from "@/app/libs/validationSchema";
 import {
+  Autocomplete,
+  AutocompleteItem,
   Button,
   Input,
   Popover,
@@ -10,20 +11,24 @@ import {
   PopoverTrigger,
   Textarea,
 } from "@nextui-org/react";
-import { Ticket } from "@prisma/client";
+import { Category, Ticket } from "@prisma/client";
 import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
+import {
+  FcCustomerSupport,
+  FcFaq,
+  FcMoneyTransfer,
+  FcSupport,
+} from "react-icons/fc";
 
 const NewTicketPopoverButton = () => {
   const router = useRouter();
+  const ticketCategories = Object.values(Category);
   const [textAreaValue, setTextAreaValue] = useState<string>();
-
-  const { register, handleSubmit } = useForm<TicketSchemaType>({
-    resolver: zodResolver(ticketSchema),
-  });
+  const { register, handleSubmit, control } = useForm<TicketSchemaType>();
 
   return (
     <>
@@ -37,9 +42,9 @@ const NewTicketPopoverButton = () => {
         <PopoverContent>
           <form
             className="w-full flex flex-col gap-6 p-3"
-            onSubmit={handleSubmit(({ subject, title }) => {
+            onSubmit={handleSubmit(({ category, title }) => {
               const myRequest = axios
-                .post<Ticket>("/api/ticket", { title, subject })
+                .post<Ticket>("/api/ticket", { title, category })
                 .then((res) => {
                   const ticket = res.data;
 
@@ -68,7 +73,27 @@ const NewTicketPopoverButton = () => {
             <div className="flex flex-col gap-2">
               <Input {...register("title")} isRequired label="عنوان" />
 
-              <Input {...register("subject")} isRequired label="موضوع" />
+              <Controller
+                control={control}
+                name="category"
+                render={({ field: { onChange } }) => (
+                  <Autocomplete
+                    onSelectionChange={onChange}
+                    isRequired
+                    label="دسته بندی"
+                    listboxProps={{ emptyContent: "دسته بندی یافت نشد" }}
+                  >
+                    {ticketCategories.map((category) => (
+                      <AutocompleteItem
+                        key={category}
+                        endContent={categoryMapping[category].icon}
+                      >
+                        {categoryMapping[category].label}
+                      </AutocompleteItem>
+                    ))}
+                  </Autocomplete>
+                )}
+              />
 
               <Textarea
                 onValueChange={setTextAreaValue}
@@ -91,3 +116,20 @@ const NewTicketPopoverButton = () => {
 };
 
 export default NewTicketPopoverButton;
+
+const categoryMapping: Record<Category, { label: string; icon: JSX.Element }> =
+  {
+    FEATURE_REQUEST: {
+      label: "درخواست ویژگی جدید",
+      icon: <FcSupport size={20} />,
+    },
+    GENERAL_INQUIRY: { label: "سوالات عمومی", icon: <FcFaq size={20} /> },
+    PAYMENT: {
+      label: "صورتحساب و پردخت ها",
+      icon: <FcMoneyTransfer size={20} />,
+    },
+    TECHNICAL_SUPPORT: {
+      label: "پشتیبانی فنی",
+      icon: <FcCustomerSupport size={20} />,
+    },
+  };

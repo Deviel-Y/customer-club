@@ -68,7 +68,7 @@ model PorformaInvoice {
 
 model Ticket {
   id            String          @id @default(cuid())
-  subject       String
+  category      Category
   title         String          @db.VarChar(255)
   ticketMessage TicketMessage[]
   status        TicketStatus    @default(OPEN)
@@ -107,4 +107,11 @@ enum TicketStatus {
 enum Status {
   IN_PROGRESS
   EXPIRED
+}
+
+enum Category {
+  TECHNICAL_SUPPORT
+  PAYMENT
+  FEATURE_REQUEST
+  GENERAL_INQUIRY
 }

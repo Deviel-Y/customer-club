@@ -196,7 +196,12 @@ export const porInvoiceSchema = z.object({
 });
 
 export const ticketSchema = z.object({
-  subject: z.string().min(1),
+  category: z.enum([
+    "TECHNICAL_SUPPORT",
+    "PAYMENT",
+    "FEATURE_REQUEST",
+    "GENERAL_INQUIRY",
+  ]),
   title: z.string().min(1).max(255),
 });
 
