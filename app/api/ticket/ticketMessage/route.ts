@@ -9,7 +9,7 @@ export const POST = async (request: NextRequest) => {
     const session = await getSession();
 
     const body: TicketMessage = await request.json();
-    const { assignetoTicketId, message } = body;
+    const { message, assignetoTicketId } = body;
 
     const validation = ticketMessageSchema.safeParse(body);
     if (!validation.success)
@@ -20,11 +20,13 @@ export const POST = async (request: NextRequest) => {
         message,
         assignetoTicketId,
         messageType: session?.user.role === "ADMIN" ? "RESPONCE" : "REQUEST",
+        issuerId: session?.user.id!,
       },
     });
 
-    return NextResponse.json(newMesaage);
+    return NextResponse.json(newMesaage, { status: 201 });
   } catch (error) {
-    return NextResponse.json(error);
+    console.log(error);
+    return NextResponse.json(error, { status: 500 });
   }
 };

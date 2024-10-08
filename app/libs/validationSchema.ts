@@ -6,7 +6,7 @@ export type SignInUserSchemaType = z.infer<typeof signInUserSchema>;
 export type InvoiceSchemaType = z.infer<typeof invoiceSchema>;
 export type PorInvoiceSchemaType = z.infer<typeof porInvoiceSchema>;
 export type TicketSchemaType = z.infer<typeof ticketSchema>;
-export type TicketMessageSchema = z.infer<typeof ticketMessageSchema>;
+export type TicketMessageSchemaType = z.infer<typeof ticketMessageSchema>;
 
 export const userSide_userSchame = z
   .object({

@@ -21,6 +21,7 @@ model User {
   tickets          Ticket[]
   proformaInvoices PorformaInvoice[]
   invoices         Invoice[]
+  TicketMessage    TicketMessage[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -65,17 +66,12 @@ model PorformaInvoice {
   updatedAt DateTime @updatedAt
 }
 
-enum Status {
-  IN_PROGRESS
-  EXPIRED
-}
-
 model Ticket {
-  id            String         @id @default(cuid())
+  id            String          @id @default(cuid())
   subject       String
-  title         String         @db.VarChar(255)
-  ticketMessage TicketMessage?
-  status        TicketStatus   @default(OPEN)
+  title         String          @db.VarChar(255)
+  ticketMessage TicketMessage[]
+  status        TicketStatus    @default(OPEN)
   issuerId      String
 
   User User @relation(fields: [issuerId], references: [id])
@@ -87,10 +83,11 @@ model Ticket {
 model TicketMessage {
   id                String      @id @default(cuid())
   message           String      @db.Text
-  assignetoTicketId String      @unique
+  assignetoTicketId String
   messageType       MessageType
   issuerId          String
 
+  User   User   @relation(fields: [issuerId], references: [id])
   Ticket Ticket @relation(fields: [assignetoTicketId], references: [id])
 
   createdAt DateTime @default(now())
@@ -105,4 +102,9 @@ enum TicketStatus {
   OPEN
   INVESTIGATING
   CLOSED
+}
+
+enum Status {
+  IN_PROGRESS
+  EXPIRED
 }
