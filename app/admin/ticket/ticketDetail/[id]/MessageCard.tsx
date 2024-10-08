@@ -24,7 +24,7 @@ const MessageCard = ({ ticket, ticketMessages, users }: Props) => {
       >
         <div>
           <Avatar
-            className="mx-2"
+            className="me-2"
             alt="Profile picture"
             src={messageIssuer.image || undefined}
           />
