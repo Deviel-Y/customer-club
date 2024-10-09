@@ -74,16 +74,10 @@ export const PATCH = async (
         }
       );
 
-    if (session?.user.role === "USER") {
-      if (!currentPassword)
-        return NextResponse.json("گذرواژه فعلی خود را وارد کنید", {
-          status: 400,
-        });
-
-      const isCurrentPasswordValid: boolean = await bcrypt.compare(
-        currentPassword,
-        user.hashedPassword
-      );
+    if (session?.user.role === "USER" && newPassword && confirmPassword) {
+      const isCurrentPasswordValid: boolean =
+        !!currentPassword &&
+        (await bcrypt.compare(currentPassword, user.hashedPassword));
       if (!isCurrentPasswordValid)
         return NextResponse.json("گذرواژه فعلی خود را به درستی وارد کنید", {
           status: 400,
@@ -95,7 +89,9 @@ export const PATCH = async (
         status: 400,
       });
 
-    const hashedPassword = await bcrypt.hash(newPassword!, 10);
+    const hashedPassword = newPassword
+      ? await bcrypt.hash(newPassword!, 10)
+      : undefined;
 
     const updatedUser = await prisma.user.update({
       where: { id },
@@ -112,6 +108,7 @@ export const PATCH = async (
     });
     return NextResponse.json(updatedUser);
   } catch (error) {
-    return NextResponse.json(error);
+    console.log(error);
+    return NextResponse.json(error, { status: 500 });
   }
 };

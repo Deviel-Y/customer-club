@@ -29,6 +29,13 @@ const EditUserInfoForm = ({ user }: Props) => {
   return (
     <form
       onSubmit={handleSubmit((data) => {
+        if (
+          data.currentPassword &&
+          (!data.newPassword || !data.confirmPassword)
+        ) {
+          return toast.error("برای تغییر گذرواژه، گذرواژه جدید را وارد کنید");
+        }
+
         const promise = axios
           .patch(`/api/userAuth/${user.id}`, {
             ...data,
