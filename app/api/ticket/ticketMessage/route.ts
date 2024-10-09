@@ -15,6 +15,12 @@ export const POST = async (request: NextRequest) => {
     if (!validation.success)
       return NextResponse.json(validation.error.format(), { status: 400 });
 
+    session?.user.role === "ADMIN" &&
+      (await prisma.ticket.update({
+        where: { id: assignetoTicketId },
+        data: { status: "INVESTIGATING" },
+      }));
+
     const lastTicket: TicketMessage = (
       await prisma.ticketMessage.findMany({
         orderBy: { createdAt: "desc" },
