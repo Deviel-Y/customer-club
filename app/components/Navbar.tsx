@@ -13,6 +13,7 @@ const Navbar = () => {
 
   useEffect(() => {
     if (
+      path.includes("/ticket/ticketDetail") ||
       path.includes("/admin/ticket/ticketDetail") ||
       path.includes("/admin/editUser") ||
       path.includes("/editUserInfo") ||
@@ -54,6 +55,7 @@ const headingMapping: Record<string, { label: string }> = {
   "/porformaInvoice": { label: "پیش فاکتورها" },
   "/editUserInfo": { label: "ویرایش اطلاعات کاربر" },
   "/ticket": { label: "تیکت های من" },
+  "/ticket/ticketDetail": { label: "جزئیات تیکت" },
   "/admin": { label: "پنل مدیریت" },
   "/admin/invoice-issuing": { label: "صدور فاکتور" },
   "/admin/porformaInvoice-issuing": { label: "صدور پیش فاکتور" },

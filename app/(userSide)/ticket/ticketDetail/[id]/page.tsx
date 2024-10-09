@@ -1,10 +1,10 @@
+import MessageCard from "@/app/admin/ticket/ticketDetail/[id]/MessageCard";
 import NewTicketMessagaForm from "@/app/components/NewTicketMessagaForm";
 import getSession from "@/app/libs/getSession";
-import { authorizeAdmin } from "@/app/utils/authorizeRole";
+import { authorizeUser } from "@/app/utils/authorizeRole";
 import prisma from "@/prisma/client";
 import { Category } from "@prisma/client";
 import { notFound } from "next/navigation";
-import MessageCard from "./MessageCard";
 
 interface Props {
   params: { id: string };
@@ -12,7 +12,7 @@ interface Props {
 
 const TicketDetailPage = async ({ params: { id } }: Props) => {
   const session = await getSession();
-  authorizeAdmin(session!);
+  authorizeUser(session!);
 
   const ticket = await prisma.ticket.findUnique({
     where: { id },
