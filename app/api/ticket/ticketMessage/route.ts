@@ -15,6 +15,23 @@ export const POST = async (request: NextRequest) => {
     if (!validation.success)
       return NextResponse.json(validation.error.format(), { status: 400 });
 
+    const lastTicket: TicketMessage = (
+      await prisma.ticketMessage.findMany({
+        orderBy: { createdAt: "desc" },
+        take: 1,
+      })
+    )[0];
+    if (session?.user.role === "ADMIN" && lastTicket.messageType === "RESPONCE")
+      return NextResponse.json(
+        "شما قادر به ارسال پیام نیستید. برای ارسال پیام باید منتظر پاسخ کاربر باشید",
+        { status: 403 }
+      );
+    if (session?.user.role === "USER" && lastTicket.messageType === "RESPONCE")
+      return NextResponse.json(
+        "شما قادر به ارسال پیام نیستید. برای ارسال پیام باید منتظر پاسخ ادمین باشید",
+        { status: 403 }
+      );
+
     const newMesaage = await prisma.ticketMessage.create({
       data: {
         message,

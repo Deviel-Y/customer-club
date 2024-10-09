@@ -60,11 +60,11 @@ const TicketListTable = ({ tickets, totalPage }: Props) => {
             </TableCell>
             <TableCell>{categoryMapping[ticket?.category].label}</TableCell>
             <TableCell>{ticket?.title}</TableCell>
+            <TableCell>{ticket?.User?.companyName}</TableCell>
+            <TableCell>{ticket?.User?.companyBranch}</TableCell>
             <TableCell>
               <StatusBadge status={ticket?.status} />
             </TableCell>
-            <TableCell>{ticket?.User?.companyName}</TableCell>
-            <TableCell>{ticket?.User?.companyBranch}</TableCell>
             <TableCell>
               {moment(ticket?.createdAt).format("jYYYY/jM/jD")}
             </TableCell>
@@ -84,9 +84,9 @@ const columns: {
   { label: "مشاهده جزئیات", value: "detail" },
   { label: "دسته بندی", value: "category" },
   { label: "عنوان تیکت", value: "title" },
-  { label: "وضعیت تیکت", value: "status" },
   { label: "نام سازمان", value: "companyName" },
   { label: "شعبه", value: "companyBranch" },
+  { label: "وضعیت تیکت", value: "status" },
   { label: "تاریخ ایجاد", value: "createdAt" },
 ];
 

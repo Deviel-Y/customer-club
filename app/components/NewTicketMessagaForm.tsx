@@ -38,7 +38,9 @@ const NewTicketMessagaForm = ({ ticketId }: Props) => {
             .then(() => {
               router.push("/admin/ticket");
               router.refresh();
-            });
+            })
+            .finally(() => setIsLoading(false));
+
           toast.promise(myPromise, {
             error: (error: AxiosError) => error.response?.data as string,
             loading: "در حال ارسال پاسخ",

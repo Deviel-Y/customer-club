@@ -33,6 +33,7 @@ const TicketActionBar = ({ isAdmin = true }: Props) => {
         }  grid-rows-1 w-full gap-5 max-sm:gap-0 mb-5 max-sm:grid-cols-1`}
       >
         <Autocomplete
+          variant="underlined"
           onSelectionChange={categoryOnChangeHandler}
           label="دسته بندی"
           listboxProps={{ emptyContent: "دسته بندی یافت نشد" }}

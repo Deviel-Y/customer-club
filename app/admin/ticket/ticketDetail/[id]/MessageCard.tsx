@@ -14,7 +14,7 @@ const MessageCard = ({ ticket, ticketMessages, users }: Props) => {
   )!;
 
   return (
-    <div className="w-full my-5">
+    <div className="w-full my-3">
       <div
         className={`flex flex-row w-full ${
           ticketMessages.messageType === "REQUEST"
