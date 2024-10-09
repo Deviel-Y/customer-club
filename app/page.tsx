@@ -19,9 +19,16 @@ const HomePage = async () => {
     },
   });
 
+  const userTicketCount = await prisma.ticket.count({
+    where: {
+      issuerId: session?.user.id,
+    },
+  });
+
   const dashboardCardInfo: { label: string; amount: number }[] = [
     { label: "userInvoice", amount: invoiceCount },
     { label: "userProformaInvoice", amount: porInvoiceCount },
+    { label: "userTicket", amount: userTicketCount },
   ];
 
   return (

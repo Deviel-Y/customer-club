@@ -12,11 +12,17 @@ const AdminPage = async () => {
   const userCount: number = await prisma.user.count({
     where: { role: "USER" },
   });
+  const adminTicketCount: number = await prisma.ticket.count({
+    where: {
+      status: { in: ["INVESTIGATING", "OPEN"] },
+    },
+  });
 
   const dashboardCardInfo: { label: string; amount: number }[] = [
     { label: "adminUser", amount: userCount },
     { label: "adminInvoice", amount: invoiceCount },
     { label: "adminPorformaInvoice", amount: proFormaInvoiceCount },
+    { label: "adminTicket", amount: adminTicketCount },
   ];
 
   return (
