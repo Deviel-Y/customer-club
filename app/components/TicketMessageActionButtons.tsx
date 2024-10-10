@@ -1,20 +1,24 @@
-import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
-import { Button } from "@nextui-org/react";
+import { TicketMessage } from "@prisma/client";
+import { DeleteConfirmationButton } from "./DeleteConfirmationButton";
+import EditTicketMessagePopover from "./EditTicketMessagePopover";
 
 interface Props {
-  TicketMessageId: string;
+  ticketMessage: TicketMessage;
 }
 
-const TicketMessageActionButtons = ({ TicketMessageId }: Props) => {
+const TicketMessageActionButtons = ({ ticketMessage }: Props) => {
   return (
     <div className="opacity-0 mx-2 transition-all flex flex-col gap-2 group-hover:opacity-100">
-      <Button size="sm" color="danger" isIconOnly>
-        <TrashIcon className="w-6 stroke-[1.3px]" />
-      </Button>
+      <EditTicketMessagePopover ticketMessage={ticketMessage} />
 
-      <Button size="sm" color="success" isIconOnly>
-        <PencilSquareIcon className="w-6 stroke-[1.3px]" />
-      </Button>
+      <DeleteConfirmationButton
+        content="آیا از حذف  پاسخ خود مطمئن اید؟"
+        endpoint={`/api/ticket/ticketMessage/${ticketMessage.id}`}
+        successMessage="پاسخ با موفقیت حذف شد"
+        title="حذف پاسخ"
+        iconStyle="w-6 stroke-[1.3px]"
+        buttonSize="sm"
+      />
     </div>
   );
 };
