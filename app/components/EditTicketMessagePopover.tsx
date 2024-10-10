@@ -10,8 +10,11 @@ import {
   Textarea,
 } from "@nextui-org/react";
 import { TicketMessage } from "@prisma/client";
+import axios, { AxiosError } from "axios";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import toast, { Toaster } from "react-hot-toast";
 import {
   ticketMessageSchema,
   TicketMessageSchemaType,
@@ -24,6 +27,7 @@ interface Props {
 
 const EditTicketMessagePopover = ({ ticketMessage }: Props) => {
   const [isLoading, setisLoading] = useState<boolean>(false);
+  const router = useRouter();
 
   const {
     register,
@@ -34,30 +38,49 @@ const EditTicketMessagePopover = ({ ticketMessage }: Props) => {
   });
 
   return (
-    <Popover className="w-96">
-      <PopoverTrigger>
-        <Button size="sm" color="warning" isIconOnly>
-          <PencilSquareIcon className="w-6 stroke-[1.3px]" />
-        </Button>
-      </PopoverTrigger>
-
-      <PopoverContent>
-        <form className="flex flex-col w-full">
-          <Textarea
-            defaultValue={ticketMessage?.message}
-            {...register("message")}
-            variant="bordered"
-            label="متن پاسخ"
-            className="w-full"
-          />
-          <FormErrorMessage errorMessage={errors.message?.message!} />
-
-          <Button type="submit" isLoading={isLoading} color="secondary">
-            ویرایش پاسخ
+    <>
+      <Popover className="w-96">
+        <PopoverTrigger>
+          <Button size="sm" color="warning" isIconOnly>
+            <PencilSquareIcon className="w-6 stroke-[1.3px]" />
           </Button>
-        </form>
-      </PopoverContent>
-    </Popover>
+        </PopoverTrigger>
+
+        <PopoverContent>
+          <form
+            onSubmit={handleSubmit((data) => {
+              setisLoading(true);
+
+              const myPromise = axios
+                .patch(`/api/ticket/ticketMessage/${ticketMessage.id}`, data)
+                .then(() => router.refresh())
+                .finally(() => setisLoading(false));
+
+              toast.promise(myPromise, {
+                error: (error: AxiosError) => error.response?.data as string,
+                loading: "در حال ویرایش پاسخ",
+                success: "متن پاسخ با موفقیت ویرایش شد",
+              });
+            })}
+            className="flex flex-col w-full"
+          >
+            <Textarea
+              defaultValue={ticketMessage?.message}
+              {...register("message")}
+              variant="bordered"
+              label="متن پاسخ"
+              className="w-full"
+            />
+            <FormErrorMessage errorMessage={errors.message?.message!} />
+
+            <Button type="submit" isLoading={isLoading} color="secondary">
+              ویرایش پاسخ
+            </Button>
+          </form>
+        </PopoverContent>
+      </Popover>
+      <Toaster />
+    </>
   );
 };
 
