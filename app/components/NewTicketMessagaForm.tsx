@@ -11,6 +11,7 @@ import {
   ticketMessageSchema,
   TicketMessageSchemaType,
 } from "../libs/validationSchema";
+import FormErrorMessage from "./FormErrorMessage";
 
 interface Props {
   ticketId: string;
@@ -20,13 +21,18 @@ const NewTicketMessagaForm = ({ ticketId }: Props) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const { register, handleSubmit } = useForm<TicketMessageSchemaType>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<TicketMessageSchemaType>({
     resolver: zodResolver(ticketMessageSchema),
   });
 
   return (
     <>
       <form
+        className="flex flex-row items-end justify-start mt-10 gap-5 w-full"
         onSubmit={handleSubmit(({ message }) => {
           setIsLoading(true);
 
@@ -47,17 +53,25 @@ const NewTicketMessagaForm = ({ ticketId }: Props) => {
             success: "پاسخ با موفقیت رسال شد",
           });
         })}
-        className="flex flex-col items-start gap-5 mt-10 w-4/5"
       >
-        <Textarea
-          {...register("message")}
-          size="lg"
-          variant="bordered"
-          label="متن پاسخ"
-          className="w-2/3"
-        />
+        <div className="w-1/2">
+          <Textarea
+            {...register("message")}
+            size="lg"
+            variant="bordered"
+            label="متن پاسخ"
+            className="w-full"
+          />
+          <FormErrorMessage errorMessage={errors.message?.message!} />
+        </div>
 
-        <Button type="submit" isLoading={isLoading} color="primary" size="lg">
+        <Button
+          className="-translate-y-5"
+          type="submit"
+          isLoading={isLoading}
+          color="primary"
+          size="lg"
+        >
           ارسال پاسخ
         </Button>
       </form>

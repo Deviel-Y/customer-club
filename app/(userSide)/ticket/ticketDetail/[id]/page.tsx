@@ -29,7 +29,7 @@ const TicketDetailPage = async ({ params: { id } }: Props) => {
   const users = await prisma.user.findMany();
 
   return (
-    <div className="flex flex-col items-start w-full mt-5 p-5">
+    <div className="flex flex-col items-start w-full p-5">
       <div className="mb-10 flex flex-col">
         <h2 className="text-[23px]">{ticket.title}</h2>
         <p className="text-[15px] text-gray-500 -translate-y-1">

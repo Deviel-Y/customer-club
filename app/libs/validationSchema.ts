@@ -206,5 +206,8 @@ export const ticketSchema = z.object({
 });
 
 export const ticketMessageSchema = z.object({
-  message: z.string().min(1).max(60_000),
+  message: z
+    .string()
+    .min(1, "برای ارسال پاسخ، متن پاسخ الزامی می باشد")
+    .max(60_000, "متن پاسخ بیش از حد بلند می باشد"),
 });

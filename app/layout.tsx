@@ -30,7 +30,7 @@ export default async function RootLayout({
   return (
     <html lang="fa" dir="rtl">
       <body
-        className={`${iranYekan_bold.variable} ${iranYekan_regular.variable} antialiased relative h-screen bg-neutral-100`}
+        className={`${iranYekan_bold.variable} ${iranYekan_regular.variable} antialiased relative h-full bg-neutral-100`}
       >
         <AllProviders>
           <div>
