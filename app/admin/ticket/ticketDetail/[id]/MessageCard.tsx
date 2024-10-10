@@ -1,5 +1,5 @@
-import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
-import { Avatar, Button, Card } from "@nextui-org/react";
+import TicketMessageActionButtons from "@/app/components/TicketMessageActionButtons";
+import { Avatar, Card } from "@nextui-org/react";
 import { Ticket, TicketMessage, User } from "@prisma/client";
 import moment from "moment-jalaali";
 
@@ -67,15 +67,7 @@ const MessageCard = ({ ticket, ticketMessages, users }: Props) => {
         </Card>
 
         {ticketMessages.canBeModified && (
-          <div className="opacity-0 mx-2 transition-all flex flex-col gap-2 group-hover:opacity-100">
-            <Button size="sm" color="danger" isIconOnly>
-              <TrashIcon className="w-6 stroke-[1.3px]" />
-            </Button>
-
-            <Button size="sm" color="success" isIconOnly>
-              <PencilSquareIcon className="w-6 stroke-[1.3px]" />
-            </Button>
-          </div>
+          <TicketMessageActionButtons TicketMessageId={ticketMessages.id} />
         )}
       </div>
     </div>
