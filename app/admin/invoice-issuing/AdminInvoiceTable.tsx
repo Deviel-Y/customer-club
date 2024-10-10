@@ -1,6 +1,6 @@
 "use client";
 
-import { DeleteConfirmationButton } from "@/app/admin/components/DeleteConfirmationButton";
+import { DeleteConfirmationButton } from "@/app/components/DeleteConfirmationButton";
 import PaginationControl from "@/app/components/PaginationControl";
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
 import {

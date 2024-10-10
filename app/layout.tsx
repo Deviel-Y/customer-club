@@ -28,9 +28,9 @@ export default async function RootLayout({
   const session = await getSession();
 
   return (
-    <html lang="fa" dir="rtl">
+    <html lang="fa" dir="rtl" className="bg-neutral-50">
       <body
-        className={`${iranYekan_bold.variable} ${iranYekan_regular.variable} antialiased relative h-full bg-neutral-100`}
+        className={`${iranYekan_bold.variable} ${iranYekan_regular.variable} antialiased relative `}
       >
         <AllProviders>
           <div>

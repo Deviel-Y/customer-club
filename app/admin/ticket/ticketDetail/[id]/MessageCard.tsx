@@ -7,9 +7,10 @@ interface Props {
   ticket: Ticket;
   ticketMessages: TicketMessage;
   users: User[];
+  sessionId: string;
 }
 
-const MessageCard = ({ ticket, ticketMessages, users }: Props) => {
+const MessageCard = ({ ticket, ticketMessages, users, sessionId }: Props) => {
   const messageIssuer: User = users.find(
     (user) => user?.id === ticketMessages?.issuerId
   )!;
@@ -66,7 +67,7 @@ const MessageCard = ({ ticket, ticketMessages, users }: Props) => {
           <p className="mt-3">{ticketMessages.message}</p>
         </Card>
 
-        {ticketMessages.canBeModified && (
+        {ticketMessages.canBeModified && sessionId === messageIssuer?.id && (
           <TicketMessageActionButtons TicketMessageId={ticketMessages.id} />
         )}
       </div>
