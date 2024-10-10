@@ -56,6 +56,7 @@ const UserListTable = ({ users, totalPage }: Props) => {
                   content="آیا از حذف این کاربر مطمئن اید؟"
                   title="حذف کاربر"
                   endpoint={`/api/userAuth/${user.id}`}
+                  iconStyle="min-w-5 w-4"
                 />
                 <Button
                   onPress={() => router.push(`/admin/editUser/${user.id}`)}

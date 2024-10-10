@@ -20,6 +20,8 @@ interface Props {
   title: string;
   content: string;
   successMessage: string;
+  iconStyle: string;
+  buttonSize?: "sm" | "md" | "lg";
 }
 
 export const DeleteConfirmationButton = ({
@@ -27,6 +29,8 @@ export const DeleteConfirmationButton = ({
   content,
   title,
   successMessage,
+  iconStyle,
+  buttonSize = "md",
 }: Props) => {
   const [isLoading, setisLoading] = useState<boolean>(false);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -34,8 +38,8 @@ export const DeleteConfirmationButton = ({
 
   return (
     <div>
-      <Button isIconOnly color="danger" onPress={onOpen}>
-        <TrashIcon className="min-w-5 w-4" />
+      <Button size={buttonSize} isIconOnly color="danger" onPress={onOpen}>
+        <TrashIcon className={iconStyle} />
       </Button>
       <Modal backdrop="blur" isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>

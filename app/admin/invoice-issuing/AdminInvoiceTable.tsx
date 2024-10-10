@@ -56,6 +56,7 @@ const AdminInvoiceTable = ({ invoices, totalPage }: Props) => {
                   content="آیا از حذف این فاکتور مطمئن اید؟"
                   title="حذف فاکتور"
                   endpoint={`/api/invoice/${invoice.id}`}
+                  iconStyle="min-w-5 w-4"
                 />
 
                 <Button

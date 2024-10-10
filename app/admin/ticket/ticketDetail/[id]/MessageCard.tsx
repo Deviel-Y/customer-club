@@ -68,7 +68,7 @@ const MessageCard = ({ ticket, ticketMessages, users, sessionId }: Props) => {
         </Card>
 
         {ticketMessages.canBeModified && sessionId === messageIssuer?.id && (
-          <TicketMessageActionButtons TicketMessageId={ticketMessages.id} />
+          <TicketMessageActionButtons ticketMessage={ticketMessages} />
         )}
       </div>
     </div>

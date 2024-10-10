@@ -60,6 +60,7 @@ const AdminPorformaInvoiceTable = ({ porformaInvoice, totalPage }: Props) => {
                   content="آیا از حذف این پیش فاکتور مطمئن اید؟"
                   title="حذف پیش فاکتور"
                   endpoint={`/api/porformaInvoice/${p_invoice.id}`}
+                  iconStyle="min-w-5 w-4"
                 />
 
                 <Button
