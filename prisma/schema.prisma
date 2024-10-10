@@ -86,6 +86,7 @@ model TicketMessage {
   assignetoTicketId String
   messageType       MessageType
   issuerId          String
+  canBeModified     Boolean     @default(true)
 
   User   User   @relation(fields: [issuerId], references: [id])
   Ticket Ticket @relation(fields: [assignetoTicketId], references: [id])
