@@ -135,7 +135,7 @@ const dataMapping: Record<
     iconBackgroung: "bg-blue-300",
     href: "/admin/ticket",
     figure: (
-      <HiOutlineTicket className="figureIcon absolute bottom-4 left-10 scale-[6] stroke-[2px] opacity-10 w-6 overflow-visible h-8" />
+      <HiOutlineTicket className="figureIcon absolute bottom-5 left-10 scale-[6] stroke-[2px] opacity-10 w-6 overflow-visible h-8" />
     ),
   },
   userTicket: {
@@ -147,7 +147,7 @@ const dataMapping: Record<
     iconBackgroung: "bg-blue-300",
     href: "/ticket",
     figure: (
-      <HiOutlineTicket className="figureIcon absolute bottom-4 left-10 scale-[6] stroke-[2px] opacity-10 w-6 overflow-visible h-8" />
+      <HiOutlineTicket className="figureIcon absolute bottom-5 left-10 scale-[6] stroke-[2px] opacity-10 w-6 overflow-visible h-8" />
     ),
   },
 };

@@ -27,16 +27,27 @@ export const POST = async (request: NextRequest) => {
         take: 1,
       })
     )[0];
+
     if (session?.user.role === "ADMIN" && lastTicket.messageType === "RESPONCE")
       return NextResponse.json(
-        "شما قادر به ارسال پیام نیستید. برای ارسال پیام باید منتظر پاسخ کاربر باشید",
+        "شما قادر به ارسال مجدد پیام نیستید. برای ارسال پیام باید منتظر پاسخ کاربر باشید",
         { status: 403 }
       );
-    if (session?.user.role === "USER" && lastTicket.messageType === "RESPONCE")
+
+    if (session?.user.role === "USER" && lastTicket.messageType === "REQUEST")
       return NextResponse.json(
-        "شما قادر به ارسال پیام نیستید. برای ارسال پیام باید منتظر پاسخ ادمین باشید",
+        "شما قادر به ارسال مجدد پیام نیستید. برای ارسال پیام باید منتظر پاسخ ادمین باشید",
         { status: 403 }
       );
+
+    await prisma.ticketMessage.updateMany({
+      where: {
+        assignetoTicketId,
+      },
+      data: {
+        canBeModified: false,
+      },
+    });
 
     const newMesaage = await prisma.ticketMessage.create({
       data: {
@@ -49,7 +60,6 @@ export const POST = async (request: NextRequest) => {
 
     return NextResponse.json(newMesaage, { status: 201 });
   } catch (error) {
-    console.log(error);
     return NextResponse.json(error, { status: 500 });
   }
 };

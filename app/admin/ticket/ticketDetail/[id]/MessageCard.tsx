@@ -1,4 +1,5 @@
-import { Avatar, Card } from "@nextui-org/react";
+import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { Avatar, Button, Card } from "@nextui-org/react";
 import { Ticket, TicketMessage, User } from "@prisma/client";
 import moment from "moment-jalaali";
 
@@ -14,21 +15,28 @@ const MessageCard = ({ ticket, ticketMessages, users }: Props) => {
   )!;
 
   return (
-    <div className="w-full my-3">
+    <div
+      className={`w-full my-3 flex ${
+        ticketMessages.messageType === "RESPONCE"
+          ? "flex-row-reverse"
+          : "flex-row"
+      } gap-2 group`}
+    >
       <div
-        className={`flex flex-row w-full ${
+        className={`flex flex-row w-full items-center ${
           ticketMessages.messageType === "REQUEST"
             ? "flex-row justify-start"
             : "flex-row-reverse justify-self-end"
         }`}
       >
-        <div>
+        <div className="self-start">
           <Avatar
             className="mx-2"
             alt="Profile picture"
             src={messageIssuer.image || undefined}
           />
         </div>
+
         <Card className="col-span-3 px-4 py-2 w-2/3">
           <div
             className={`flex ${
@@ -39,6 +47,7 @@ const MessageCard = ({ ticket, ticketMessages, users }: Props) => {
           >
             <div className="">
               <p>{messageIssuer?.companyName || "ادمین"}</p>
+
               <p
                 className={`text-gray-500 text-[12px] ${
                   ticketMessages.messageType === "REQUEST"
@@ -49,12 +58,25 @@ const MessageCard = ({ ticket, ticketMessages, users }: Props) => {
                 {messageIssuer?.companyBranch || ""}
               </p>
             </div>
+
             <p className="text-sm text-gray-500">
               {moment(ticket.createdAt).format("jYYYY/jM/jD")}
             </p>
           </div>
           <p className="mt-3">{ticketMessages.message}</p>
         </Card>
+
+        {ticketMessages.canBeModified && (
+          <div className="opacity-0 mx-2 transition-all flex flex-col gap-2 group-hover:opacity-100">
+            <Button size="sm" color="danger" isIconOnly>
+              <TrashIcon className="w-6 stroke-[1.3px]" />
+            </Button>
+
+            <Button size="sm" color="success" isIconOnly>
+              <PencilSquareIcon className="w-6 stroke-[1.3px]" />
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );
