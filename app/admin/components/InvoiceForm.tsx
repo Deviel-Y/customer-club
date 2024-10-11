@@ -98,7 +98,7 @@ const InvoiceForm = ({ Userlist, invoice }: Props) => {
           </h2>
         </div>
 
-        <div className="grid grid-cols-3 grid-rows-2 max-md:grid-cols-1 max-md:grid-rows-4 gap-3 max-md:gap-0 place-items-center">
+        <div className="grid grid-cols-3 grid-rows-3 max-md:grid-cols-1 max-md:grid-rows-4 gap-2 max-md:gap-0 place-items-center">
           <div className="w-full">
             <Input
               size="lg"
@@ -171,6 +171,44 @@ const InvoiceForm = ({ Userlist, invoice }: Props) => {
             />
 
             <FormErrorMessage errorMessage={errors.organization?.message!} />
+          </div>
+          <div className="w-full">
+            <Input
+              size="lg"
+              defaultValue={invoice?.price.toString()}
+              {...register("price", { valueAsNumber: true })}
+              isRequired
+              type="number"
+              label="مبلغ بدون مالیات"
+            />
+
+            <FormErrorMessage errorMessage={errors.price?.message!} />
+          </div>
+
+          <div className="w-full">
+            <Input
+              size="lg"
+              defaultValue={invoice?.tax.toString()}
+              {...register("tax", { valueAsNumber: true })}
+              isRequired
+              type="number"
+              label="مالیات"
+            />
+
+            <FormErrorMessage errorMessage={errors.tax?.message!} />
+          </div>
+
+          <div className="w-full">
+            <Input
+              size="lg"
+              defaultValue={invoice?.priceWithTax.toString()}
+              {...register("priceWithTax", { valueAsNumber: true })}
+              isRequired
+              type="number"
+              label="مبلغ با احتساب مالیات"
+            />
+
+            <FormErrorMessage errorMessage={errors.priceWithTax?.message!} />
           </div>
 
           <div className="col-span-3 max-md:col-span-1 w-full">

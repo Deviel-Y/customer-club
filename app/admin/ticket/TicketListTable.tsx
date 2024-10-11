@@ -45,7 +45,7 @@ const TicketListTable = ({ tickets, totalPage }: Props) => {
         ))}
       </TableHeader>
 
-      <TableBody>
+      <TableBody emptyContent="تیکتی یافت نشد">
         {tickets.map((ticket) => (
           <TableRow key={ticket?.id}>
             <TableCell>
