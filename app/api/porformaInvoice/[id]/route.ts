@@ -73,5 +73,14 @@ export const PATCH = async (
       issuerId: session?.user.id,
     },
   });
+
+  await prisma.notification.create({
+    data: {
+      message: `شماره پیش فاکتور ${porformaInvoiceNumber} از سمت ادمین ویرایش شد`,
+      type: "INFO",
+      assignedToUserId,
+    },
+  });
+
   return NextResponse.json(updatedPorInvoice);
 };

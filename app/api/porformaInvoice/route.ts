@@ -41,6 +41,15 @@ export const POST = async (request: NextRequest) => {
         issuerId: session?.user.id!,
       },
     });
+
+    await prisma.notification.create({
+      data: {
+        message: `پیش فاکتوری با شماره ${porformaInvoiceNumber} برای شما صادر شد`,
+        type: "INFO",
+        assignedToUserId,
+      },
+    });
+
     return NextResponse.json(newPorformaInvoice, { status: 201 });
   } catch (error) {
     return NextResponse.json(error);
