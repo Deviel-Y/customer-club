@@ -29,7 +29,9 @@ const AdminInvoiceTable = ({ invoices, totalPage }: Props) => {
   return (
     <Table
       bottomContent={
-        <div className="flex justify-center w-full">
+        <div
+          className={`flex justify-center w-full ${totalPage <= 1 && "hidden"}`}
+        >
           <PaginationControl totalPage={totalPage} />
         </div>
       }
