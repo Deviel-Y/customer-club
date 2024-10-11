@@ -18,6 +18,7 @@ model User {
   image          String?
   role           Role    @default(USER)
 
+  notification     Notification[]
   tickets          Ticket[]
   proformaInvoices PorformaInvoice[]
   invoices         Invoice[]
@@ -95,6 +96,24 @@ model TicketMessage {
   Ticket Ticket @relation(fields: [assignetoTicketId], references: [id])
 
   createdAt DateTime @default(now())
+}
+
+model Notification {
+  id               String           @id @default(cuid())
+  message          String
+  type             NotificationType
+  isRead           Boolean          @default(false)
+  assignedToUserId String
+
+  user User @relation(fields: [assignedToUserId], references: [id])
+
+  createdAt DateTime @default(now())
+}
+
+enum NotificationType {
+  INFO
+  WARNING
+  ERORR
 }
 
 enum MessageType {
