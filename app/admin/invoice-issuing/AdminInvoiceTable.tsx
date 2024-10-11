@@ -2,6 +2,7 @@
 
 import { DeleteConfirmationButton } from "@/app/components/DeleteConfirmationButton";
 import PaginationControl from "@/app/components/PaginationControl";
+import formatNumber from "@/app/utils/formatNumber";
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
 import {
   Button,
@@ -37,11 +38,7 @@ const AdminInvoiceTable = ({ invoices, totalPage }: Props) => {
     >
       <TableHeader>
         {columns.map((column) => (
-          <TableColumn
-            width={column.value === "description" ? 500 : undefined}
-            align="center"
-            key={column.value}
-          >
+          <TableColumn align="center" key={column.value}>
             {column.label}
           </TableColumn>
         ))}
@@ -81,6 +78,9 @@ const AdminInvoiceTable = ({ invoices, totalPage }: Props) => {
             <TableCell>{invoice.organization}</TableCell>
             <TableCell>{invoice.organizationBranch}</TableCell>
             <TableCell>{invoice.description}</TableCell>
+            <TableCell>{formatNumber(invoice.price)}</TableCell>
+            <TableCell>{formatNumber(invoice.tax)}</TableCell>
+            <TableCell>{formatNumber(invoice.priceWithTax)}</TableCell>
             <TableCell>
               {moment(invoice.createdAt).format("jYYYY/jM/jD")}
             </TableCell>
@@ -102,6 +102,9 @@ const columns: { label: string; value: keyof Invoice | "operation" }[] = [
   { label: "سازمان", value: "organization" },
   { label: "شعبه", value: "organizationBranch" },
   { label: "توضیحات", value: "description" },
+  { label: "مبلغ (ریال)", value: "price" },
+  { label: "مالیات (ریال)", value: "tax" },
+  { label: "مبلغ با مالیات (ریال)", value: "priceWithTax" },
   { label: "تاریخ صدور", value: "createdAt" },
   { label: "تاریخ بروزسانی", value: "updatedAt" },
 ];
