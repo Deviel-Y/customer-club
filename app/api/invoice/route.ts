@@ -49,6 +49,14 @@ export const POST = async (request: NextRequest) => {
       },
     });
 
+    await prisma.notification.create({
+      data: {
+        message: `فاکتوری با شماره ${invoiceNumber} برای شما صادر شد`,
+        type: "INFO",
+        assignedToUserId,
+      },
+    });
+
     return NextResponse.json(newInvoice, { status: 201 });
   } catch (error) {
     return NextResponse.json(error, { status: 500 });

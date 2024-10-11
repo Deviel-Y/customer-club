@@ -69,6 +69,14 @@ export const PATCH = async (
       },
     });
 
+    await prisma.notification.create({
+      data: {
+        message: `شماره فاکتور ${invoiceNumber} از سمت ادمین ویرایش شد`,
+        type: "INFO",
+        assignedToUserId,
+      },
+    });
+
     return NextResponse.json(updatedInvoice);
   } catch (error) {
     return NextResponse.json(error, { status: 500 });
