@@ -2,8 +2,8 @@ import ActionBar from "@/app/components/ActionBar";
 import getSession from "@/app/libs/getSession";
 import { authorizeAdmin } from "@/app/utils/authorizeRole";
 import prisma from "@/prisma/client";
+import InvoiceSummery from "../../components/InvoiceSummery";
 import AdminInvoiceTable from "./AdminInvoiceTable";
-import InvoiceSummery from "./InvoiceSummery";
 
 interface Props {
   searchParams: {
