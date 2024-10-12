@@ -55,11 +55,12 @@ const NewTicketPopoverButton = () => {
                     message: textAreaValue,
                     assignetoTicketId: ticket.id,
                   });
-
-                  router.push("/");
+                  router.push("/ticket");
                   router.refresh();
                 })
-                .finally(() => setIsLoading(false));
+                .finally(() => {
+                  setIsLoading(false);
+                });
 
               toast.promise(myRequest, {
                 error: (error: AxiosError) => error?.response?.data as string,

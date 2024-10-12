@@ -81,7 +81,7 @@ export const POST = async (request: NextRequest) => {
 
     const notificationMessage =
       ticketMessages.length === 0
-        ? `کاربر ${user?.companyName} شعبه  ${user?.companyBranch} درخواست جدیدی ثبت کرده است`
+        ? `تیکتی به شماره ${ticket?.ticketNumber} ایجاد شد`
         : ticketMessages.length !== 0 && newMesaage.messageType === "REQUEST"
         ? `کاربر ${user?.companyName} شعبه ${user?.companyBranch} به تیکت شماره ${ticket?.ticketNumber} پاسخ خود را ثبت کرد`
         : ticketMessages.length !== 0 && newMesaage.messageType === "RESPONCE"
