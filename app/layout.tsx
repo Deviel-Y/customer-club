@@ -37,6 +37,7 @@ export default async function RootLayout({
     },
 
     orderBy: { createdAt: "desc" },
+    take: 5,
   });
 
   return (

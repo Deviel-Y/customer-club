@@ -10,6 +10,7 @@ import {
 import { Notification, Section } from "@prisma/client";
 import moment from "moment-jalaali";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { AiOutlineNotification } from "react-icons/ai";
 import {
   HiOutlineNewspaper,
@@ -22,24 +23,61 @@ interface Props {
 }
 
 const ShowNotificationButton = ({ notifications }: Props) => {
+  const router = useRouter();
   const { data: session } = useSession();
+
   if (!notifications) return null;
 
   return (
-    <Dropdown>
+    <Dropdown type="listbox">
       <DropdownTrigger>
-        <Button color="default" variant="shadow" isIconOnly>
+        <Button
+          color="warning"
+          variant="shadow"
+          className="stroke-[1.2px]"
+          isIconOnly
+        >
           <AiOutlineNotification size={20} />
           <span className="absolute top-[2px] left-[2px] flex h-3 w-3 ">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-600 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-600 opacity-75" />
+            <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500" />
           </span>
         </Button>
       </DropdownTrigger>
 
-      <DropdownMenu emptyContent="شما پیام جدیدی ندارید" items={notifications}>
-        {(notification) => (
+      <DropdownMenu
+        topContent={
+          <div className="flex flex-row justify-start mb-4 items-center w-full">
+            <p className="text-lg">اعلان های اخیر</p>
+          </div>
+        }
+        bottomContent={
+          <div className="flex flex-row justify-center items-center mt-4 w-full">
+            <Button
+              onPress={() =>
+                router.push(
+                  `${
+                    session?.user.role === "ADMIN"
+                      ? "/admin/notification"
+                      : "/notification"
+                  }`
+                )
+              }
+              variant="light"
+              className="w-full"
+              size="sm"
+            >
+              همه اعلان ها
+            </Button>
+          </div>
+        }
+        aria-label="Notification Menu"
+        emptyContent="شما پیام جدیدی ندارید"
+      >
+        {notifications.map((notification) => (
           <DropdownItem
+            className="my-1"
+            key={notification.id}
             href={
               session?.user.role === "USER"
                 ? dropdownItemMapping[notification.assignedToSection].userHref
@@ -50,15 +88,16 @@ const ShowNotificationButton = ({ notifications }: Props) => {
               dropdownItemMapping[notification.assignedToSection].icon
             }
             description={notification.message}
-            key={notification.id}
           >
             {dropdownItemMapping[notification.assignedToSection].label}
           </DropdownItem>
-        )}
+        ))}
       </DropdownMenu>
     </Dropdown>
   );
 };
+
+export default ShowNotificationButton;
 
 const dropdownItemMapping: Record<
   Section,
@@ -72,7 +111,7 @@ const dropdownItemMapping: Record<
       <HiOutlineNewspaper
         size={35}
         fill="lightgrey"
-        className="stroke-[1.3px] bg-slate-300  rounded-lg me-1 w-10"
+        className="stroke-[1.3px] bg-slate-200  rounded-lg me-1 w-10"
       />
     ),
   },
@@ -85,7 +124,7 @@ const dropdownItemMapping: Record<
       <HiOutlineShoppingBag
         size={35}
         fill="lightgrey"
-        className="stroke-[1.3px] bg-slate-300  rounded-lg me-1 w-10"
+        className="stroke-[1.3px] bg-slate-200  rounded-lg me-1 w-10"
       />
     ),
   },
@@ -98,7 +137,7 @@ const dropdownItemMapping: Record<
       <HiOutlineTicket
         size={35}
         fill="lightgrey"
-        className="stroke-[1.3px] bg-slate-300  rounded-lg me-1 w-10"
+        className="stroke-[1.3px] bg-slate-200  rounded-lg me-1 w-10"
       />
     ),
   },
@@ -111,10 +150,8 @@ const dropdownItemMapping: Record<
       <HiOutlineTicket
         size={35}
         fill="lightgrey"
-        className="stroke-[1.3px] bg-slate-300  rounded-lg me-1 w-10"
+        className="stroke-[1.3px] bg-slate-200  rounded-lg me-1 w-10"
       />
     ),
   },
 };
-
-export default ShowNotificationButton;
