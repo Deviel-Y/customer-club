@@ -7,8 +7,8 @@ interface Props {
 
 const StatusBadge = ({ status }: Props) => {
   return (
-    <Chip color={statusMapping[status].color}>
-      {statusMapping[status].label}
+    <Chip color={statusMapping[status]?.color}>
+      {statusMapping[status]?.label}
     </Chip>
   );
 };
@@ -16,7 +16,7 @@ const StatusBadge = ({ status }: Props) => {
 export default StatusBadge;
 
 const statusMapping: Record<
-  Status | TicketStatus,
+  Status | TicketStatus | "true" | "false",
   { label: string; color: "danger" | "success" | "warning" | "primary" }
 > = {
   EXPIRED: { color: "danger", label: "منقضی شده" },
@@ -24,4 +24,6 @@ const statusMapping: Record<
   CLOSED: { color: "success", label: "بسته شده" },
   OPEN: { color: "danger", label: "جدید" },
   INVESTIGATING: { color: "warning", label: "در حال بررسی" },
+  true: { color: "success", label: "خوانده شده" },
+  false: { color: "danger", label: "خوانده نشده" },
 };

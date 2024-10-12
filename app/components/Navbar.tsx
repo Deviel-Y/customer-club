@@ -66,6 +66,8 @@ const headingMapping: Record<string, { label: string }> = {
   "/editUserInfo": { label: "ویرایش اطلاعات کاربر" },
   "/ticket": { label: "تیکت های من" },
   "/ticket/ticketDetail": { label: "جزئیات تیکت" },
+  "/notification": { label: "لیست اعلان ها" },
+  "/admin/notification": { label: "لیست اعلان ها" },
   "/admin": { label: "پنل مدیریت" },
   "/admin/invoice-issuing": { label: "صدور فاکتور" },
   "/admin/porformaInvoice-issuing": { label: "صدور پیش فاکتور" },

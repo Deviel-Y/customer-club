@@ -28,7 +28,7 @@ const InvoiceIssuingPage = async ({
   authorizeAdmin(session!);
 
   const currentPage = pageNumber || 1;
-  const pageSize: number = 2;
+  const pageSize: number = 6;
   const invoiceCount: number = await prisma.invoice.count({
     where: {
       description: { contains: description },
