@@ -58,6 +58,7 @@ const UserTicketListTable = ({ tickets, totalPage }: Props) => {
                 نمایش تیکت
               </Button>
             </TableCell>
+            <TableCell className="text-nowrap">{ticket.ticketNumber}</TableCell>
             <TableCell className="text-nowrap">
               {categoryMapping[ticket.category]?.label}
             </TableCell>
@@ -82,6 +83,7 @@ const columns: {
   value: keyof Ticket | "detail";
 }[] = [
   { label: "مشاهده جزئیات", value: "detail" },
+  { label: "شماره تیکت", value: "ticketNumber" },
   { label: "دسته بندی", value: "category" },
   { label: "عنوان تیکت", value: "title" },
   { label: "وضعیت تیکت", value: "status" },

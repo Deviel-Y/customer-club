@@ -58,6 +58,7 @@ const TicketListTable = ({ tickets, totalPage }: Props) => {
                 نمایش تیکت
               </Button>
             </TableCell>
+            <TableCell>{ticket.ticketNumber}</TableCell>
             <TableCell>{categoryMapping[ticket?.category].label}</TableCell>
             <TableCell>{ticket?.title}</TableCell>
             <TableCell>{ticket?.User?.companyName}</TableCell>
@@ -82,6 +83,7 @@ const columns: {
   value: keyof Ticket | "detail" | "companyName" | "companyBranch";
 }[] = [
   { label: "مشاهده جزئیات", value: "detail" },
+  { label: "شماره تیکت", value: "ticketNumber" },
   { label: "دسته بندی", value: "category" },
   { label: "عنوان تیکت", value: "title" },
   { label: "نام سازمان", value: "companyName" },
