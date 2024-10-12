@@ -1,3 +1,5 @@
+import prisma from "@/prisma/client";
+import { Notification } from "@prisma/client";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import AllProviders from "./AllProviders";
@@ -27,6 +29,16 @@ export default async function RootLayout({
 }>) {
   const session = await getSession();
 
+  const notifications: Notification[] = await prisma.notification.findMany({
+    where: {
+      isRead: false,
+      assignedToUserId:
+        session?.user.role === "USER" ? session?.user.id : undefined,
+    },
+
+    orderBy: { createdAt: "desc" },
+  });
+
   return (
     <html lang="fa" dir="rtl" className="bg-neutral-50">
       <body
@@ -39,7 +51,7 @@ export default async function RootLayout({
 
           <main className={`flex flex-col ${session && "mr-[66px]"} h-full`}>
             <nav className="w-full">
-              <Navbar />
+              <Navbar notifications={notifications} />
             </nav>
 
             {children}

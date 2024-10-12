@@ -1,12 +1,18 @@
 "use client";
 
 import { Avatar } from "@nextui-org/react";
+import { Notification } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { removeLastSegmentURL } from "../utils/removeLastSegmentURL";
+import ShowNotificationButton from "./ShowNotificationButton";
 
-const Navbar = () => {
+interface Props {
+  notifications: Notification[];
+}
+
+const Navbar = ({ notifications }: Props) => {
   const { data: session } = useSession();
   const path = usePathname();
   const [pathName, setPathName] = useState<string>("");
@@ -33,6 +39,8 @@ const Navbar = () => {
       <h1 className="text-[40px] max-md:text-[30px] max-sm:text-[23px]">
         {headingMapping[pathName].label}
       </h1>
+
+      <ShowNotificationButton notifications={notifications} />
 
       <Avatar
         src={session.user.image || undefined}
