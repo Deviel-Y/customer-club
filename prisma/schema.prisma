@@ -100,21 +100,28 @@ model TicketMessage {
 }
 
 model Notification {
-  id               String           @id @default(cuid())
-  message          String
-  type             NotificationType
-  isRead           Boolean          @default(false)
-  assignedToUserId String
+  id                String           @id @default(cuid())
+  message           String
+  type              NotificationType
+  isRead            Boolean          @default(false)
+  assignedToUserId  String
+  assignedToSection Section
 
   user User @relation(fields: [assignedToUserId], references: [id])
 
   createdAt DateTime @default(now())
 }
 
+enum Section {
+  INVOICE
+  POR_INVOICE
+  TICKET
+  TICKET_MESSAGE
+}
+
 enum NotificationType {
   INFO
   WARNING
-  ERORR
 }
 
 enum MessageType {
