@@ -40,16 +40,18 @@ const Navbar = ({ notifications }: Props) => {
         {headingMapping[pathName].label}
       </h1>
 
-      <ShowNotificationButton notifications={notifications} />
+      <div className="flex flex-row gap-5 justify-center items-center">
+        <ShowNotificationButton notifications={notifications} />
 
-      <Avatar
-        src={session.user.image || undefined}
-        alt="Profile Avater"
-        fallback="?"
-        size="lg"
-        isBordered
-        color="primary"
-      />
+        <Avatar
+          src={session.user.image || undefined}
+          alt="Profile Avater"
+          fallback="?"
+          size="lg"
+          isBordered
+          color="primary"
+        />
+      </div>
     </div>
   );
 };
