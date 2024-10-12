@@ -15,26 +15,46 @@ export const POST = async (request: NextRequest) => {
     if (!validation.success)
       return NextResponse.json(validation.error.format(), { status: 400 });
 
+    const [ticketMessages, ticket, user] = await Promise.all([
+      await prisma.ticketMessage.findMany({
+        where: { assignetoTicketId },
+      }),
+
+      await prisma.ticket.findUnique({
+        where: { id: assignetoTicketId },
+      }),
+
+      await prisma.user.findUnique({
+        where: { id: session?.user.id },
+      }),
+    ]);
+
     session?.user.role === "ADMIN" &&
-      (await prisma.ticket.update({
+      (await prisma?.ticket.update({
         where: { id: assignetoTicketId },
         data: { status: "INVESTIGATING" },
       }));
 
-    const lastTicket: TicketMessage = (
-      await prisma.ticketMessage.findMany({
+    const lastTicketMessage: TicketMessage = (
+      await prisma?.ticketMessage.findMany({
         orderBy: { createdAt: "desc" },
         take: 1,
       })
     )[0];
 
-    if (session?.user.role === "ADMIN" && lastTicket.messageType === "RESPONCE")
+    if (
+      session?.user.role === "ADMIN" &&
+      lastTicketMessage?.messageType === "RESPONCE"
+    )
       return NextResponse.json(
         "شما قادر به ارسال مجدد پیام نیستید. برای ارسال پیام باید منتظر پاسخ کاربر باشید",
         { status: 403 }
       );
 
-    if (session?.user.role === "USER" && lastTicket.messageType === "REQUEST")
+    if (
+      session?.user.role === "USER" &&
+      lastTicketMessage?.messageType === "REQUEST"
+    )
       return NextResponse.json(
         "شما قادر به ارسال مجدد پیام نیستید. برای ارسال پیام باید منتظر پاسخ ادمین باشید",
         { status: 403 }
@@ -58,8 +78,26 @@ export const POST = async (request: NextRequest) => {
       },
     });
 
+    const notificationMessage =
+      ticketMessages.length === 0
+        ? `کاربر ${user?.companyName} شعبه  ${user?.companyBranch} درخواست جدیدی ثبت کرده است`
+        : ticketMessages.length !== 0 && newMesaage.messageType === "REQUEST"
+        ? `کاربر ${user?.companyName} شعبه ${user?.companyBranch} به تیکت شماره ${ticket?.ticketNumber} پاسخ خود را ثبت کرد`
+        : ticketMessages.length !== 0 && newMesaage.messageType === "RESPONCE"
+        ? `پاسخی از سوی ادمین به تیکت شماره ${ticket?.ticketNumber} ثبت شد`
+        : "پیام جدید";
+
+    await prisma.notification.create({
+      data: {
+        message: notificationMessage,
+        type: "INFO",
+        assignedToUserId: session?.user.id!,
+      },
+    });
+
     return NextResponse.json(newMesaage, { status: 201 });
   } catch (error) {
+    console.log(error);
     return NextResponse.json(error, { status: 500 });
   }
 };

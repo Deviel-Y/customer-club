@@ -75,6 +75,7 @@ model Ticket {
   category      Category
   title         String          @db.VarChar(255)
   ticketMessage TicketMessage[]
+  ticketNumber  Int             @unique @default(autoincrement())
   status        TicketStatus    @default(OPEN)
   issuerId      String
 

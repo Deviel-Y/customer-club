@@ -26,6 +26,7 @@ import {
 
 const NewTicketPopoverButton = () => {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const ticketCategories = Object.values(Category);
   const [textAreaValue, setTextAreaValue] = useState<string>();
   const { register, handleSubmit, control } = useForm<TicketSchemaType>();
@@ -43,23 +44,22 @@ const NewTicketPopoverButton = () => {
           <form
             className="w-full flex flex-col gap-6 p-3"
             onSubmit={handleSubmit(({ category, title }) => {
+              setIsLoading(true);
+
               const myRequest = axios
                 .post<Ticket>("/api/ticket", { title, category })
                 .then((res) => {
                   const ticket = res.data;
 
-                  axios
-                    .post("/api/ticket/ticketMessage", {
-                      message: textAreaValue,
-                      assignetoTicketId: ticket.id,
-                    })
-                    .catch((error: AxiosError) =>
-                      toast.error(error?.response?.data as string)
-                    );
+                  axios.post("/api/ticket/ticketMessage", {
+                    message: textAreaValue,
+                    assignetoTicketId: ticket.id,
+                  });
 
                   router.push("/");
                   router.refresh();
-                });
+                })
+                .finally(() => setIsLoading(false));
 
               toast.promise(myRequest, {
                 error: (error: AxiosError) => error?.response?.data as string,
@@ -103,7 +103,12 @@ const NewTicketPopoverButton = () => {
             </div>
 
             <div>
-              <Button type="submit" size="lg" color="primary">
+              <Button
+                isLoading={isLoading}
+                type="submit"
+                size="lg"
+                color="primary"
+              >
                 ثبت
               </Button>
             </div>
