@@ -81,7 +81,7 @@ export const POST = async (request: NextRequest) => {
 
     const notificationMessage =
       ticketMessages.length === 0
-        ? `تیکتی به شماره ${ticket?.ticketNumber} ایجاد شد`
+        ? `تیکت جدیدی به شماره ${ticket?.ticketNumber} ایجاد شد`
         : ticketMessages.length !== 0 && newMesaage.messageType === "REQUEST"
         ? `کاربر ${user?.companyName} شعبه ${user?.companyBranch} به تیکت شماره ${ticket?.ticketNumber} پاسخ خود را ثبت کرد`
         : ticketMessages.length !== 0 && newMesaage.messageType === "RESPONCE"
@@ -93,12 +93,12 @@ export const POST = async (request: NextRequest) => {
         message: notificationMessage,
         type: "INFO",
         assignedToUserId: session?.user.id!,
+        assignedToSection: "TICKET_MESSAGE",
       },
     });
 
     return NextResponse.json(newMesaage, { status: 201 });
   } catch (error) {
-    console.log(error);
     return NextResponse.json(error, { status: 500 });
   }
 };

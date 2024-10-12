@@ -74,6 +74,7 @@ export const PATCH = async (
         message: `شماره فاکتور ${invoiceNumber} از سمت ادمین ویرایش شد`,
         type: "INFO",
         assignedToUserId,
+        assignedToSection: "INVOICE",
       },
     });
 

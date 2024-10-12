@@ -79,6 +79,7 @@ export const PATCH = async (
       message: `شماره پیش فاکتور ${porformaInvoiceNumber} از سمت ادمین ویرایش شد`,
       type: "INFO",
       assignedToUserId,
+      assignedToSection: "POR_INVOICE",
     },
   });
 

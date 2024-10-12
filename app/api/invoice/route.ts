@@ -54,6 +54,7 @@ export const POST = async (request: NextRequest) => {
         message: `فاکتوری با شماره ${invoiceNumber} برای شما صادر شد`,
         type: "INFO",
         assignedToUserId,
+        assignedToSection: "INVOICE",
       },
     });
 

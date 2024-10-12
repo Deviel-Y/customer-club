@@ -47,6 +47,7 @@ export const POST = async (request: NextRequest) => {
         message: `پیش فاکتوری با شماره ${porformaInvoiceNumber} برای شما صادر شد`,
         type: "INFO",
         assignedToUserId,
+        assignedToSection: "POR_INVOICE",
       },
     });
 
