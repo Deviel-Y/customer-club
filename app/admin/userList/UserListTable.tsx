@@ -56,6 +56,7 @@ const UserListTable = ({ users, totalPage }: Props) => {
             <TableCell>
               <div className="flex flex-row justify-center items-center gap-x-3">
                 <DeleteConfirmationButton
+                  redirectEndpont="/admin/userList"
                   successMessage="کاربر با موفقیت حذف شد"
                   content="آیا از حذف این کاربر مطمئن اید؟"
                   title="حذف کاربر"

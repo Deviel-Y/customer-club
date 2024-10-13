@@ -1,16 +1,15 @@
 import TicketMessageActionButtons from "@/app/components/TicketMessageActionButtons";
 import { Avatar, Card } from "@nextui-org/react";
-import { Ticket, TicketMessage, User } from "@prisma/client";
+import { TicketMessage, User } from "@prisma/client";
 import moment from "moment-jalaali";
 
 interface Props {
-  ticket: Ticket;
   ticketMessages: TicketMessage;
   users: User[];
   sessionId: string;
 }
 
-const MessageCard = ({ ticket, ticketMessages, users, sessionId }: Props) => {
+const MessageCard = ({ ticketMessages, users, sessionId }: Props) => {
   const messageIssuer: User = users.find(
     (user) => user?.id === ticketMessages?.issuerId
   )!;
@@ -47,7 +46,7 @@ const MessageCard = ({ ticket, ticketMessages, users, sessionId }: Props) => {
             } items-center justify-between`}
           >
             <div className="">
-              <p>{messageIssuer?.companyName || "ادمین"}</p>
+              <p>{messageIssuer?.companyName || messageIssuer.adminName}</p>
 
               <p
                 className={`text-gray-500 text-[12px] ${
@@ -56,7 +55,7 @@ const MessageCard = ({ ticket, ticketMessages, users, sessionId }: Props) => {
                     : "text-left"
                 }`}
               >
-                {messageIssuer?.companyBranch || ""}
+                {messageIssuer?.companyBranch || "ادمین"}
               </p>
             </div>
 
@@ -68,7 +67,10 @@ const MessageCard = ({ ticket, ticketMessages, users, sessionId }: Props) => {
         </Card>
 
         {ticketMessages.canBeModified && sessionId === messageIssuer?.id && (
-          <TicketMessageActionButtons ticketMessage={ticketMessages} />
+          <TicketMessageActionButtons
+            userRole={messageIssuer.role}
+            ticketMessage={ticketMessages}
+          />
         )}
       </div>
     </div>

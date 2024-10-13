@@ -12,7 +12,7 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
-import { PorformaInvoice } from "@prisma/client";
+import { PorformaInvoice, Role } from "@prisma/client";
 import moment from "moment-jalaali";
 import { useRouter } from "next/navigation";
 import { BsDownload } from "react-icons/bs";
@@ -21,9 +21,14 @@ import StatusBadge from "../components/StatusBadge";
 interface Props {
   porformaInvoice: PorformaInvoice[];
   totalPage: number;
+  userRole: Role;
 }
 
-const AdminPorformaInvoiceTable = ({ porformaInvoice, totalPage }: Props) => {
+const AdminPorformaInvoiceTable = ({
+  porformaInvoice,
+  totalPage,
+  userRole,
+}: Props) => {
   const router = useRouter();
 
   return (
@@ -60,6 +65,7 @@ const AdminPorformaInvoiceTable = ({ porformaInvoice, totalPage }: Props) => {
             <TableCell>
               <div className="flex flex-row justify-center items-center gap-x-3">
                 <DeleteConfirmationButton
+                  redirectEndpont="/admin/porformaInvoice-issuing"
                   successMessage="پیش فاکتور با موفقیت حذف شد."
                   content="آیا از حذف این پیش فاکتور مطمئن اید؟"
                   title="حذف پیش فاکتور"

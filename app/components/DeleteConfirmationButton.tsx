@@ -39,54 +39,63 @@ export const DeleteConfirmationButton = ({
   const router = useRouter();
 
   return (
-    <div>
-      <Button size={buttonSize} isIconOnly color="danger" onPress={onOpen}>
-        <TrashIcon className={iconStyle} />
-      </Button>
-      <Modal backdrop="blur" isOpen={isOpen} onOpenChange={onOpenChange}>
-        <ModalContent>
-          {(onClose) => (
-            <div>
-              <ModalHeader className="flex flex-col">{title}</ModalHeader>
-              <ModalBody>
-                <p>{content}</p>
-              </ModalBody>
-              <ModalFooter>
-                <Button
-                  isDisabled={isLoading}
-                  color="primary"
-                  variant="solid"
-                  onPress={onClose}
-                >
-                  انصراف
-                </Button>
-                <Button
-                  color="danger"
-                  isLoading={isLoading}
-                  onPress={() => {
-                    setisLoading(true);
-                    axios
-                      .delete(endpoint)
-                      .then(() => {
-                        router.push(redirectEndpont);
-                        router.refresh();
-                        toast.success(successMessage);
-                      })
-                      .catch((error: AxiosError) => {
-                        setisLoading(false);
-                        onClose();
-                        toast.error(error?.response?.data as string);
+    <>
+      <div>
+        <Button size={buttonSize} isIconOnly color="danger" onPress={onOpen}>
+          <TrashIcon className={iconStyle} />
+        </Button>
+        <Modal backdrop="blur" isOpen={isOpen} onOpenChange={onOpenChange}>
+          <ModalContent>
+            {(onClose) => (
+              <div>
+                <ModalHeader className="flex flex-col">{title}</ModalHeader>
+                <ModalBody>
+                  <p>{content}</p>
+                </ModalBody>
+                <ModalFooter>
+                  <Button
+                    isDisabled={isLoading}
+                    color="primary"
+                    variant="solid"
+                    onPress={onClose}
+                  >
+                    انصراف
+                  </Button>
+                  <Button
+                    color="danger"
+                    isLoading={isLoading}
+                    onPress={() => {
+                      setisLoading(true);
+
+                      const myPromise = axios
+                        .delete(endpoint)
+                        .then(() => {
+                          router.push(redirectEndpont);
+                          router.refresh();
+                          toast.success(successMessage);
+                        })
+                        .finally(() => {
+                          setisLoading(false);
+                          onClose();
+                        });
+
+                      toast.promise(myPromise, {
+                        error: (error: AxiosError) =>
+                          error.response?.data as string,
+                        loading: "در حال حذف...",
+                        success: successMessage,
                       });
-                  }}
-                >
-                  حذف
-                </Button>
-              </ModalFooter>
-            </div>
-          )}
-        </ModalContent>
-        <Toaster />
-      </Modal>
-    </div>
+                    }}
+                  >
+                    حذف
+                  </Button>
+                </ModalFooter>
+              </div>
+            )}
+          </ModalContent>
+        </Modal>
+      </div>
+      <Toaster />
+    </>
   );
 };
