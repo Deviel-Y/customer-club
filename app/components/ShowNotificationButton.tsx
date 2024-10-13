@@ -86,6 +86,7 @@ const ShowNotificationButton = ({
       >
         {notifications.map((notification) => (
           <DropdownItem
+            color={notification.type === "INFO" ? "primary" : "warning"}
             onPress={() =>
               axios
                 .patch(`/api/notification/${notification.id}`, {
@@ -102,7 +103,7 @@ const ShowNotificationButton = ({
                   router.refresh();
                 })
             }
-            className="my-1"
+            className="my-1 group"
             key={notification.id}
             endContent={moment(notification.createdAt).format("jYYYY/jM/jD")}
             startContent={
@@ -131,8 +132,8 @@ const dropdownItemMapping: Record<
     icon: (
       <HiOutlineNewspaper
         size={35}
-        fill="lightgrey"
-        className="stroke-[1.3px] bg-slate-200  rounded-lg me-1 w-10"
+        fill="white"
+        className="stroke-[1.3px] bg-white group-hover:fill-white group-hover:stroke-black transition-all group-hover:bg-white   rounded-lg me-1 w-10"
       />
     ),
   },
@@ -145,7 +146,7 @@ const dropdownItemMapping: Record<
       <HiOutlineShoppingBag
         size={35}
         fill="lightgrey"
-        className="stroke-[1.3px] bg-slate-200  rounded-lg me-1 w-10"
+        className="stroke-[1.3px] bg-white group-hover:fill-white group-hover:stroke-black transition-all group-hover:bg-white   rounded-lg me-1 w-10"
       />
     ),
   },
@@ -158,7 +159,7 @@ const dropdownItemMapping: Record<
       <HiOutlineChatAlt2
         size={35}
         fill="lightgrey"
-        className="stroke-[1.3px] bg-slate-200  rounded-lg me-1 w-10"
+        className="stroke-[1.3px] bg-white group-hover:fill-white group-hover:stroke-black transition-all group-hover:bg-white   rounded-lg me-1 w-10"
       />
     ),
   },
@@ -171,7 +172,7 @@ const dropdownItemMapping: Record<
       <HiOutlineTicket
         size={35}
         fill="lightgrey"
-        className="stroke-[1.3px] bg-slate-200  rounded-lg me-1 w-10"
+        className="stroke-[1.3px] bg-white group-hover:fill-white group-hover:stroke-black transition-all group-hover:bg-white   rounded-lg me-1 w-10"
       />
     ),
   },
