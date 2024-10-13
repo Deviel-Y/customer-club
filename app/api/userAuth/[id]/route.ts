@@ -46,6 +46,7 @@ export const PATCH = async (
       companyBranch,
       itManager,
       image,
+      adminName,
     } = body;
 
     const user = await prisma.user.findUnique({ where: { id } });
@@ -99,6 +100,7 @@ export const PATCH = async (
         email: email?.toLocaleLowerCase()!,
         hashedPassword,
         role,
+        adminName: role === "ADMIN" ? adminName : undefined,
         address: role === "ADMIN" ? null : address,
         companyName: role === "ADMIN" ? null : companyName,
         companyBranch: role === "ADMIN" ? null : companyBranch,

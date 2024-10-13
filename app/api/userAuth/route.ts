@@ -14,6 +14,7 @@ export const POST = async (request: NextRequest) => {
       companyBranch,
       companyName,
       email,
+      adminName,
       itManager,
       newPassword,
       address,
@@ -63,6 +64,7 @@ export const POST = async (request: NextRequest) => {
 
     const newUser = await prisma.user.create({
       data: {
+        adminName: role === "ADMIN" ? adminName : undefined,
         companyBranch: role === "ADMIN" ? undefined : companyBranch,
         companyName: role === "ADMIN" ? undefined : companyName,
         email: email?.toLocaleLowerCase()!,

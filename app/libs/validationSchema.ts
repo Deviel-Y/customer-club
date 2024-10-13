@@ -49,20 +49,21 @@ export const fullUserSchame = z
       .min(6)
       .max(50, { message: "ایمیل باید کمتر از 50 کاراکتر باشد" })
       .optional(),
+    adminName: z.string().min(1).max(50).or(literal("")),
     currentPassword: z
       .string()
       .min(5, { message: "گذرواژه باید بیشتر از 5 کاراکتر باشد" })
       .max(120, { message: "گذرواژه باید کمتر از 120 کاراکتر باشد" })
       .optional()
-      .or(literal("")),
+      .or(z.literal("")),
     newPassword: z
       .string()
       .min(8, { message: "گذرواژه باید بیشتر از 8 کاراکتر باشد" })
       .max(120, { message: "گذرواژه باید کمتر از 120 کاراکتر باشد" })
       .regex(/\d.*\d/, { message: "گذرواژه باید حداقل شامل دو عدد باشد" })
       .optional()
-      .or(literal("")),
-    confirmPassword: z.string().optional().or(literal("")),
+      .or(z.literal("")),
+    confirmPassword: z.string().optional().or(z.literal("")),
     companyName: z
       .string()
       .max(100, { message: "نام سازمان باید کمتر از 100 کاراکتر باشد" })
@@ -108,7 +109,10 @@ export const fullUserSchame = z
     }
   )
   .superRefine(
-    ({ role, companyName, companyBranch, address, itManager }, ctx) => {
+    (
+      { role, companyName, companyBranch, address, itManager, adminName },
+      ctx
+    ) => {
       if (role === "USER") {
         if (!companyName || companyName.length === 0) {
           ctx.addIssue({
@@ -136,6 +140,15 @@ export const fullUserSchame = z
             code: z.ZodIssueCode.custom,
             path: ["address"],
             message: "وارد کردن آدرس الزامی است",
+          });
+        }
+      }
+      if (role === "ADMIN") {
+        if (!adminName || adminName.length === 0) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ["adminName"],
+            message: "وارد کردن نام ادمین الزامی است",
           });
         }
       }
