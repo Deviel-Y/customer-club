@@ -1,3 +1,4 @@
+import NotificationActionBar from "@/app/components/NotificationActionBar";
 import getSession from "@/app/libs/getSession";
 import { authorizeAdmin } from "@/app/utils/authorizeRole";
 import prisma from "@/prisma/client";
@@ -72,7 +73,9 @@ const AdminNotificationListPage = async ({
   });
 
   return (
-    <div className="flex flex-col gap-5 px-5 py-2 w-full">
+    <div className="flex flex-col px-5 py-2 w-full">
+      <NotificationActionBar />
+
       <NotificationListTable
         totalPage={Math.ceil(notificationCount / pageSize)}
         notifications={notification}
