@@ -46,7 +46,9 @@ const ShowNotificationButton = ({
         >
           <Badge
             size="sm"
-            className="animate-pulse z-50 -translate-y-2"
+            className={`animate-pulse z-50 -translate-y-2 ${
+              unReadNotificationCount === 0 && "hidden"
+            }`}
             content={unReadNotificationCount}
             color="danger"
           >
@@ -145,7 +147,7 @@ const dropdownItemMapping: Record<
     icon: (
       <HiOutlineShoppingBag
         size={35}
-        fill="lightgrey"
+        fill="white"
         className="stroke-[1.3px] bg-white group-hover:fill-white group-hover:stroke-black transition-all group-hover:bg-white   rounded-lg me-1 w-10"
       />
     ),
@@ -158,7 +160,7 @@ const dropdownItemMapping: Record<
     icon: (
       <HiOutlineChatAlt2
         size={35}
-        fill="lightgrey"
+        fill="white"
         className="stroke-[1.3px] bg-white group-hover:fill-white group-hover:stroke-black transition-all group-hover:bg-white   rounded-lg me-1 w-10"
       />
     ),
@@ -171,7 +173,7 @@ const dropdownItemMapping: Record<
     icon: (
       <HiOutlineTicket
         size={35}
-        fill="lightgrey"
+        fill="white"
         className="stroke-[1.3px] bg-white group-hover:fill-white group-hover:stroke-black transition-all group-hover:bg-white   rounded-lg me-1 w-10"
       />
     ),

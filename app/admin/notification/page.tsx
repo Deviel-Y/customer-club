@@ -46,7 +46,6 @@ const AdminNotificationListPage = async ({
     isRead === "true" ? true : isRead === "false" ? false : undefined;
 
   const currentPage = pageNumber || 1;
-  const pageSize: number = 6;
 
   const notification = await prisma.notification.findMany({
     where: {
@@ -92,3 +91,5 @@ const AdminNotificationListPage = async ({
 };
 
 export default AdminNotificationListPage;
+
+const pageSize: number = 9;

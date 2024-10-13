@@ -68,6 +68,7 @@ const InvoiceIssuingPage = async ({
       />
 
       <AdminInvoiceTable
+        userRole="ADMIN"
         totalPage={Math.ceil(invoiceCount / pageSize)}
         invoices={adminSideInvoiceList}
       />

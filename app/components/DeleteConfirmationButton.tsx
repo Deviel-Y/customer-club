@@ -11,7 +11,6 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 import axios, { AxiosError } from "axios";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
@@ -23,6 +22,7 @@ interface Props {
   successMessage: string;
   iconStyle: string;
   buttonSize?: "sm" | "md" | "lg";
+  redirectEndpont: string;
 }
 
 export const DeleteConfirmationButton = ({
@@ -32,11 +32,11 @@ export const DeleteConfirmationButton = ({
   successMessage,
   iconStyle,
   buttonSize = "md",
+  redirectEndpont,
 }: Props) => {
   const [isLoading, setisLoading] = useState<boolean>(false);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const router = useRouter();
-  const { data: session } = useSession();
 
   return (
     <div>
@@ -68,13 +68,7 @@ export const DeleteConfirmationButton = ({
                     axios
                       .delete(endpoint)
                       .then(() => {
-                        router.push(
-                          `${
-                            session?.user.role === "ADMIN"
-                              ? "/admin/ticket"
-                              : "/ticket"
-                          }`
-                        );
+                        router.push(redirectEndpont);
                         router.refresh();
                         toast.success(successMessage);
                       })
