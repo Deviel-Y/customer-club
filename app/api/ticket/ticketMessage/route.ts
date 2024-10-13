@@ -93,7 +93,8 @@ export const POST = async (request: NextRequest) => {
         message: notificationMessage,
         type: "INFO",
         assignedToUserId: session?.user.id!,
-        assignedToSection: "TICKET_MESSAGE",
+        assignedToSection:
+          ticketMessages.length === 0 ? "TICKET" : "TICKET_MESSAGE",
       },
     });
 

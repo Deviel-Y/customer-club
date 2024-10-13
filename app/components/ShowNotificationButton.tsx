@@ -14,6 +14,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { AiOutlineNotification } from "react-icons/ai";
 import {
+  HiOutlineChatAlt2,
   HiOutlineNewspaper,
   HiOutlineShoppingBag,
   HiOutlineTicket,
@@ -21,9 +22,13 @@ import {
 
 interface Props {
   notifications: Notification[];
+  unReadNotificationCount: number;
 }
 
-const ShowNotificationButton = ({ notifications }: Props) => {
+const ShowNotificationButton = ({
+  notifications,
+  unReadNotificationCount,
+}: Props) => {
   const router = useRouter();
   const { data: session } = useSession();
 
@@ -41,7 +46,7 @@ const ShowNotificationButton = ({ notifications }: Props) => {
           <Badge
             size="sm"
             className="animate-pulse z-50 -translate-y-2"
-            content={notifications.length}
+            content={unReadNotificationCount}
             color="danger"
           >
             <AiOutlineNotification size={20} />
@@ -134,11 +139,11 @@ const dropdownItemMapping: Record<
   },
 
   TICKET_MESSAGE: {
-    label: "تیکت جدید",
+    label: "پاسخ به تیکت",
     userHref: "/ticket",
     adminHref: "/admin/ticket",
     icon: (
-      <HiOutlineTicket
+      <HiOutlineChatAlt2
         size={35}
         fill="lightgrey"
         className="stroke-[1.3px] bg-slate-200  rounded-lg me-1 w-10"

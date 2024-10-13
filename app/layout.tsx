@@ -40,6 +40,14 @@ export default async function RootLayout({
     take: 5,
   });
 
+  const unReadNotificationCount: number = await prisma.notification.count({
+    where: {
+      isRead: false,
+      assignedToUserId:
+        session?.user.role === "USER" ? session?.user.id : undefined,
+    },
+  });
+
   return (
     <html lang="fa" dir="rtl" className="bg-neutral-50">
       <body
@@ -52,7 +60,10 @@ export default async function RootLayout({
 
           <main className={`flex flex-col ${session && "mr-[66px]"} h-full`}>
             <nav className="w-full">
-              <Navbar notifications={notifications} />
+              <Navbar
+                unReadNotificationCount={unReadNotificationCount}
+                notifications={notifications}
+              />
             </nav>
 
             {children}

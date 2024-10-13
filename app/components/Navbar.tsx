@@ -10,9 +10,10 @@ import ShowNotificationButton from "./ShowNotificationButton";
 
 interface Props {
   notifications: Notification[];
+  unReadNotificationCount: number;
 }
 
-const Navbar = ({ notifications }: Props) => {
+const Navbar = ({ notifications, unReadNotificationCount }: Props) => {
   const { data: session } = useSession();
   const path = usePathname();
   const [pathName, setPathName] = useState<string>("");
@@ -41,7 +42,10 @@ const Navbar = ({ notifications }: Props) => {
       </h1>
 
       <div className="flex flex-row gap-5 justify-center items-center">
-        <ShowNotificationButton notifications={notifications} />
+        <ShowNotificationButton
+          unReadNotificationCount={unReadNotificationCount}
+          notifications={notifications}
+        />
 
         <Avatar
           src={session.user.image || undefined}
