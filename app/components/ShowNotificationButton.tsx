@@ -9,6 +9,7 @@ import {
   DropdownTrigger,
 } from "@nextui-org/react";
 import { Notification, Section } from "@prisma/client";
+import axios from "axios";
 import moment from "moment-jalaali";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -85,13 +86,24 @@ const ShowNotificationButton = ({
       >
         {notifications.map((notification) => (
           <DropdownItem
+            onPress={() =>
+              axios
+                .patch(`/api/notification/${notification.id}`, {
+                  isRead: true,
+                })
+                .then(() => {
+                  router.push(
+                    session?.user.role === "USER"
+                      ? dropdownItemMapping[notification.assignedToSection]
+                          .userHref
+                      : dropdownItemMapping[notification.assignedToSection]
+                          .adminHref
+                  );
+                  router.refresh();
+                })
+            }
             className="my-1"
             key={notification.id}
-            href={
-              session?.user.role === "USER"
-                ? dropdownItemMapping[notification.assignedToSection].userHref
-                : dropdownItemMapping[notification.assignedToSection].adminHref
-            }
             endContent={moment(notification.createdAt).format("jYYYY/jM/jD")}
             startContent={
               dropdownItemMapping[notification.assignedToSection].icon

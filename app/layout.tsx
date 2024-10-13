@@ -44,7 +44,7 @@ export default async function RootLayout({
     where: {
       isRead: false,
       assignedToUserId:
-        session?.user.role === "USER" ? session?.user.id : undefined,
+        session?.user.role === "ADMIN" ? undefined : session?.user.id,
     },
   });
 
