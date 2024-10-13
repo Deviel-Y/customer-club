@@ -7,23 +7,25 @@ import NotificationListTable from "./NotificationListTable";
 
 interface Props {
   searchParams: {
-    notificationType: NotificationType;
-    assigneToSection: Section;
+    type: NotificationType;
+    section: Section;
     companyName: string;
     companyBranch: string;
-    message: string;
+    content: string;
     readStatus: boolean;
+    isRead: string;
     pageNumber: number;
   };
 }
 
 const AdminNotificationListPage = async ({
   searchParams: {
-    assigneToSection,
+    section,
     companyBranch,
     companyName,
-    message,
-    notificationType,
+    content,
+    type,
+    isRead,
     pageNumber,
   },
 }: Props) => {
@@ -31,27 +33,31 @@ const AdminNotificationListPage = async ({
   authorizeAdmin(session!);
 
   const prismaNotificationType = Object.values(NotificationType);
-  const type = prismaNotificationType.includes(notificationType)
-    ? notificationType
+  const notificationType = prismaNotificationType.includes(type)
+    ? type
     : undefined;
 
   const prismaAssigneToSection = Object.values(Section);
-  const section = prismaAssigneToSection.includes(assigneToSection)
-    ? assigneToSection
+  const notificationSection = prismaAssigneToSection.includes(section)
+    ? section
     : undefined;
+
+  const isReadNotification =
+    isRead === "true" ? true : isRead === "false" ? false : undefined;
 
   const currentPage = pageNumber || 1;
   const pageSize: number = 6;
 
   const notification = await prisma.notification.findMany({
     where: {
-      assignedToSection: { equals: section as Section },
+      assignedToSection: { equals: notificationSection },
       user: {
         companyBranch: { contains: companyBranch },
         companyName: { contains: companyName },
       },
-      message: { contains: message },
-      type: { equals: type as NotificationType },
+      message: { contains: content },
+      type: { equals: notificationType },
+      isRead: isReadNotification,
     },
 
     include: { user: true },
@@ -62,13 +68,14 @@ const AdminNotificationListPage = async ({
 
   const notificationCount = await prisma.notification.count({
     where: {
-      assignedToSection: { equals: section as Section },
+      assignedToSection: { equals: notificationSection },
       user: {
         companyBranch: { contains: companyBranch },
         companyName: { contains: companyName },
       },
-      message: { contains: message },
-      type: { equals: type as NotificationType },
+      message: { contains: content },
+      type: { equals: notificationType },
+      isRead: isReadNotification,
     },
   });
 
