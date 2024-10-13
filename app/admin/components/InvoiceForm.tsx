@@ -12,7 +12,7 @@ import {
 import { Invoice, User } from "@prisma/client";
 import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
-import { Key, useState } from "react";
+import { Key, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
 import FormErrorMessage from "../../components/FormErrorMessage";
@@ -41,13 +41,27 @@ const InvoiceForm = ({ Userlist, invoice }: Props) => {
     (user) => user.companyName === companyName
   ).map((companyName) => companyName.companyBranch);
 
-  const [price, setPrice] = useState<string>("0");
+  const [price, setPrice] = useState<string>(invoice?.price?.toString() || "0");
   const [isInputsManual, setIsInputsManual] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (!isInputsManual) {
+      const calculatedTax = (parseInt(price) * 0.1).toFixed(0);
+      const calculatedPriceWithTax = (
+        parseInt(price) * 0.1 +
+        parseInt(price)
+      ).toFixed(0);
+
+      setValue("tax", parseInt(calculatedTax));
+      setValue("priceWithTax", parseInt(calculatedPriceWithTax));
+    }
+  }, [price, isInputsManual]);
 
   const {
     register,
     handleSubmit,
     control,
+    setValue,
     formState: { errors },
   } = useForm<InvoiceSchemaType>({
     resolver: zodResolver(invoiceSchema),
@@ -199,13 +213,13 @@ const InvoiceForm = ({ Userlist, invoice }: Props) => {
 
           <div className="w-full">
             <Input
+              isDisabled={!isInputsManual}
               size="lg"
-              value={
-                !isInputsManual
-                  ? (parseInt(price) * 0.1).toFixed(0).toString() || ""
-                  : undefined
+              value={!isInputsManual ? undefined : undefined}
+              defaultValue={invoice?.tax?.toString()}
+              onValueChange={(value) =>
+                isInputsManual && setValue("tax", parseInt(value))
               }
-              defaultValue={invoice?.tax.toString()}
               {...register("tax", { valueAsNumber: true })}
               isRequired
               type="number"
@@ -217,15 +231,13 @@ const InvoiceForm = ({ Userlist, invoice }: Props) => {
 
           <div className="w-full">
             <Input
+              isDisabled={!isInputsManual}
               size="lg"
-              value={
-                !isInputsManual
-                  ? (parseInt(price) * 0.1 + parseInt(price))
-                      .toFixed(0)
-                      .toString() || ""
-                  : undefined
+              value={!isInputsManual ? undefined : undefined}
+              defaultValue={invoice?.priceWithTax?.toString()}
+              onValueChange={(value) =>
+                isInputsManual && setValue("priceWithTax", parseInt(value))
               }
-              defaultValue={invoice?.priceWithTax.toString()}
               {...register("priceWithTax", { valueAsNumber: true })}
               isRequired
               type="number"

@@ -33,6 +33,9 @@ export const PATCH = async (
       description,
       invoiceNumber,
       organizationBranch,
+      price,
+      tax,
+      priceWithTax,
     } = body;
 
     const user = await prisma.user.findUnique({
@@ -66,6 +69,9 @@ export const PATCH = async (
         organizationBranch,
         issuerId: session?.user.id,
         organization,
+        price,
+        tax,
+        priceWithTax,
       },
     });
 
