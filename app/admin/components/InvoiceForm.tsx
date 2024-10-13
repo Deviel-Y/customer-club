@@ -6,6 +6,7 @@ import {
   AutocompleteItem,
   Button,
   Card,
+  Checkbox,
   Input,
 } from "@nextui-org/react";
 import { Invoice, User } from "@prisma/client";
@@ -39,6 +40,9 @@ const InvoiceForm = ({ Userlist, invoice }: Props) => {
   const organizationBranch = Userlist.filter(
     (user) => user.companyName === companyName
   ).map((companyName) => companyName.companyBranch);
+
+  const [price, setPrice] = useState<string>("0");
+  const [isInputsManual, setIsInputsManual] = useState<boolean>(false);
 
   const {
     register,
@@ -172,9 +176,17 @@ const InvoiceForm = ({ Userlist, invoice }: Props) => {
 
             <FormErrorMessage errorMessage={errors.organization?.message!} />
           </div>
-          <div className="w-full">
+
+          <div className="w-full -translate-y-3">
+            <Checkbox
+              size="sm"
+              onChange={(event) => setIsInputsManual(event.target.checked)}
+            >
+              وارد کردن مالیات به صورت دستی
+            </Checkbox>
             <Input
               size="lg"
+              onValueChange={setPrice}
               defaultValue={invoice?.price.toString()}
               {...register("price", { valueAsNumber: true })}
               isRequired
@@ -188,11 +200,16 @@ const InvoiceForm = ({ Userlist, invoice }: Props) => {
           <div className="w-full">
             <Input
               size="lg"
+              value={
+                !isInputsManual
+                  ? (parseInt(price) * 0.1).toFixed(0).toString() || ""
+                  : undefined
+              }
               defaultValue={invoice?.tax.toString()}
               {...register("tax", { valueAsNumber: true })}
               isRequired
               type="number"
-              label="مالیات"
+              label="%10 مالیات بر ارزش افزوده"
             />
 
             <FormErrorMessage errorMessage={errors.tax?.message!} />
@@ -201,6 +218,13 @@ const InvoiceForm = ({ Userlist, invoice }: Props) => {
           <div className="w-full">
             <Input
               size="lg"
+              value={
+                !isInputsManual
+                  ? (parseInt(price) * 0.1 + parseInt(price))
+                      .toFixed(0)
+                      .toString() || ""
+                  : undefined
+              }
               defaultValue={invoice?.priceWithTax.toString()}
               {...register("priceWithTax", { valueAsNumber: true })}
               isRequired
