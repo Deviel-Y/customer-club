@@ -11,6 +11,7 @@ model User {
   id             String  @id @default(cuid())
   email          String  @unique
   hashedPassword String
+  adminName      String?
   companyName    String?
   companyBranch  String?
   itManager      String?
