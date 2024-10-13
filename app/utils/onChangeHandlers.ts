@@ -413,3 +413,190 @@ export const ticketActionBarOnchangeHandlers = (
     statusOnChangeHandler,
   };
 };
+
+export const notificationActionBarOnchangeHandlers = (
+  searchParmas: ReadonlyURLSearchParams,
+  router: AppRouterInstance
+) => {
+  const typeOnChange = (event: Key | null) => {
+    const newParams = new URLSearchParams(searchParmas);
+
+    if (event) {
+      newParams.set("type", event as string);
+    } else {
+      newParams.delete("type");
+    }
+
+    if (searchParmas.get("section"))
+      newParams.set("section", searchParmas.get("section")!);
+
+    if (searchParmas.get("companyName"))
+      newParams.set("companyName", searchParmas.get("companyName")!);
+
+    if (searchParmas.get("companyBranch"))
+      newParams.set("companyBranch", searchParmas.get("companyBranch")!);
+
+    if (searchParmas.get("contenet"))
+      newParams.set("contenet", searchParmas.get("contenet")!);
+
+    if (searchParmas.get("isRead"))
+      newParams.set("isRead", searchParmas.get("isRead")!);
+
+    if (searchParmas.get("pageNumber")) newParams.delete("pageNumber");
+
+    router.push(`?${newParams.toString()}`);
+  };
+
+  const sectionOnChange = (event: Key | null) => {
+    const newParams = new URLSearchParams(searchParmas);
+
+    if (event) {
+      newParams.set("section", event as string);
+    } else {
+      newParams.delete("section");
+    }
+
+    if (searchParmas.get("type"))
+      newParams.set("type", searchParmas.get("type")!);
+
+    if (searchParmas.get("companyName"))
+      newParams.set("companyName", searchParmas.get("companyName")!);
+
+    if (searchParmas.get("companyBranch"))
+      newParams.set("companyBranch", searchParmas.get("companyBranch")!);
+
+    if (searchParmas.get("contenet"))
+      newParams.set("contenet", searchParmas.get("contenet")!);
+
+    if (searchParmas.get("isRead"))
+      newParams.set("isRead", searchParmas.get("isRead")!);
+
+    if (searchParmas.get("pageNumber")) newParams.delete("pageNumber");
+
+    router.push(`?${newParams.toString()}`);
+  };
+
+  const companyNameOnChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const newParams = new URLSearchParams(searchParmas);
+
+    if (event.target.value) {
+      newParams.set("companyName", event.target.value as string);
+    } else {
+      newParams.delete("companyName");
+    }
+
+    if (searchParmas.get("type"))
+      newParams.set("type", searchParmas.get("type")!);
+
+    if (searchParmas.get("section"))
+      newParams.set("section", searchParmas.get("section")!);
+
+    if (searchParmas.get("companyBranch"))
+      newParams.set("companyBranch", searchParmas.get("companyBranch")!);
+
+    if (searchParmas.get("contenet"))
+      newParams.set("contenet", searchParmas.get("contenet")!);
+
+    if (searchParmas.get("isRead"))
+      newParams.set("isRead", searchParmas.get("isRead")!);
+
+    if (searchParmas.get("pageNumber")) newParams.delete("pageNumber");
+
+    router.push(`?${newParams.toString()}`);
+  };
+
+  const companyBranchOnChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const newParams = new URLSearchParams(searchParmas);
+
+    if (event.target.value) {
+      newParams.set("companyBranch", event.target.value as string);
+    } else {
+      newParams.delete("companyBranch");
+    }
+
+    if (searchParmas.get("type"))
+      newParams.set("type", searchParmas.get("type")!);
+
+    if (searchParmas.get("section"))
+      newParams.set("section", searchParmas.get("section")!);
+
+    if (searchParmas.get("companyName"))
+      newParams.set("companyName", searchParmas.get("companyName")!);
+
+    if (searchParmas.get("contenet"))
+      newParams.set("contenet", searchParmas.get("contenet")!);
+
+    if (searchParmas.get("isRead"))
+      newParams.set("isRead", searchParmas.get("isRead")!);
+
+    if (searchParmas.get("pageNumber")) newParams.delete("pageNumber");
+
+    router.push(`?${newParams.toString()}`);
+  };
+
+  const isReadOnChange = (event: Key | null) => {
+    const newParams = new URLSearchParams(searchParmas);
+
+    if (event) {
+      newParams.set("isRead", event as string);
+    } else {
+      newParams.delete("isRead");
+    }
+
+    if (searchParmas.get("type"))
+      newParams.set("type", searchParmas.get("type")!);
+
+    if (searchParmas.get("section"))
+      newParams.set("section", searchParmas.get("section")!);
+
+    if (searchParmas.get("companyName"))
+      newParams.set("companyName", searchParmas.get("companyName")!);
+
+    if (searchParmas.get("companyBranch"))
+      newParams.set("companyBranch", searchParmas.get("companyBranch")!);
+
+    if (searchParmas.get("content"))
+      newParams.set("content", searchParmas.get("content")!);
+
+    if (searchParmas.get("pageNumber")) newParams.delete("pageNumber");
+
+    router.push(`?${newParams.toString()}`);
+  };
+
+  const contentOnChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const newParams = new URLSearchParams(searchParmas);
+
+    if (event.target.value) {
+      newParams.set("content", event.target.value as string);
+    } else {
+      newParams.delete("content");
+    }
+
+    if (searchParmas.get("type"))
+      newParams.set("type", searchParmas.get("type")!);
+
+    if (searchParmas.get("section"))
+      newParams.set("section", searchParmas.get("section")!);
+
+    if (searchParmas.get("companyName"))
+      newParams.set("companyName", searchParmas.get("companyName")!);
+
+    if (searchParmas.get("companyBranch"))
+      newParams.set("companyBranch", searchParmas.get("companyBranch")!);
+
+    if (searchParmas.get("isRead"))
+      newParams.set("isRead", searchParmas.get("isRead")!);
+
+    if (searchParmas.get("pageNumber")) newParams.delete("pageNumber");
+
+    router.push(`?${newParams.toString()}`);
+  };
+  return {
+    typeOnChange,
+    sectionOnChange,
+    companyNameOnChange,
+    companyBranchOnChange,
+    contentOnChange,
+    isReadOnChange,
+  };
+};
