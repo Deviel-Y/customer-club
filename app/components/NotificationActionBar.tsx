@@ -3,7 +3,6 @@
 import { Autocomplete, AutocompleteItem, Input } from "@nextui-org/react";
 import { NotificationType, Section } from "@prisma/client";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import NewTicketPopoverButton from "../(userSide)/ticket/NewTicketPopoverButton";
 import { notificationActionBarOnchangeHandlers } from "../utils/onChangeHandlers";
 
 interface Props {
@@ -29,11 +28,9 @@ const NotificationActionBar = ({ isAdmin = true }: Props) => {
 
   return (
     <div className=" flex flex-row max-sm:flex-col gap-5 max-sm:gap-0 max-sm:mt-5 w-full place-content-center place-items-center">
-      {!isAdmin && <NewTicketPopoverButton />}
-
       <div
         className={`grid ${
-          pathname === "/admin/notification" ? "grid-cols-6" : "grid-cols-5"
+          pathname === "/admin/notification" ? "grid-cols-6" : "grid-cols-4"
         }  grid-rows-1 w-full gap-5 max-sm:gap-0 mb-5 max-sm:grid-cols-1`}
       >
         <Autocomplete

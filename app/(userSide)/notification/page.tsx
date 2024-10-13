@@ -1,6 +1,6 @@
 import NotificationActionBar from "@/app/components/NotificationActionBar";
 import getSession from "@/app/libs/getSession";
-import { authorizeAdmin } from "@/app/utils/authorizeRole";
+import { authorizeUser } from "@/app/utils/authorizeRole";
 import prisma from "@/prisma/client";
 import { NotificationType, Section } from "@prisma/client";
 import NotificationListTable from "../../components/NotificationListTable";
@@ -18,19 +18,11 @@ interface Props {
   };
 }
 
-const AdminNotificationListPage = async ({
-  searchParams: {
-    section,
-    companyBranch,
-    companyName,
-    content,
-    type,
-    isRead,
-    pageNumber,
-  },
+const UserNotificationListPage = async ({
+  searchParams: { section, content, type, isRead, pageNumber },
 }: Props) => {
   const session = await getSession();
-  authorizeAdmin(session!);
+  authorizeUser(session!);
 
   const prismaNotificationType = Object.values(NotificationType);
   const notificationType = prismaNotificationType.includes(type)
@@ -50,11 +42,8 @@ const AdminNotificationListPage = async ({
 
   const notification = await prisma.notification.findMany({
     where: {
+      assignedToUserId: session?.user.id,
       assignedToSection: { equals: notificationSection },
-      user: {
-        companyBranch: { contains: companyBranch },
-        companyName: { contains: companyName },
-      },
       message: { contains: content },
       type: { equals: notificationType },
       isRead: isReadNotification,
@@ -68,11 +57,8 @@ const AdminNotificationListPage = async ({
 
   const notificationCount = await prisma.notification.count({
     where: {
+      assignedToUserId: session?.user.id,
       assignedToSection: { equals: notificationSection },
-      user: {
-        companyBranch: { contains: companyBranch },
-        companyName: { contains: companyName },
-      },
       message: { contains: content },
       type: { equals: notificationType },
       isRead: isReadNotification,
@@ -81,7 +67,7 @@ const AdminNotificationListPage = async ({
 
   return (
     <div className="flex flex-col px-5 py-2 w-full">
-      <NotificationActionBar />
+      <NotificationActionBar isAdmin={false} />
 
       <NotificationListTable
         totalPage={Math.ceil(notificationCount / pageSize)}
@@ -91,4 +77,4 @@ const AdminNotificationListPage = async ({
   );
 };
 
-export default AdminNotificationListPage;
+export default UserNotificationListPage;

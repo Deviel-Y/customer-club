@@ -11,7 +11,7 @@ import {
 } from "@nextui-org/react";
 import { Notification } from "@prisma/client";
 import moment from "moment-jalaali";
-import StatusBadge from "../components/StatusBadge";
+import StatusBadge from "../admin/components/StatusBadge";
 
 interface Props {
   notifications: any[];
