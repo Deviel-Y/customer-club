@@ -15,17 +15,33 @@ export const DELETE = async (
   request: NextRequest,
   { params: { id } }: Props
 ) => {
-  const invoice = await prisma.invoice.findFirst({
-    where: { assignedToUserId: id },
-  });
-  if (invoice)
-    return NextResponse.json(
-      "امکان حذف وجود ندارد زیرا فاکتور یا پیش فاکتور به نام این کاربر ثبت شده است",
-      { status: 400 }
-    );
+  try {
+    const [invoice, por_invocie, ticket] = await Promise.all([
+      prisma.invoice.findFirst({
+        where: { assignedToUserId: id },
+      }),
 
-  const deletedUser = await prisma.user.delete({ where: { id } });
-  return NextResponse.json(deletedUser);
+      prisma.porformaInvoice.findFirst({
+        where: { assignedToUserId: id },
+      }),
+
+      prisma.ticket.findFirst({
+        where: { issuerId: id },
+      }),
+    ]);
+
+    if (invoice || por_invocie || ticket)
+      return NextResponse.json(
+        "امکان حذف کاربر وجود ندارد. فاکتور، پیش فاکتور و یا تیکتی به نام این کاربر ثبت شده است",
+        { status: 403 }
+      );
+
+    const deletedUser = await prisma.user.delete({ where: { id } });
+    return NextResponse.json(deletedUser);
+  } catch (error) {
+    console.log(error);
+    return NextResponse.json(error);
+  }
 };
 
 export const PATCH = async (
