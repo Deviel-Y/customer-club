@@ -87,10 +87,10 @@ const UserForm = ({ user }: Props) => {
         </div>
 
         <div className="grid grid-cols-4 max-sm:grid-cols-1 grid-rows-4 max-sm:grid-rows-8 gap-3 max-sm:gap-1 place-items-center">
-          <div className="col-span-3 max-md:col-span-2 w-full">
+          <div className="col-span-2 max-md:col-span-2 w-full">
             <Input
               {...register("email")}
-              defaultValue={user?.email}
+              defaultValue={user?.email || ""}
               isRequired
               type="email"
               label="آدرس ایمیل"
@@ -98,11 +98,23 @@ const UserForm = ({ user }: Props) => {
 
             <FormErrorMessage errorMessage={errors.email?.message || ""} />
           </div>
+
+          <div className="col-span-1 max-md:col-span-2 w-full">
+            <Input
+              {...register("adminName")}
+              isDisabled={selectedRole === "USER"}
+              defaultValue={user?.adminName || ""}
+              isRequired
+              label="نام ادمین"
+            />
+
+            <FormErrorMessage errorMessage={errors.adminName?.message || ""} />
+          </div>
           <div className="max-md:col-span-2 w-full">
             <Controller
               name="role"
               control={control}
-              defaultValue={user?.role}
+              defaultValue={user?.role ? user?.role : undefined}
               render={({ field: { onChange } }) => (
                 <RoleSelection
                   userRole={user?.role!}
@@ -163,7 +175,7 @@ const UserForm = ({ user }: Props) => {
           </div>
           <div className="col-span-2 w-full">
             <Input
-              defaultValue={user?.companyName!}
+              defaultValue={user?.companyName || ""}
               {...register("companyName")}
               isDisabled={selectedRole === "ADMIN"}
               isRequired={selectedRole === "USER"}
@@ -177,7 +189,7 @@ const UserForm = ({ user }: Props) => {
           </div>
           <div className="col-span-2 w-full">
             <Input
-              defaultValue={user?.companyBranch!}
+              defaultValue={user?.companyBranch || ""}
               {...register("companyBranch")}
               isDisabled={selectedRole === "ADMIN"}
               isRequired={selectedRole === "USER"}
@@ -191,7 +203,7 @@ const UserForm = ({ user }: Props) => {
           </div>
           <div className="col-span-1 max-md:col-span-2 w-full">
             <Input
-              defaultValue={user?.itManager!}
+              defaultValue={user?.itManager || ""}
               {...register("itManager")}
               isDisabled={selectedRole === "ADMIN"}
               isRequired={selectedRole === "USER"}
@@ -203,7 +215,7 @@ const UserForm = ({ user }: Props) => {
           </div>
           <div className="col-span-3 max-md:col-span-2 w-full">
             <Input
-              defaultValue={user?.address!}
+              defaultValue={user?.address || ""}
               {...register("address")}
               isDisabled={selectedRole === "ADMIN"}
               isRequired={selectedRole === "USER"}

@@ -1,7 +1,7 @@
 import getSession from "@/app/libs/getSession";
 import { authorizeAdmin } from "@/app/utils/authorizeRole";
 import prisma from "@/prisma/client";
-import UserForm from "../../components/UserForm";
+import UserForm from "../../createNewUser/UserForm";
 
 interface Props {
   params: { id: string };
