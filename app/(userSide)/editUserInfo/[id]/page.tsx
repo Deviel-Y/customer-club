@@ -1,7 +1,7 @@
 import getSession from "@/app/libs/getSession";
 import { authorizeUser } from "@/app/utils/authorizeRole";
 import prisma from "@/prisma/client";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import EditUserInfoForm from "./EditUserInfoForm";
 
 interface Props {
@@ -11,6 +11,8 @@ interface Props {
 const EditUserInfoPage = async ({ params: { id } }: Props) => {
   const session = await getSession();
   authorizeUser(session!);
+
+  if (id !== session?.user.id) redirect("/");
 
   const user = await prisma.user.findUnique({ where: { id } });
 

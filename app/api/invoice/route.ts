@@ -51,7 +51,7 @@ export const POST = async (request: NextRequest) => {
 
     await prisma.notification.create({
       data: {
-        message: `فاکتوری با شماره ${invoiceNumber} برای شما صادر شد`,
+        message: `فاکتوری با شماره ${invoiceNumber} صادر شد`,
         type: "INFO",
         assignedToUserId,
         assignedToSection: "INVOICE",
