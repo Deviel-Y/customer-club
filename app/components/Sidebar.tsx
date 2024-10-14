@@ -46,12 +46,6 @@ const Sidebar = () => {
         <NewspaperIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />
       ),
     },
-    "ویرایش اطلاعات کاربر": {
-      href: `/editUserInfo/${session?.user.id}`,
-      icon: (
-        <UserCircleIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />
-      ),
-    },
     "پنل مدیریت": {
       href: "/admin",
       icon: <HomeIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />,
@@ -220,7 +214,6 @@ const userLinkLabels: string[] = [
   "فاکتورها",
   "پیش فاکتورها",
   "تیکت های من",
-  "ویرایش اطلاعات کاربر",
 ];
 
 const adminLinkLabels: string[] = [

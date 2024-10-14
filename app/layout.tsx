@@ -48,6 +48,10 @@ export default async function RootLayout({
     },
   });
 
+  const authenticatedUser =
+    session?.user &&
+    (await prisma.user.findUnique({ where: { id: session.user.id } }));
+
   return (
     <html lang="fa" dir="rtl" className="bg-neutral-50">
       <body
@@ -61,6 +65,7 @@ export default async function RootLayout({
           <main className={`flex flex-col ${session && "mr-[66px]"} h-full`}>
             <nav className="w-full">
               <Navbar
+                authenticatedUser={authenticatedUser!}
                 unReadNotificationCount={unReadNotificationCount}
                 notifications={notifications}
               />
