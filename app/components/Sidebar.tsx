@@ -24,66 +24,17 @@ const Sidebar = ({ session }: Props) => {
   const svgControls = useAnimationControls();
   const containerControls = useAnimationControls();
   const [isOpen, setIsOpen] = useState(false);
+
   const handleClick = () => setIsOpen(!isOpen);
+
+  // Function to close the sidebar
+  const handleLinkClick = () => setIsOpen(false);
 
   useEffect(() => {
     isOpen
       ? (containerControls.start("open"), svgControls.start("open"))
       : (containerControls.start("close"), svgControls.start("close"));
   }, [isOpen, svgControls, containerControls]);
-
-  const sidebarDataMap: Record<string, { icon: JSX.Element; href: string }> = {
-    داشبورد: {
-      href: "/",
-      icon: <HomeIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />,
-    },
-    فاکتورها: {
-      href: "/invoice",
-      icon: (
-        <ShoppingBagIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />
-      ),
-    },
-    "پیش فاکتورها": {
-      href: "/porformaInvoice",
-      icon: (
-        <NewspaperIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />
-      ),
-    },
-    "پنل مدیریت": {
-      href: "/admin",
-      icon: <HomeIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />,
-    },
-    "صدور فاکتور": {
-      href: "/admin/invoice-issuing",
-      icon: (
-        <ShoppingBagIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />
-      ),
-    },
-    "صدور پیش فاکتور": {
-      href: "/admin/porformaInvoice-issuing",
-      icon: (
-        <NewspaperIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />
-      ),
-    },
-    "مدیریت کاربران": {
-      href: "/admin/userList",
-      icon: (
-        <UserCircleIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />
-      ),
-    },
-    "تیکت های من": {
-      href: "/ticket",
-      icon: (
-        <TicketIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />
-      ),
-    },
-    "مدیریت تیکت ها": {
-      href: "/admin/ticket",
-      icon: (
-        <TicketIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />
-      ),
-    },
-  };
 
   if (!session?.user) return null;
 
@@ -92,7 +43,7 @@ const Sidebar = ({ session }: Props) => {
       variants={containerVariant}
       animate={containerControls}
       initial="close"
-      className="bg-[#ececec] border-l-1 border-neutral-300  flex flex-col z-50 gap-20 p-3 fixed top-0 right-0 h-screen"
+      className="bg-[#ececec] border-l-1 border-neutral-300 flex flex-col z-50 gap-20 p-3 fixed top-0 right-0 h-screen"
     >
       <div className="flex flex-row w-full justify-between items-center">
         <Image
@@ -102,13 +53,11 @@ const Sidebar = ({ session }: Props) => {
           width={150}
           height={100}
           style={{ height: "auto" }}
-          className={` -translate-x-8
-            ${
-              !isOpen
-                ? "translate-x-96 transition-all delay-100"
-                : "transition-all "
-            }
-          `}
+          className={`-translate-x-8 ${
+            !isOpen
+              ? "translate-x-96 transition-all delay-100"
+              : "transition-all"
+          }`}
         />
         <Button
           className="p-1 flex rounded-full self-start"
@@ -145,6 +94,7 @@ const Sidebar = ({ session }: Props) => {
               key={label}
               href={sidebarDataMap[label].href}
               label={label}
+              onClick={handleLinkClick} // Close sidebar on link click
             >
               {sidebarDataMap[label].icon}
             </SidebarLink>
@@ -156,6 +106,7 @@ const Sidebar = ({ session }: Props) => {
               key={label}
               href={sidebarDataMap[label].href}
               label={label}
+              onClick={handleLinkClick} // Close sidebar on link click
             >
               {sidebarDataMap[label].icon}
             </SidebarLink>
@@ -165,6 +116,55 @@ const Sidebar = ({ session }: Props) => {
       </div>
     </motion.aside>
   );
+};
+
+const sidebarDataMap: Record<string, { icon: JSX.Element; href: string }> = {
+  داشبورد: {
+    href: "/",
+    icon: <HomeIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />,
+  },
+  فاکتورها: {
+    href: "/invoice",
+    icon: (
+      <ShoppingBagIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />
+    ),
+  },
+  "پیش فاکتورها": {
+    href: "/porformaInvoice",
+    icon: (
+      <NewspaperIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />
+    ),
+  },
+  "پنل مدیریت": {
+    href: "/admin",
+    icon: <HomeIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />,
+  },
+  "صدور فاکتور": {
+    href: "/admin/invoice-issuing",
+    icon: (
+      <ShoppingBagIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />
+    ),
+  },
+  "صدور پیش فاکتور": {
+    href: "/admin/porformaInvoice-issuing",
+    icon: (
+      <NewspaperIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />
+    ),
+  },
+  "مدیریت کاربران": {
+    href: "/admin/userList",
+    icon: (
+      <UserCircleIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />
+    ),
+  },
+  "تیکت های من": {
+    href: "/ticket",
+    icon: <TicketIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />,
+  },
+  "مدیریت تیکت ها": {
+    href: "/admin/ticket",
+    icon: <TicketIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-8" />,
+  },
 };
 
 export default Sidebar;
