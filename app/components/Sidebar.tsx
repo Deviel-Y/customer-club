@@ -164,9 +164,7 @@ const Sidebar = () => {
             </SidebarLink>
           ))}
 
-        <div className="cursor-pointer bottom-3 overflow-clip rounded flex stroke-[0.75px] hover:stroke-neutral-100 stroke-neutral-600 text-neutral-600 place-items-center gap-3 hover:bg-red-500 transition-all duration-[10ms]">
-          <SignOutConfirmation />
-        </div>
+        <SignOutConfirmation />
       </div>
     </motion.aside>
   );

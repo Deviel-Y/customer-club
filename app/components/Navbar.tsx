@@ -52,7 +52,7 @@ const Navbar = ({ notifications, unReadNotificationCount }: Props) => {
           src={session.user.image || userPlaceholder.src}
           alt="Profile Avater"
           fallback="?"
-          className="hover:scale-[1.5] transform-gpu transition-all cursor-pointer scale-[1.4]"
+          className="scale-[1.4]"
           color="primary"
         />
       </div>

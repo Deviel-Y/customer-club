@@ -1,6 +1,7 @@
 import { PowerIcon } from "@heroicons/react/24/outline";
 import {
   Button,
+  Link,
   Modal,
   ModalBody,
   ModalContent,
@@ -16,13 +17,18 @@ export const SignOutConfirmation = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   return (
-    <div>
-      <Button color="danger" className="bg-transparent p-0" onPress={onOpen}>
-        <PowerIcon className="stroke-inherit stroke-[0.75px] min-w-8 w-9  ps-1" />
-        <p className="whitespace-nowrap text-inherit tracking-wide text-neutral-600 text-[16px]">
+    <div className="w-full h-10 cursor-pointer bottom-3 flex overflow-clip rounded place-items-center gap-3 hover:bg-red-500 transition-all duration-[10ms]">
+      <Link
+        color="danger"
+        className="bg-transparent p-0 group w-full h-full group"
+        onPress={onOpen}
+      >
+        <PowerIcon className="transition-all stroke-[0.90px] min-w-[35px] w-[40px] ps-[4px] self-center group-hover:stroke-neutral-100 stroke-neutral-600" />
+        <p className="transition-all whitespace-nowrap text-inherit tracking-wide w-full h-full translate-y-2 ms-3 text-neutral-600 group-hover:text-neutral-100">
           خروج
         </p>
-      </Button>
+      </Link>
+
       <Modal backdrop="blur" isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
           {(onClose) => (
