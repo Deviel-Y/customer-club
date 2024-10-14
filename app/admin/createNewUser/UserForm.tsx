@@ -48,7 +48,7 @@ const UserForm = ({ user }: Props) => {
 
     const promise = user
       ? axios
-          .patch(`/api/userAuth/${user.id}`, {
+          .patch(`/api/userAuth/editUser/${user.id}`, {
             email: email?.trim(),
             companyName: companyName?.trim(),
             ...data,

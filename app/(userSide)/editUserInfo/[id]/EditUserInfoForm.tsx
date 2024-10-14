@@ -37,12 +37,13 @@ const EditUserInfoForm = ({ user }: Props) => {
         }
 
         const promise = axios
-          .patch(`/api/userAuth/${user.id}`, {
+          .patch(`/api/userAuth/editUser/${user.id}`, {
             ...data,
             role: user?.role,
             companyName: user?.companyName,
             address: user?.address,
             email: user?.email,
+            adminName: null,
           })
           .then(() => {
             router.push("/");

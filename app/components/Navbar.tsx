@@ -11,6 +11,7 @@ import {
 import { Notification, User } from "@prisma/client";
 import { Session } from "next-auth";
 import { usePathname, useRouter } from "next/navigation";
+import { useState } from "react";
 import { getHeadingLabel } from "../utils/getHeadingLabel ";
 import ShowNotificationButton from "./ShowNotificationButton";
 
@@ -28,9 +29,10 @@ const Navbar = ({
   session,
 }: Props) => {
   const router = useRouter();
-
   const path = usePathname();
   const heading = getHeadingLabel(path);
+
+  const [isOpen, setIsOpen] = useState(false);
 
   if (!session) return null;
 
@@ -46,7 +48,7 @@ const Navbar = ({
           notifications={notifications}
         />
 
-        <Popover size="lg">
+        <Popover size="lg" isOpen={isOpen} onOpenChange={setIsOpen}>
           <PopoverTrigger>
             <Avatar
               src={session?.user?.image || userPlaceholder?.src}
@@ -76,13 +78,15 @@ const Navbar = ({
 
               <div className="flex flex-col">
                 <Button
-                  onPress={() =>
+                  onPress={() => {
+                    setIsOpen(false);
+
                     router.push(
                       authenticatedUser?.role === "ADMIN"
-                        ? "/admin/notification"
+                        ? `/admin/editProfile/${authenticatedUser.id}`
                         : `/editUserInfo//${authenticatedUser?.id}`
-                    )
-                  }
+                    );
+                  }}
                   color="primary"
                 >
                   ویرایش اطلاعات کاربر
