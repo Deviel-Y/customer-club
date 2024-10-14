@@ -1,5 +1,6 @@
 import { literal, z } from "zod";
 
+export type AdminSide_userSchameType = z.infer<typeof adminSide_userSchame>;
 export type UserSide_userSchameType = z.infer<typeof userSide_userSchame>;
 export type FullUserSchameType = z.infer<typeof fullUserSchame>;
 export type SignInUserSchemaType = z.infer<typeof signInUserSchema>;
@@ -7,6 +8,36 @@ export type InvoiceSchemaType = z.infer<typeof invoiceSchema>;
 export type PorInvoiceSchemaType = z.infer<typeof porInvoiceSchema>;
 export type TicketSchemaType = z.infer<typeof ticketSchema>;
 export type TicketMessageSchemaType = z.infer<typeof ticketMessageSchema>;
+
+export const adminSide_userSchame = z
+  .object({
+    currentPassword: z
+      .string()
+      .min(8, { message: "گذرواژه باید بیشتر از 8 کاراکتر باشد" })
+      .max(120, { message: "گذرواژه باید کمتر از 120 کاراکتر باشد" })
+      .optional()
+      .or(literal("")),
+    newPassword: z
+      .string()
+      .min(8, { message: "گذرواژه باید بیشتر از 8 کاراکتر باشد" })
+      .max(120, { message: "گذرواژه باید کمتر از 120 کاراکتر باشد" })
+      .regex(/\d.*\d/, { message: "گذرواژه باید حداقل شامل دو عدد باشد" })
+      .optional()
+      .or(literal("")),
+    confirmPassword: z.string().optional().or(literal("")),
+    adminName: z
+      .string()
+      .max(50, { message: "نام ادمین باید کمتر از 50 کاراکتر باشد" })
+      .min(1, { message: "فیلد مسئول الزامی می باشد" })
+      .or(literal("")),
+  })
+  .refine(
+    ({ newPassword, confirmPassword }) => newPassword === confirmPassword,
+    {
+      message: "گذرواژه ها با یکدیگر مطابقت ندارند",
+      path: ["confirmPassword"],
+    }
+  );
 
 export const userSide_userSchame = z
   .object({
@@ -49,7 +80,7 @@ export const fullUserSchame = z
       .min(6)
       .max(50, { message: "ایمیل باید کمتر از 50 کاراکتر باشد" })
       .optional(),
-    adminName: z.string().min(1).max(50).or(literal("")),
+    adminName: z.string().min(1).max(50).optional().nullable(),
     currentPassword: z
       .string()
       .min(5, { message: "گذرواژه باید بیشتر از 5 کاراکتر باشد" })
@@ -67,19 +98,23 @@ export const fullUserSchame = z
     companyName: z
       .string()
       .max(100, { message: "نام سازمان باید کمتر از 100 کاراکتر باشد" })
-      .optional(),
+      .optional()
+      .nullable(),
     companyBranch: z
       .string()
       .max(50, { message: "نام شعبه باید کمتر از 50 کاراکتر باشد" })
-      .optional(),
+      .optional()
+      .nullable(),
     itManager: z
       .string()
       .max(50, { message: "نام مسئول باید کمتر از 50 کاراکتر باشد" })
-      .optional(),
+      .optional()
+      .nullable(),
     address: z
       .string()
       .max(200, { message: "آدرس باید کمتر از 200 کاراکتر باشد" })
-      .optional(),
+      .optional()
+      .nullable(),
     image: z.string().min(1).optional(),
     role: z.enum(["USER", "ADMIN"], {
       errorMap: () => ({ message: "تعیین سطح درسترسی الزامی است" }),
