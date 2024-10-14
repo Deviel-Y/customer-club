@@ -9,7 +9,7 @@ import {
   PopoverTrigger,
 } from "@nextui-org/react";
 import { Notification, User } from "@prisma/client";
-import { useSession } from "next-auth/react";
+import { Session } from "next-auth";
 import { usePathname, useRouter } from "next/navigation";
 import { getHeadingLabel } from "../utils/getHeadingLabel ";
 import ShowNotificationButton from "./ShowNotificationButton";
@@ -18,15 +18,17 @@ interface Props {
   notifications: Notification[];
   unReadNotificationCount: number;
   authenticatedUser: User;
+  session: Session;
 }
 
 const Navbar = ({
   notifications,
   unReadNotificationCount,
   authenticatedUser,
+  session,
 }: Props) => {
   const router = useRouter();
-  const { data: session } = useSession();
+
   const path = usePathname();
   const heading = getHeadingLabel(path);
 

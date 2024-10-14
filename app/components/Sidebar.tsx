@@ -10,14 +10,17 @@ import {
 } from "@heroicons/react/24/outline";
 import { Button, Image } from "@nextui-org/react";
 import { motion, useAnimationControls } from "framer-motion";
-import { useSession } from "next-auth/react";
+import { Session } from "next-auth";
 import NextImage from "next/image";
 import { useEffect, useState } from "react";
 import SidebarLink from "./SidebarLink";
 import { SignOutConfirmation } from "./SignoutConfirmation";
 
-const Sidebar = () => {
-  const { data: session } = useSession();
+interface Props {
+  session: Session;
+}
+
+const Sidebar = ({ session }: Props) => {
   const svgControls = useAnimationControls();
   const containerControls = useAnimationControls();
   const [isOpen, setIsOpen] = useState(false);

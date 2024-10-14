@@ -59,12 +59,13 @@ export default async function RootLayout({
       >
         <AllProviders>
           <div>
-            <Sidebar />
+            <Sidebar session={session!} />
           </div>
 
           <main className={`flex flex-col ${session && "mr-[66px]"} h-full`}>
             <nav className="w-full">
               <Navbar
+                session={session!}
                 authenticatedUser={authenticatedUser!}
                 unReadNotificationCount={unReadNotificationCount}
                 notifications={notifications}
