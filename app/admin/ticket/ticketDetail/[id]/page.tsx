@@ -14,19 +14,21 @@ const TicketDetailPage = async ({ params: { id } }: Props) => {
   const session = await getSession();
   authorizeAdmin(session!);
 
-  const ticket = await prisma.ticket.findUnique({
-    where: { id },
-  });
+  const [ticket, ticketMessages, users] = await Promise.all([
+    prisma.ticket.findUnique({
+      where: { id },
+    }),
+
+    prisma.ticketMessage.findMany({
+      where: {
+        assignetoTicketId: id,
+      },
+    }),
+
+    prisma.user.findMany(),
+  ]);
 
   if (!ticket) notFound();
-
-  const ticketMessages = await prisma.ticketMessage.findMany({
-    where: {
-      assignetoTicketId: id,
-    },
-  });
-
-  const users = await prisma.user.findMany();
 
   return (
     <div className="flex flex-col items-start w-full mt-5 p-5">

@@ -28,36 +28,39 @@ const InvoiceIssuingPage = async ({
   authorizeAdmin(session!);
 
   const currentPage = pageNumber || 1;
-  const pageSize: number = 6;
-  const invoiceCount: number = await prisma.invoice.count({
-    where: {
-      description: { contains: description },
-      invoiceNumber: { contains: number },
-      organization: { contains: organization },
-      organizationBranch: { contains: organizationBranch },
-    },
-  });
 
-  const adminSideInvoiceList = await prisma.invoice.findMany({
-    where: {
-      description: { contains: description },
-      invoiceNumber: { contains: number },
-      organization: { contains: organization },
-      organizationBranch: { contains: organizationBranch },
-    },
-    take: pageSize,
-    skip: (currentPage - 1) * pageSize,
-    orderBy: { createdAt: "desc" },
-  });
+  const [invoiceCount, adminSideInvoiceList, adminSideAllInvoices] =
+    await Promise.all([
+      prisma.invoice.count({
+        where: {
+          description: { contains: description },
+          invoiceNumber: { contains: number },
+          organization: { contains: organization },
+          organizationBranch: { contains: organizationBranch },
+        },
+      }),
 
-  const adminSideAllInvoices = await prisma.invoice.findMany({
-    where: {
-      description: { contains: description },
-      organization: { contains: organization },
-      organizationBranch: { contains: organizationBranch },
-      invoiceNumber: { contains: number },
-    },
-  });
+      prisma.invoice.findMany({
+        where: {
+          description: { contains: description },
+          invoiceNumber: { contains: number },
+          organization: { contains: organization },
+          organizationBranch: { contains: organizationBranch },
+        },
+        take: pageSize,
+        skip: (currentPage - 1) * pageSize,
+        orderBy: { createdAt: "desc" },
+      }),
+
+      prisma.invoice.findMany({
+        where: {
+          description: { contains: description },
+          organization: { contains: organization },
+          organizationBranch: { contains: organizationBranch },
+          invoiceNumber: { contains: number },
+        },
+      }),
+    ]);
 
   return (
     <div className="flex flex-col gap-1 px-5 py-2 w-full">
@@ -81,3 +84,5 @@ const InvoiceIssuingPage = async ({
 };
 
 export default InvoiceIssuingPage;
+
+const pageSize: number = 6;

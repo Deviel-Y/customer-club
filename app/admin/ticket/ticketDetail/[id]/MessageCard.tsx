@@ -45,7 +45,7 @@ const MessageCard = ({ ticketMessages, users, sessionId }: Props) => {
                 : "flex-row-reverse"
             } items-center justify-between`}
           >
-            <div className="">
+            <div>
               <p>{messageIssuer?.companyName || messageIssuer.adminName}</p>
 
               <p

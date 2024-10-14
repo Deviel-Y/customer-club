@@ -1,5 +1,4 @@
 import prisma from "@/prisma/client";
-import { Notification } from "@prisma/client";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import AllProviders from "./AllProviders";
@@ -29,28 +28,31 @@ export default async function RootLayout({
 }>) {
   const session = await getSession();
 
-  const notifications: Notification[] = await prisma.notification.findMany({
-    where: {
-      isRead: false,
-      assignedToUserId:
-        session?.user.role === "USER" ? session?.user.id : undefined,
-    },
+  const [notifications, unReadNotificationCount, authenticatedUser] =
+    await Promise.all([
+      prisma.notification.findMany({
+        where: {
+          isRead: false,
+          assignedToUserId:
+            session?.user.role === "USER" ? session?.user.id : undefined,
+        },
 
-    orderBy: { createdAt: "desc" },
-    take: 5,
-  });
+        orderBy: { createdAt: "desc" },
+        take: 5,
+      }),
 
-  const unReadNotificationCount: number = await prisma.notification.count({
-    where: {
-      isRead: false,
-      assignedToUserId:
-        session?.user.role === "ADMIN" ? undefined : session?.user.id,
-    },
-  });
+      prisma.notification.count({
+        where: {
+          isRead: false,
+          assignedToUserId:
+            session?.user.role === "ADMIN" ? undefined : session?.user.id,
+        },
+      }),
 
-  const authenticatedUser =
-    session?.user &&
-    (await prisma.user.findUnique({ where: { id: session.user.id } }));
+      session?.user
+        ? prisma.user.findUnique({ where: { id: session?.user.id } })
+        : undefined,
+    ]);
 
   return (
     <html lang="fa" dir="rtl" className="bg-neutral-50">

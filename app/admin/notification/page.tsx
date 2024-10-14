@@ -47,36 +47,38 @@ const AdminNotificationListPage = async ({
 
   const currentPage = pageNumber || 1;
 
-  const notification = await prisma.notification.findMany({
-    where: {
-      assignedToSection: { equals: notificationSection },
-      user: {
-        companyBranch: { contains: companyBranch },
-        companyName: { contains: companyName },
+  const [notification, notificationCount] = await Promise.all([
+    prisma.notification.findMany({
+      where: {
+        assignedToSection: { equals: notificationSection },
+        user: {
+          companyBranch: { contains: companyBranch },
+          companyName: { contains: companyName },
+        },
+        message: { contains: content },
+        type: { equals: notificationType },
+        isRead: isReadNotification,
       },
-      message: { contains: content },
-      type: { equals: notificationType },
-      isRead: isReadNotification,
-    },
 
-    include: { user: true },
-    take: pageSize,
-    skip: (currentPage - 1) * pageSize,
-    orderBy: { createdAt: "desc" },
-  });
+      include: { user: true },
+      take: pageSize,
+      skip: (currentPage - 1) * pageSize,
+      orderBy: { createdAt: "desc" },
+    }),
 
-  const notificationCount = await prisma.notification.count({
-    where: {
-      assignedToSection: { equals: notificationSection },
-      user: {
-        companyBranch: { contains: companyBranch },
-        companyName: { contains: companyName },
+    prisma.notification.count({
+      where: {
+        assignedToSection: { equals: notificationSection },
+        user: {
+          companyBranch: { contains: companyBranch },
+          companyName: { contains: companyName },
+        },
+        message: { contains: content },
+        type: { equals: notificationType },
+        isRead: isReadNotification,
       },
-      message: { contains: content },
-      type: { equals: notificationType },
-      isRead: isReadNotification,
-    },
-  });
+    }),
+  ]);
 
   return (
     <div className="flex flex-col px-5 py-2 w-full">

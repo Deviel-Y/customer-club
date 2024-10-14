@@ -35,26 +35,28 @@ const TicketIssuingPage = async ({
   const currentPage = pageNumber || 1;
   const pageSize: number = 6;
 
-  const tickets = await prisma.ticket.findMany({
-    where: {
-      title: { contains: title },
-      category: { equals: categoryFilterEnum },
-      status: { equals: statusFilterEnum },
+  const [tickets, ticketCountCount] = await Promise.all([
+    prisma.ticket.findMany({
+      where: {
+        title: { contains: title },
+        category: { equals: categoryFilterEnum },
+        status: { equals: statusFilterEnum },
 
-      issuerId: session?.user.id,
-    },
-    take: pageSize,
-    skip: (currentPage - 1) * pageSize,
-    orderBy: { createdAt: "desc" },
-  });
+        issuerId: session?.user.id,
+      },
+      take: pageSize,
+      skip: (currentPage - 1) * pageSize,
+      orderBy: { createdAt: "desc" },
+    }),
 
-  const ticketCountCount: number = await prisma.ticket.count({
-    where: {
-      category: { equals: categoryFilterEnum },
-      title: { contains: title },
-      status: statusFilterEnum,
-    },
-  });
+    prisma.ticket.count({
+      where: {
+        category: { equals: categoryFilterEnum },
+        title: { contains: title },
+        status: statusFilterEnum,
+      },
+    }),
+  ]);
 
   return (
     <div className="flex flex-col gap-5 px-5 py-2 w-full">

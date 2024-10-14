@@ -1,5 +1,5 @@
 import prisma from "@/prisma/client";
-import { PorformaInvoice, Status } from "@prisma/client";
+import { Status } from "@prisma/client";
 import ActionBar from "../../components/ActionBar";
 import getSession from "../../libs/getSession";
 import { authorizeUser } from "../../utils/authorizeRole";
@@ -20,6 +20,10 @@ const PorformaInvoicePage = async ({
   const session = await getSession();
   authorizeUser(session!);
 
+  const currentPage = pageNumber || 1;
+  const statusFilterEnum =
+    statusFilter === "ALL" ? undefined : (statusFilter as Status);
+
   await prisma.porformaInvoice.updateMany({
     where: {
       expiredAt: { lt: new Date(new Date().setHours(0, 0, 0, 0)) },
@@ -30,21 +34,16 @@ const PorformaInvoicePage = async ({
     },
   });
 
-  const statusFilterEnum =
-    statusFilter === "ALL" ? undefined : (statusFilter as Status);
+  const [porInvoiceCount, userPorInvoice] = await Promise.all([
+    prisma.porformaInvoice.count({
+      where: {
+        description: { contains: description },
+        porformaInvoiceNumber: { contains: number },
+        status: statusFilterEnum,
+      },
+    }),
 
-  const currentPage = pageNumber || 1;
-
-  const porInvoiceCount: number = await prisma.porformaInvoice.count({
-    where: {
-      description: { contains: description },
-      porformaInvoiceNumber: { contains: number },
-      status: statusFilterEnum,
-    },
-  });
-
-  const userPorInvoice: PorformaInvoice[] =
-    await prisma.porformaInvoice.findMany({
+    prisma.porformaInvoice.findMany({
       where: {
         assignedToUserId: session?.user.id,
         porformaInvoiceNumber: { contains: number },
@@ -54,7 +53,8 @@ const PorformaInvoicePage = async ({
       take: pageSize,
       skip: (currentPage - 1) * pageSize,
       orderBy: { createdAt: "desc" },
-    });
+    }),
+  ]);
 
   return (
     <div className="flex flex-col gap-5 max-sm:gap-0 p-10 max-sm:p-5 max-sm:-translate-y-12 w-full">

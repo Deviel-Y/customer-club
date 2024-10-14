@@ -1,6 +1,5 @@
 import InvoiceSummery from "@/app/components/InvoiceSummery";
 import prisma from "@/prisma/client";
-import { Invoice } from "@prisma/client";
 import ActionBar from "../../components/ActionBar";
 import getSession from "../../libs/getSession";
 import { authorizeUser } from "../../utils/authorizeRole";
@@ -22,30 +21,31 @@ const InvoicePage = async ({
 
   const currentPage = pageNumber || 1;
 
-  const invoiceCount: number = await prisma.invoice.count({
-    where: {
-      description: { contains: description },
-      invoiceNumber: { contains: number },
-    },
-  });
+  const [invoiceCount, userInvoice, userAllInvoice] = await Promise.all([
+    prisma.invoice.count({
+      where: {
+        description: { contains: description },
+        invoiceNumber: { contains: number },
+      },
+    }),
+    prisma.invoice.findMany({
+      where: {
+        assignedToUserId: session?.user.id,
+        invoiceNumber: { contains: number },
+        description: { contains: description },
+      },
+      take: pageSize,
+      skip: (currentPage - 1) * pageSize,
+    }),
 
-  const userInvoice: Invoice[] = await prisma.invoice.findMany({
-    where: {
-      assignedToUserId: session?.user.id,
-      invoiceNumber: { contains: number },
-      description: { contains: description },
-    },
-    take: pageSize,
-    skip: (currentPage - 1) * pageSize,
-  });
-
-  const userAllInvoice: Invoice[] = await prisma.invoice.findMany({
-    where: {
-      assignedToUserId: session?.user.id,
-      invoiceNumber: { contains: number },
-      description: { contains: description },
-    },
-  });
+    prisma.invoice.findMany({
+      where: {
+        assignedToUserId: session?.user.id,
+        invoiceNumber: { contains: number },
+        description: { contains: description },
+      },
+    }),
+  ]);
 
   return (
     <div className="flex flex-col gap-5 max-sm:gap-0 p-10 max-sm:p-5 max-sm:-translate-y-12 w-full">

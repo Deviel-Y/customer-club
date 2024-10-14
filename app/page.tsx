@@ -7,23 +7,25 @@ const HomePage = async () => {
   const session = await getSession();
   authorizeUser(session!);
 
-  const invoiceCount = await prisma.invoice.count({
-    where: {
-      assignedToUserId: session?.user.id,
-    },
-  });
+  const [invoiceCount, porInvoiceCount, userTicketCount] = await Promise.all([
+    prisma.invoice.count({
+      where: {
+        assignedToUserId: session?.user.id,
+      },
+    }),
 
-  const porInvoiceCount = await prisma.porformaInvoice.count({
-    where: {
-      assignedToUserId: session?.user.id,
-    },
-  });
+    prisma.porformaInvoice.count({
+      where: {
+        assignedToUserId: session?.user.id,
+      },
+    }),
 
-  const userTicketCount = await prisma.ticket.count({
-    where: {
-      issuerId: session?.user.id,
-    },
-  });
+    prisma.ticket.count({
+      where: {
+        issuerId: session?.user.id,
+      },
+    }),
+  ]);
 
   const dashboardCardInfo: { label: string; amount: number }[] = [
     { label: "userInvoice", amount: invoiceCount },

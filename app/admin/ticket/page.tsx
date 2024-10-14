@@ -42,35 +42,36 @@ const AdminTicketIssuingPage = async ({
       : (statusFilter as TicketStatus);
 
   const currentPage = pageNumber || 1;
-  const pageSize: number = 6;
 
-  const tickets = await prisma.ticket.findMany({
-    where: {
-      title: { contains: title },
-      category: { equals: categoryFilterEnum },
-      User: {
-        companyName: { contains: companyName },
-        companyBranch: { contains: companyBranch },
+  const [tickets, ticketCountCount] = await Promise.all([
+    prisma.ticket.findMany({
+      where: {
+        title: { contains: title },
+        category: { equals: categoryFilterEnum },
+        User: {
+          companyName: { contains: companyName },
+          companyBranch: { contains: companyBranch },
+        },
+        status: { equals: statusFilterEnum },
       },
-      status: { equals: statusFilterEnum },
-    },
-    take: pageSize,
-    skip: (currentPage - 1) * pageSize,
-    orderBy: { createdAt: "desc" },
-    include: { User: true },
-  });
+      take: pageSize,
+      skip: (currentPage - 1) * pageSize,
+      orderBy: { createdAt: "desc" },
+      include: { User: true },
+    }),
 
-  const ticketCountCount: number = await prisma.ticket.count({
-    where: {
-      category: { equals: categoryFilterEnum },
-      title: { contains: title },
-      User: {
-        companyName: { contains: companyName },
-        companyBranch: { contains: companyBranch },
+    prisma.ticket.count({
+      where: {
+        category: { equals: categoryFilterEnum },
+        title: { contains: title },
+        User: {
+          companyName: { contains: companyName },
+          companyBranch: { contains: companyBranch },
+        },
+        status: statusFilterEnum,
       },
-      status: statusFilterEnum,
-    },
-  });
+    }),
+  ]);
 
   return (
     <div className="flex flex-col gap-5 px-5 py-2 w-full">
@@ -85,3 +86,5 @@ const AdminTicketIssuingPage = async ({
 };
 
 export default AdminTicketIssuingPage;
+
+const pageSize: number = 6;

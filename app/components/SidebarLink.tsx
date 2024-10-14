@@ -16,7 +16,7 @@ const SidebarLink = ({ children, label, href }: Props) => {
       href={href}
       className={`${
         pathName === href
-          ? "bg-neutral-900/30 stroke-neutral-50 text-neutral-50"
+          ? "bg-neutral-900/30 stroke-neutral-100 text-neutral-100"
           : undefined
       } cursor-pointer overflow-clip p-1 rounded flex stroke-[0.75px] hover:stroke-neutral-100  stroke-neutral-600 text-neutral-600 hover:text-neutral-100 place-items-center gap-3 hover:bg-neutral-700/30 transition-colors duration-100`}
     >

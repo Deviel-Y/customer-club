@@ -7,16 +7,21 @@ const AdminPage = async () => {
   const session = await getSession();
   authorizeAdmin(session!);
 
-  const invoiceCount: number = await prisma.invoice.count();
-  const proFormaInvoiceCount: number = await prisma.porformaInvoice.count();
-  const userCount: number = await prisma.user.count({
-    where: { role: "USER" },
-  });
-  const adminTicketCount: number = await prisma.ticket.count({
-    where: {
-      status: { in: ["INVESTIGATING", "OPEN"] },
-    },
-  });
+  const [invoiceCount, proFormaInvoiceCount, userCount, adminTicketCount] =
+    await Promise.all([
+      prisma.invoice.count(),
+
+      prisma.porformaInvoice.count(),
+
+      prisma.user.count({
+        where: { role: "USER" },
+      }),
+      prisma.ticket.count({
+        where: {
+          status: { in: ["INVESTIGATING", "OPEN"] },
+        },
+      }),
+    ]);
 
   const dashboardCardInfo: { label: string; amount: number }[] = [
     { label: "adminUser", amount: userCount },
