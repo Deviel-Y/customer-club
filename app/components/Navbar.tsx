@@ -11,8 +11,7 @@ import {
 import { Notification, User } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { removeLastSegmentURL } from "../utils/removeLastSegmentURL";
+import { getHeadingLabel } from "../utils/getHeadingLabel ";
 import ShowNotificationButton from "./ShowNotificationButton";
 
 interface Props {
@@ -29,29 +28,14 @@ const Navbar = ({
   const router = useRouter();
   const { data: session } = useSession();
   const path = usePathname();
-  const [pathName, setPathName] = useState<string>("");
-
-  useEffect(() => {
-    if (
-      path.includes("/ticket/ticketDetail") ||
-      path.includes("/admin/ticket/ticketDetail") ||
-      path.includes("/admin/editUser") ||
-      path.includes("/editUserInfo") ||
-      path.includes("/admin/invoice-issuing/editInvoiceInfo") ||
-      path.includes("/admin/porformaInvoice-issuing/editPorInvoiceInfo")
-    ) {
-      setPathName(removeLastSegmentURL(path));
-    } else {
-      setPathName(path);
-    }
-  }, [path, pathName]);
+  const heading = getHeadingLabel(path);
 
   if (!session) return null;
 
   return (
     <div className="flex flex-row justify-between items-center px-5 py-2">
       <h1 className="text-[40px] max-md:text-[30px] max-sm:text-[23px]">
-        {headingMapping[pathName].label}
+        {heading}
       </h1>
 
       <div className="flex flex-row gap-5 justify-center items-center">
@@ -63,7 +47,7 @@ const Navbar = ({
         <Popover size="lg">
           <PopoverTrigger>
             <Avatar
-              src={session.user.image || userPlaceholder.src}
+              src={session?.user?.image || userPlaceholder?.src}
               alt="Profile Avater"
               fallback="?"
               size="lg"
@@ -75,7 +59,7 @@ const Navbar = ({
           <PopoverContent>
             <div className="flex flex-col gap-5 p-1">
               <div className="flex flex-col">
-                <p className="text-gray-600">{authenticatedUser.email}</p>
+                <p className="text-gray-600">{authenticatedUser?.email}</p>
                 <p className="text-lg">
                   {authenticatedUser?.role === "ADMIN"
                     ? authenticatedUser?.adminName
@@ -111,31 +95,3 @@ const Navbar = ({
 };
 
 export default Navbar;
-
-const headingMapping: Record<string, { label: string }> = {
-  "/": { label: "داشبورد" },
-  "/userAuth/login": { label: "داشبورد" },
-  "/invoice": { label: "فاکتورها" },
-  "/porformaInvoice": { label: "پیش فاکتورها" },
-  "/editUserInfo": { label: "ویرایش اطلاعات کاربر" },
-  "/ticket": { label: "تیکت های من" },
-  "/ticket/ticketDetail": { label: "جزئیات تیکت" },
-  "/notification": { label: "لیست اعلان ها" },
-  "/admin/notification": { label: "لیست اعلان ها" },
-  "/admin": { label: "پنل مدیریت" },
-  "/admin/invoice-issuing": { label: "صدور فاکتور" },
-  "/admin/porformaInvoice-issuing": { label: "صدور پیش فاکتور" },
-  "/admin/userList": { label: "مدیریت کاربران" },
-  "/admin/createNewUser": { label: "تعریف کاربر جدید" },
-  "/admin/editUser": { label: "ویرایش کاربر" },
-  "/admin/invoice-issuing/createNewInvoice": { label: "صدور فاکتور جدید" },
-  "/admin/invoice-issuing/editInvoiceInfo": { label: "ویرایش فاکتور" },
-  "/admin/porformaInvoice-issuing/createNewPorInvoice": {
-    label: "صدور پیش فاکتور جدید",
-  },
-  "/admin/porformaInvoice-issuing/editPorInvoiceInfo": {
-    label: "ویرایش پیش فاکتور",
-  },
-  "/admin/ticket": { label: "مدیریت تیکت ها" },
-  "/admin/ticket/ticketDetail": { label: "جزئیات تیکت" },
-};
