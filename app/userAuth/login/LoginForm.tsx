@@ -6,7 +6,7 @@ import {
 } from "@/app/libs/validationSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Card, Input } from "@nextui-org/react";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -19,6 +19,7 @@ import {
 import { BsKey } from "react-icons/bs";
 
 const LoginForm = () => {
+  const { data: session } = useSession();
   const router = useRouter();
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [isLoading, setLoading] = useState(false);
@@ -50,7 +51,7 @@ const LoginForm = () => {
                 password,
                 redirect: false,
               }).then(() => {
-                router.push("/");
+                router.push(session?.user.role === "ADMIN" ? "/admin" : "/");
                 router.refresh();
               });
         })}

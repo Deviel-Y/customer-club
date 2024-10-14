@@ -13,6 +13,7 @@ import axios from "axios";
 import moment from "moment-jalaali";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { AiOutlineNotification } from "react-icons/ai";
 import {
   HiOutlineChatAlt2,
@@ -33,10 +34,12 @@ const ShowNotificationButton = ({
   const router = useRouter();
   const { data: session } = useSession();
 
+  const [isOpen, setIsOpen] = useState(false);
+
   if (!notifications) return null;
 
   return (
-    <Dropdown type="listbox">
+    <Dropdown type="listbox" isOpen={isOpen} onOpenChange={setIsOpen}>
       <DropdownTrigger>
         <Button
           color="warning"
@@ -66,15 +69,17 @@ const ShowNotificationButton = ({
         bottomContent={
           <div className="flex flex-row justify-center items-center mt-4 w-full">
             <Button
-              onPress={() =>
+              onPress={() => {
+                setIsOpen(false);
+
                 router.push(
                   `${
                     session?.user.role === "ADMIN"
                       ? "/admin/notification"
                       : "/notification"
                   }`
-                )
-              }
+                );
+              }}
               variant="light"
               className="w-full"
               size="sm"
