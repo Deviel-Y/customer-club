@@ -1,5 +1,6 @@
 "use client";
 
+import userPlaceholder from "@/public/user-profile-placeholder.jpg";
 import { Avatar } from "@nextui-org/react";
 import { Notification } from "@prisma/client";
 import { useSession } from "next-auth/react";
@@ -48,11 +49,10 @@ const Navbar = ({ notifications, unReadNotificationCount }: Props) => {
         />
 
         <Avatar
-          src={session.user.image || undefined}
+          src={session.user.image || userPlaceholder.src}
           alt="Profile Avater"
           fallback="?"
-          size="lg"
-          isBordered
+          className="hover:scale-[1.5] transform-gpu transition-all cursor-pointer scale-[1.4]"
           color="primary"
         />
       </div>
