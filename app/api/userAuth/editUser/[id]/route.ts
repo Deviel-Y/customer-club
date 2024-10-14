@@ -116,12 +116,12 @@ export const PATCH = async (
         email: email?.toLocaleLowerCase()!,
         hashedPassword,
         role,
-        adminName: role === "ADMIN" ? adminName : undefined,
         address: role === "ADMIN" ? null : address,
         companyName: role === "ADMIN" ? null : companyName,
         companyBranch: role === "ADMIN" ? null : companyBranch,
         itManager: role === "ADMIN" ? null : itManager,
         image,
+        adminName: role === "ADMIN" ? adminName : null,
       },
     });
     return NextResponse.json(updatedUser);

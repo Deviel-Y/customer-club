@@ -33,12 +33,14 @@ const EditAdminProfileForm = ({ user }: Props) => {
         if (
           data.currentPassword &&
           (!data.newPassword || !data.confirmPassword)
-        ) {
+        )
           return toast.error("برای تغییر گذرواژه، گذرواژه جدید را وارد کنید");
-        }
+
+        if (!data.adminName)
+          return toast.error("وارد کردن نام ادمین الزامی است");
 
         const promise = axios
-          .patch(`/api/userAuth/${user.id}`, {
+          .patch(`/api/userAuth/editAdmin/${user.id}`, {
             ...data,
             role: user?.role,
             companyName: user?.companyName,
