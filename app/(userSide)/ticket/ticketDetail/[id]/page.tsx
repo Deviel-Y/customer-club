@@ -41,7 +41,6 @@ const TicketDetailPage = async ({ params: { id } }: Props) => {
         <MessageCard
           sessionId={session?.user.id!}
           key={message.id}
-          ticket={ticket!}
           ticketMessages={message}
           users={users}
         />

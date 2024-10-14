@@ -44,6 +44,16 @@ const InvoiceForm = ({ Userlist, invoice }: Props) => {
   const [price, setPrice] = useState<string>(invoice?.price?.toString() || "0");
   const [isInputsManual, setIsInputsManual] = useState<boolean>(false);
 
+  const {
+    register,
+    handleSubmit,
+    control,
+    setValue,
+    formState: { errors },
+  } = useForm<InvoiceSchemaType>({
+    resolver: zodResolver(invoiceSchema),
+  });
+
   useEffect(() => {
     if (!isInputsManual) {
       const calculatedTax = (parseInt(price) * 0.1).toFixed(0);
@@ -55,17 +65,7 @@ const InvoiceForm = ({ Userlist, invoice }: Props) => {
       setValue("tax", parseInt(calculatedTax));
       setValue("priceWithTax", parseInt(calculatedPriceWithTax));
     }
-  }, [price, isInputsManual]);
-
-  const {
-    register,
-    handleSubmit,
-    control,
-    setValue,
-    formState: { errors },
-  } = useForm<InvoiceSchemaType>({
-    resolver: zodResolver(invoiceSchema),
-  });
+  }, [price, isInputsManual, setValue]);
 
   return (
     <form
