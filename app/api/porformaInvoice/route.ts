@@ -48,6 +48,7 @@ export const POST = async (request: NextRequest) => {
         type: "INFO",
         assignedToUserId,
         assignedToSection: "POR_INVOICE",
+        assignedToPorInvoiceId: newPorformaInvoice.id,
       },
     });
 

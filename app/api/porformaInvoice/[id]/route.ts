@@ -80,6 +80,7 @@ export const PATCH = async (
       type: "INFO",
       assignedToUserId,
       assignedToSection: "POR_INVOICE",
+      assignedToPorInvoiceId: updatedPorInvoice.id,
     },
   });
 

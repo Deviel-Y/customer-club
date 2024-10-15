@@ -81,11 +81,13 @@ export const PATCH = async (
         type: "INFO",
         assignedToUserId,
         assignedToSection: "INVOICE",
+        assignedToInvoiceId: updatedInvoice.id,
       },
     });
 
     return NextResponse.json(updatedInvoice);
   } catch (error) {
+    console.log(error);
     return NextResponse.json(error, { status: 500 });
   }
 };

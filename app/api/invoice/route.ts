@@ -55,6 +55,7 @@ export const POST = async (request: NextRequest) => {
         type: "INFO",
         assignedToUserId,
         assignedToSection: "INVOICE",
+        assignedToInvoiceId: newInvoice.id,
       },
     });
 
