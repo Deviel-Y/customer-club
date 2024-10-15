@@ -35,8 +35,8 @@ enum Role {
 }
 
 model Invoice {
-  id                 String @id @default(cuid())
-  invoiceNumber      String @unique
+  id                 String         @id @default(cuid())
+  invoiceNumber      String         @unique
   price              Int
   tax                Float
   priceWithTax       Float
@@ -45,6 +45,7 @@ model Invoice {
   organizationBranch String
   assignedToUserId   String
   issuerId           String
+  Notification       Notification[]
   // image String
 
   User User @relation(fields: [assignedToUserId], references: [id])
@@ -63,6 +64,8 @@ model PorformaInvoice {
   issuerId              String
   status                Status   @default(IN_PROGRESS)
   expiredAt             DateTime
+
+  notifications Notification[]
   // image String
 
   User User @relation(fields: [assignedToUserId], references: [id])
@@ -87,12 +90,13 @@ model Ticket {
 }
 
 model TicketMessage {
-  id                String      @id @default(cuid())
-  message           String      @db.Text
+  id                String         @id @default(cuid())
+  message           String         @db.Text
   assignetoTicketId String
   messageType       MessageType
   issuerId          String
-  canBeModified     Boolean     @default(true)
+  canBeModified     Boolean        @default(true)
+  notification      Notification[]
 
   User   User   @relation(fields: [issuerId], references: [id])
   Ticket Ticket @relation(fields: [assignetoTicketId], references: [id])
@@ -105,10 +109,19 @@ model Notification {
   message           String
   type              NotificationType
   isRead            Boolean          @default(false)
-  assignedToUserId  String
   assignedToSection Section
 
-  user User @relation(fields: [assignedToUserId], references: [id])
+  assignedToTicketId String?
+  ticket             TicketMessage? @relation(fields: [assignedToTicketId], references: [id])
+
+  assignedToPorInvoiceId String?
+  porformaInvoice        PorformaInvoice? @relation(fields: [assignedToPorInvoiceId], references: [id])
+
+  assignedToInvoiceId String?
+  invocie             Invoice? @relation(fields: [assignedToInvoiceId], references: [id])
+
+  assignedToUserId String
+  user             User   @relation(fields: [assignedToUserId], references: [id])
 
   createdAt DateTime @default(now())
 }
