@@ -12,7 +12,7 @@ import { Notification, User } from "@prisma/client";
 import { Session } from "next-auth";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
-import { getHeadingLabel } from "../utils/getHeadingLabel ";
+import { getHeadingLabel } from "../utils/getHeadingLabel";
 import ShowNotificationButton from "./ShowNotificationButton";
 
 interface Props {

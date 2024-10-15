@@ -24,5 +24,5 @@ export const getHeadingLabel = (path: string): string => {
   if (path.includes("/notification")) return "لیست اعلان ها";
 
   if (path === "/admin") return "پنل مدیریت";
-  return "داشبورد";
+  return "";
 };

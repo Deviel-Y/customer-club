@@ -80,7 +80,7 @@ export const fullUserSchame = z
       .min(6)
       .max(50, { message: "ایمیل باید کمتر از 50 کاراکتر باشد" })
       .optional(),
-    adminName: z.string().min(1).max(50).optional().nullable(),
+    adminName: z.string().min(1).max(50).optional().nullable().or(literal("")),
     currentPassword: z
       .string()
       .min(5, { message: "گذرواژه باید بیشتر از 5 کاراکتر باشد" })

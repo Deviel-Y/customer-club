@@ -27,7 +27,6 @@ const Sidebar = ({ session }: Props) => {
 
   const handleClick = () => setIsOpen(!isOpen);
 
-  // Function to close the sidebar
   const handleLinkClick = () => setIsOpen(false);
 
   useEffect(() => {
@@ -94,7 +93,7 @@ const Sidebar = ({ session }: Props) => {
               key={label}
               href={sidebarDataMap[label].href}
               label={label}
-              onClick={handleLinkClick} // Close sidebar on link click
+              onClick={handleLinkClick}
             >
               {sidebarDataMap[label].icon}
             </SidebarLink>
@@ -106,7 +105,7 @@ const Sidebar = ({ session }: Props) => {
               key={label}
               href={sidebarDataMap[label].href}
               label={label}
-              onClick={handleLinkClick} // Close sidebar on link click
+              onClick={handleLinkClick}
             >
               {sidebarDataMap[label].icon}
             </SidebarLink>

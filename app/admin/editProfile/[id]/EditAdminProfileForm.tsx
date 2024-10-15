@@ -40,7 +40,7 @@ const EditAdminProfileForm = ({ user }: Props) => {
           return toast.error("وارد کردن نام ادمین الزامی است");
 
         const promise = axios
-          .patch(`/api/userAuth/editAdmin/${user.id}`, {
+          .patch(`/api/userAuth/editUser/${user.id}`, {
             ...data,
             role: user?.role,
             companyName: user?.companyName,
@@ -65,7 +65,12 @@ const EditAdminProfileForm = ({ user }: Props) => {
         <div className="grid grid-cols-1 grid-rows-2 place-content-center place-items-center">
           <div className="grid grid-cols-2 grid-rows-1 w-full place-items-center place-content-center">
             <div className="w-full">
-              <Input {...register("adminName")} size="lg" label="نام ادمین" />
+              <Input
+                defaultValue={user?.adminName!}
+                {...register("adminName")}
+                size="lg"
+                label="نام ادمین"
+              />
               <FormErrorMessage
                 errorMessage={errors.adminName?.message || ""}
               />
