@@ -38,40 +38,43 @@ const UserNotificationListPage = async ({
     isRead === "true" ? true : isRead === "false" ? false : undefined;
 
   const currentPage = pageNumber || 1;
-  const pageSize: number = 6;
 
-  const [notification, notificationCount] = await Promise.all([
-    prisma.notification.findMany({
-      where: {
-        assignedToUserId: session?.user.id,
-        assignedToSection: { equals: notificationSection },
-        message: { contains: content },
-        type: { equals: notificationType },
-        isRead: isReadNotification,
-      },
+  const [notification, notificationCount, authenticatedUser] =
+    await Promise.all([
+      prisma.notification.findMany({
+        where: {
+          assignedToUserId: session?.user.id,
+          assignedToSection: { equals: notificationSection },
+          message: { contains: content },
+          type: { equals: notificationType },
+          isRead: isReadNotification,
+        },
 
-      include: { user: true },
-      take: pageSize,
-      skip: (currentPage - 1) * pageSize,
-      orderBy: { createdAt: "desc" },
-    }),
+        include: { user: true },
+        take: pageSize,
+        skip: (currentPage - 1) * pageSize,
+        orderBy: { createdAt: "desc" },
+      }),
 
-    prisma.notification.count({
-      where: {
-        assignedToUserId: session?.user.id,
-        assignedToSection: { equals: notificationSection },
-        message: { contains: content },
-        type: { equals: notificationType },
-        isRead: isReadNotification,
-      },
-    }),
-  ]);
+      prisma.notification.count({
+        where: {
+          assignedToUserId: session?.user.id,
+          assignedToSection: { equals: notificationSection },
+          message: { contains: content },
+          type: { equals: notificationType },
+          isRead: isReadNotification,
+        },
+      }),
+
+      prisma.user.findUnique({ where: { id: session?.user.id } }),
+    ]);
 
   return (
     <div className="flex flex-col px-5 py-2 w-full">
       <NotificationActionBar isAdmin={false} />
 
       <NotificationListTable
+        user={authenticatedUser!}
         totalPage={Math.ceil(notificationCount / pageSize)}
         notifications={notification}
       />
@@ -80,3 +83,5 @@ const UserNotificationListPage = async ({
 };
 
 export default UserNotificationListPage;
+
+const pageSize: number = 6;
