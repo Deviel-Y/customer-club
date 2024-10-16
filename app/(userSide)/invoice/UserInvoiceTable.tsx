@@ -54,6 +54,9 @@ const UserInvoiceTable = ({ invoices, totalPage }: Props) => {
             </TableCell>
             <TableCell>{invoice.invoiceNumber}</TableCell>
             <TableCell>{invoice.description}</TableCell>
+            <TableCell>{invoice.price}</TableCell>
+            <TableCell>{invoice.tax}</TableCell>
+            <TableCell>{invoice.priceWithTax}</TableCell>
             <TableCell>
               {moment(invoice.createdAt).format("jYYYY/jM/jD")}
             </TableCell>
@@ -70,5 +73,8 @@ const columns: { label: string; value: keyof Invoice | "downloadInvoice" }[] = [
   { label: "دریافت فاکتور", value: "downloadInvoice" },
   { label: "شماره فاکتور", value: "invoiceNumber" },
   { label: "توضیحات", value: "description" },
+  { label: "(ريال)مبلغ کل", value: "price" },
+  { label: "10% مالیات بر ارزش افزوده(ريال)", value: "tax" },
+  { label: "جمع کل با احتساب مالیات(ريال)", value: "priceWithTax" },
   { label: "تاریخ صدور", value: "createdAt" },
 ];

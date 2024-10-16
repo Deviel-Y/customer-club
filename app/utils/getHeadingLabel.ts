@@ -1,5 +1,5 @@
 export const getHeadingLabel = (path: string): string => {
-  if (path === "/userAuth/login") return "داشبورد";
+  if (path === "/userAuth/login") return "";
 
   if (path === "/admin/invoice-issuing/createNewInvoice")
     return "صدور فاکتور جدید";
@@ -24,5 +24,6 @@ export const getHeadingLabel = (path: string): string => {
   if (path.includes("/notification")) return "لیست اعلان ها";
 
   if (path === "/admin") return "پنل مدیریت";
+  if (path === "/") return "داشبورد";
   return "";
 };
