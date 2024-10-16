@@ -24,37 +24,59 @@ const PorformaInvoicePage = async ({
   const statusFilterEnum =
     statusFilter === "ALL" ? undefined : (statusFilter as Status);
 
+  const [porInvoiceCount, userPorInvoice, expiredPorInvoice] =
+    await Promise.all([
+      prisma.porformaInvoice.count({
+        where: {
+          description: { contains: description },
+          porformaInvoiceNumber: { contains: number },
+          status: statusFilterEnum,
+        },
+      }),
+
+      prisma.porformaInvoice.findMany({
+        where: {
+          assignedToUserId: session?.user.id,
+          porformaInvoiceNumber: { contains: number },
+          description: { contains: description },
+          status: statusFilterEnum,
+        },
+        take: pageSize,
+        skip: (currentPage - 1) * pageSize,
+        orderBy: { createdAt: "desc" },
+      }),
+
+      prisma.porformaInvoice.findMany({
+        where: {
+          expiredAt: { lt: new Date(new Date().setHours(0, 0, 0, 0)) },
+          status: "IN_PROGRESS",
+        },
+      }),
+    ]);
+
+  const expiredPorInvoiceIds = expiredPorInvoice.map(
+    (por_invoice) => por_invoice.id
+  );
+
   await prisma.porformaInvoice.updateMany({
     where: {
+      id: { in: expiredPorInvoiceIds },
       expiredAt: { lt: new Date(new Date().setHours(0, 0, 0, 0)) },
-      status: "IN_PROGRESS",
     },
-    data: {
-      status: "EXPIRED",
-    },
+    data: { status: "EXPIRED" },
   });
 
-  const [porInvoiceCount, userPorInvoice] = await Promise.all([
-    prisma.porformaInvoice.count({
-      where: {
-        description: { contains: description },
-        porformaInvoiceNumber: { contains: number },
-        status: statusFilterEnum,
+  expiredPorInvoice.forEach(async (invocie) => {
+    await prisma.notification.create({
+      data: {
+        assignedToSection: "POR_INVOICE",
+        message: `پیش فاکتور شماره ${invocie.porformaInvoiceNumber} منضقی شد`,
+        assignedToPorInvoiceId: invocie.id,
+        assignedToUserId: session?.user.id!,
+        type: "EXPIRED",
       },
-    }),
-
-    prisma.porformaInvoice.findMany({
-      where: {
-        assignedToUserId: session?.user.id,
-        porformaInvoiceNumber: { contains: number },
-        description: { contains: description },
-        status: statusFilterEnum,
-      },
-      take: pageSize,
-      skip: (currentPage - 1) * pageSize,
-      orderBy: { createdAt: "desc" },
-    }),
-  ]);
+    });
+  });
 
   return (
     <div className="flex flex-col gap-5 max-sm:gap-0 px-5 py-2 max-sm:p-5 max-sm:-translate-y-12 w-full">

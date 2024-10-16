@@ -93,7 +93,13 @@ const ShowNotificationButton = ({
       >
         {notifications.map((notification) => (
           <DropdownItem
-            color={notification.type === "INFO" ? "primary" : "warning"}
+            color={
+              notification.type === "INFO"
+                ? "primary"
+                : notification.type === "WARNING"
+                ? "warning"
+                : "danger"
+            }
             onPress={() =>
               axios
                 .patch(`/api/notification/${notification.id}`, {
@@ -118,9 +124,10 @@ const ShowNotificationButton = ({
             }
             description={notification.message}
           >
-            {notification.type === "WARNING" &&
-            notification.assignedToPorInvoiceId
+            {notification.type === "WARNING"
               ? dropdownItemMapping[notification.assignedToSection].warningLabel
+              : notification.type === "EXPIRED"
+              ? dropdownItemMapping[notification.assignedToSection].errorLabel
               : dropdownItemMapping[notification.assignedToSection].infoLabel}
           </DropdownItem>
         ))}
@@ -136,6 +143,7 @@ const dropdownItemMapping: Record<
   {
     infoLabel: string;
     warningLabel?: string;
+    errorLabel?: string;
     userHref: string;
     adminHref: string;
     icon: JSX.Element;
@@ -155,6 +163,7 @@ const dropdownItemMapping: Record<
   },
 
   POR_INVOICE: {
+    errorLabel: "پیش فاکتور منقضی شده",
     warningLabel: "انقضای پیش فاکتور",
     infoLabel: "پیش فاکتور جدید",
     userHref: "/porformaInvoice",

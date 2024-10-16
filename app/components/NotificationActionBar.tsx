@@ -110,6 +110,7 @@ export default NotificationActionBar;
 const typeMapping: Record<NotificationType | Section, { label: string }> = {
   INFO: { label: "اطلاع رسانی" },
   WARNING: { label: "هشدار" },
+  EXPIRED: { label: "منقضی شده" },
 
   INVOICE: { label: "فاکتور" },
   POR_INVOICE: { label: "پیش فاکتور" },

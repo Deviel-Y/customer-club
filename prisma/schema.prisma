@@ -136,6 +136,7 @@ enum Section {
 enum NotificationType {
   INFO
   WARNING
+  EXPIRED
 }
 
 enum MessageType {
