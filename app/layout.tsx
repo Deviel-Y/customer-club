@@ -1,4 +1,5 @@
 import prisma from "@/prisma/client";
+import { addDays, endOfDay, startOfDay } from "date-fns";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import AllProviders from "./AllProviders";
@@ -53,6 +54,45 @@ export default async function RootLayout({
         ? prisma.user.findUnique({ where: { id: session?.user.id } })
         : undefined,
     ]);
+
+  // Notify user if assigned porforma invoices will expire in 2 days
+  const currentDate = new Date();
+  const twoDaysFromNowStart = startOfDay(addDays(currentDate, 2));
+  const twoDaysFromNowEnd = endOfDay(addDays(currentDate, 2));
+
+  const porformaInvoicesExpiringInTwoDays =
+    await prisma.porformaInvoice.findMany({
+      where: {
+        expiredAt: {
+          gte: twoDaysFromNowStart,
+          lte: twoDaysFromNowEnd,
+        },
+        status: "IN_PROGRESS",
+      },
+    });
+
+  // Create notification records for each invoice expiring in 2 days
+  await Promise.all(
+    porformaInvoicesExpiringInTwoDays.map(async (por_invoice) => {
+      const porInvoiceexpireNotification = await prisma.notification.findFirst({
+        where: {
+          assignedToUserId: por_invoice.assignedToUserId,
+          assignedToPorInvoiceId: por_invoice.id,
+        },
+      });
+
+      if (!porInvoiceexpireNotification)
+        await prisma.notification.create({
+          data: {
+            assignedToUserId: por_invoice.assignedToUserId, // assuming each invoice has a user assigned
+            message: `شماره پیش فاکتور ${por_invoice.porformaInvoiceNumber} به زودی منقضی میشود`,
+            assignedToPorInvoiceId: por_invoice.id, // assuming you have an invoice ID reference in the notification model
+            type: "WARNING",
+            assignedToSection: "POR_INVOICE",
+          },
+        });
+    })
+  );
 
   return (
     <html lang="fa" dir="rtl" className="bg-neutral-50">

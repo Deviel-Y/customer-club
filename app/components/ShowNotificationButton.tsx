@@ -118,7 +118,10 @@ const ShowNotificationButton = ({
             }
             description={notification.message}
           >
-            {dropdownItemMapping[notification.assignedToSection].label}
+            {notification.type === "WARNING" &&
+            notification.assignedToPorInvoiceId
+              ? dropdownItemMapping[notification.assignedToSection].warningLabel
+              : dropdownItemMapping[notification.assignedToSection].infoLabel}
           </DropdownItem>
         ))}
       </DropdownMenu>
@@ -130,10 +133,16 @@ export default ShowNotificationButton;
 
 const dropdownItemMapping: Record<
   Section,
-  { label: string; userHref: string; adminHref: string; icon: JSX.Element }
+  {
+    infoLabel: string;
+    warningLabel?: string;
+    userHref: string;
+    adminHref: string;
+    icon: JSX.Element;
+  }
 > = {
   INVOICE: {
-    label: "فاکتور جدید",
+    infoLabel: "فاکتور جدید",
     userHref: "/invoice",
     adminHref: "/admin/invoice-issuing",
     icon: (
@@ -146,7 +155,8 @@ const dropdownItemMapping: Record<
   },
 
   POR_INVOICE: {
-    label: "پیش فاکتور جدید",
+    warningLabel: "انقضای پیش فاکتور",
+    infoLabel: "پیش فاکتور جدید",
     userHref: "/porformaInvoice",
     adminHref: "/admin/invoice-issuing",
     icon: (
@@ -159,7 +169,7 @@ const dropdownItemMapping: Record<
   },
 
   TICKET_MESSAGE: {
-    label: "پاسخ به تیکت",
+    infoLabel: "پاسخ به تیکت",
     userHref: "/ticket",
     adminHref: "/admin/ticket",
     icon: (
@@ -172,7 +182,7 @@ const dropdownItemMapping: Record<
   },
 
   TICKET: {
-    label: "تیکت جدید",
+    infoLabel: "تیکت جدید",
     userHref: "/ticket",
     adminHref: "/admin/ticket",
     icon: (
