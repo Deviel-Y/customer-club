@@ -1,6 +1,5 @@
 "use client";
 
-import { TrashIcon } from "@heroicons/react/24/outline";
 import {
   Button,
   Modal,
@@ -16,29 +15,13 @@ import { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 
 interface Props {
-  endpoint: string;
-  title: string;
-  content: string;
-  successMessage: string;
-  iconStyle?: string;
-  buttonSize?: "sm" | "md" | "lg";
-  redirectEndpont: string;
-  buttonLabel?: string;
-  variant?: "solid" | "light";
-  disableCondition?: boolean;
   listOfIds?: string[];
-  isIconOnly?: boolean;
+  setListOfIds: (ids: string[]) => void;
 }
 
-export const DeleteConfirmationButton = ({
-  endpoint,
-  content,
-  title,
-  successMessage,
-  iconStyle,
-  buttonSize = "md",
-  redirectEndpont,
-  variant = "solid",
+export const DeleteMutiplePorInvoiceButton = ({
+  listOfIds,
+  setListOfIds,
 }: Props) => {
   const [isLoading, setisLoading] = useState<boolean>(false);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -48,22 +31,27 @@ export const DeleteConfirmationButton = ({
     <>
       <div>
         <Button
-          variant={variant}
-          size={buttonSize}
-          isIconOnly
+          variant="light"
+          size="sm"
           className="w-full"
           color="danger"
           onPress={onOpen}
+          isDisabled={!listOfIds || listOfIds.length === 0}
         >
-          {<TrashIcon className={iconStyle} />}
+          حذف پیش فاکتورها
         </Button>
         <Modal backdrop="blur" isOpen={isOpen} onOpenChange={onOpenChange}>
           <ModalContent>
             {(onClose) => (
               <div>
-                <ModalHeader className="flex flex-col">{title}</ModalHeader>
+                <ModalHeader className="flex flex-col">
+                  حذف پیش فاکتورها
+                </ModalHeader>
                 <ModalBody>
-                  <p>{content}</p>
+                  <p>
+                    آیا از حذف پیش فاکتورهای انتخاب شده مطمئن هستید؟ این عمل غیر
+                    قابل بازگشت است
+                  </p>
                 </ModalBody>
                 <ModalFooter>
                   <Button
@@ -81,21 +69,24 @@ export const DeleteConfirmationButton = ({
                       setisLoading(true);
 
                       const myPromise = axios
-                        .delete(endpoint)
+                        .delete("/api/porformaInvoice/deleteMultiple", {
+                          data: listOfIds,
+                        })
                         .then(() => {
-                          router.push(redirectEndpont);
+                          router.push("/admin/porformaInvoice-issuing");
                           router.refresh();
                         })
                         .finally(() => {
                           setisLoading(false);
                           onClose();
+                          setListOfIds([]);
                         });
 
                       toast.promise(myPromise, {
                         error: (error: AxiosError) =>
                           error.response?.data as string,
                         loading: "در حال حذف...",
-                        success: successMessage,
+                        success: "پیش فاکتورها با موفقیت حذف شدند",
                       });
                     }}
                   >

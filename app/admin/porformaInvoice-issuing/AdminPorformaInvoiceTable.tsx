@@ -15,8 +15,10 @@ import {
 import { PorformaInvoice } from "@prisma/client";
 import moment from "moment-jalaali";
 import { useRouter } from "next/navigation";
+import React, { useState } from "react";
 import { BsDownload } from "react-icons/bs";
 import StatusBadge from "../components/StatusBadge";
+import { DeleteMutiplePorInvoiceButton } from "./DeleteMutiplePorInvoiceButton";
 
 interface Props {
   porformaInvoice: PorformaInvoice[];
@@ -26,8 +28,30 @@ interface Props {
 const AdminPorformaInvoiceTable = ({ porformaInvoice, totalPage }: Props) => {
   const router = useRouter();
 
+  const [porInvoiceIds, setPorInvoiceIds] = useState<string[]>([]);
+  const allPorInvoiceIds = porformaInvoice.map((por_invoice) => por_invoice.id);
+  const handleSelectionChange = (key: "all" | Set<React.Key>) =>
+    key === "all"
+      ? setPorInvoiceIds(allPorInvoiceIds.map(String))
+      : setPorInvoiceIds(Array.from(key).map(String));
+
+  console.log(porInvoiceIds);
+
   return (
     <Table
+      topContent={
+        <div className="flex flex-row justify-between">
+          <h2>جدول پیش فاکتورها</h2>
+          <DeleteMutiplePorInvoiceButton
+            setListOfIds={(value) => setPorInvoiceIds(value)}
+            listOfIds={porInvoiceIds}
+          />
+        </div>
+      }
+      selectedKeys={new Set(porInvoiceIds)}
+      selectionMode="multiple"
+      onSelectionChange={handleSelectionChange}
+      color="primary"
       bottomContent={
         <div
           className={`flex justify-center w-full ${

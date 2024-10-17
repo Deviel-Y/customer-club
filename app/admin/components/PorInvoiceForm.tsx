@@ -59,197 +59,198 @@ const PorInvoiceForm = ({ Userlist, PorInvoice }: Props) => {
   });
 
   return (
-    <form
-      onSubmit={handleSubmit(({ porformaInvoiceNumber, ...data }) => {
-        const assignedToUserId = Userlist.find(
-          (user) =>
-            user.companyName === companyName &&
-            user.companyBranch === companyBranch
-        )?.id;
-        if (!assignedToUserId) return toast("سازمانی با این نام یافت نشد");
+    <>
+      <form
+        onSubmit={handleSubmit(({ porformaInvoiceNumber, ...data }) => {
+          const assignedToUserId = Userlist.find(
+            (user) =>
+              user.companyName === companyName &&
+              user.companyBranch === companyBranch
+          )?.id;
 
-        const promise = PorInvoice
-          ? axios
-              .patch(`/api/porformaInvoice/${PorInvoice.id}`, {
-                porformaInvoiceNumber: porformaInvoiceNumber.trim(),
-                assignedToUserId,
-                ...data,
-              })
-              .then(() => {
-                router.push("/admin/porformaInvoice-issuing");
-                router.refresh();
-              })
-          : axios
-              .post("/api/porformaInvoice", {
-                porformaInvoiceNumber: porformaInvoiceNumber.trim(),
-                assignedToUserId,
-                ...data,
-              })
-              .then(() => {
-                router.push("/admin/porformaInvoice-issuing");
-                router.refresh();
-              });
+          const promise = PorInvoice
+            ? axios
+                .patch(`/api/porformaInvoice/${PorInvoice.id}`, {
+                  porformaInvoiceNumber: porformaInvoiceNumber.trim(),
+                  assignedToUserId,
+                  ...data,
+                })
+                .then(() => {
+                  router.push("/admin/porformaInvoice-issuing");
+                  router.refresh();
+                })
+            : axios
+                .post("/api/porformaInvoice", {
+                  porformaInvoiceNumber: porformaInvoiceNumber.trim(),
+                  assignedToUserId,
+                  ...data,
+                })
+                .then(() => {
+                  router.push("/admin/porformaInvoice-issuing");
+                  router.refresh();
+                });
 
-        toast.promise(promise, {
-          error: (error: AxiosError) => error.response?.data as string,
-          loading: PorInvoice
-            ? "در حال ویرایش پیش فاکتور"
-            : "در حال صدور پیش فاکتور",
-          success: PorInvoice
-            ? "پیش فاکتور با موفقیت ویرایش شد"
-            : "پیش فاکتور با موفقیت صادر شد",
-        });
-      })}
-      className="flex justify-center items-center"
-    >
-      <Card className="flex flex-col p-5 max-sm:p-2 w-4/5">
-        <div>
-          <h2 className="text-[25px] max-sm:text-[18px] mb-5 max-sm:mb-2">
-            اطلاعات پیش فاکتور
-          </h2>
-        </div>
-
-        <div className="grid grid-cols-4 max-md:grid-cols-2 max-sm:grid-cols-1 grid-rows-2 max-md:grid-rows-3 max-sm:grid-rows-5 gap-3 max-sm:gap-0 place-items-center">
-          <div className="w-full">
-            <Input
-              size="lg"
-              defaultValue={PorInvoice?.porformaInvoiceNumber}
-              {...register("porformaInvoiceNumber")}
-              isRequired
-              label="شماره فاکتور"
-            />
-
-            <FormErrorMessage
-              errorMessage={errors.porformaInvoiceNumber?.message!}
-            />
+          toast.promise(promise, {
+            error: (error: AxiosError) => error.response?.data as string,
+            loading: PorInvoice
+              ? "در حال ویرایش پیش فاکتور"
+              : "در حال صدور پیش فاکتور",
+            success: PorInvoice
+              ? "پیش فاکتور با موفقیت ویرایش شد"
+              : "پیش فاکتور با موفقیت صادر شد",
+          });
+        })}
+        className="flex justify-center items-center"
+      >
+        <Card className="flex flex-col p-5 max-sm:p-2 w-4/5">
+          <div>
+            <h2 className="text-[25px] max-sm:text-[18px] mb-5 max-sm:mb-2">
+              اطلاعات پیش فاکتور
+            </h2>
           </div>
 
-          <div className="w-full">
-            <Controller
-              name="organization"
-              control={control}
-              defaultValue={PorInvoice?.organization}
-              render={({ field: { onChange } }) => (
-                <Autocomplete
-                  listboxProps={{
-                    emptyContent: "سازمانی یافت نشد",
-                  }}
-                  defaultSelectedKey={PorInvoice?.organization}
-                  onSelectionChange={(value) => {
-                    onChange(value);
-                    setCompanyName(value!);
-                  }}
-                  isRequired
-                  size="lg"
-                  label="نام سازمان"
-                >
-                  {uniqueCompanyName?.map((uniqueCompanyName) => (
-                    <AutocompleteItem key={uniqueCompanyName!}>
-                      {uniqueCompanyName}
-                    </AutocompleteItem>
-                  ))}
-                </Autocomplete>
-              )}
-            />
+          <div className="grid grid-cols-4 max-md:grid-cols-2 max-sm:grid-cols-1 grid-rows-2 max-md:grid-rows-3 max-sm:grid-rows-5 gap-3 max-sm:gap-0 place-items-center">
+            <div className="w-full">
+              <Input
+                size="lg"
+                defaultValue={PorInvoice?.porformaInvoiceNumber}
+                {...register("porformaInvoiceNumber")}
+                isRequired
+                label="شماره فاکتور"
+              />
 
-            <FormErrorMessage errorMessage={errors.organization?.message!} />
+              <FormErrorMessage
+                errorMessage={errors.porformaInvoiceNumber?.message!}
+              />
+            </div>
+
+            <div className="w-full">
+              <Controller
+                name="organization"
+                control={control}
+                defaultValue={PorInvoice?.organization}
+                render={({ field: { onChange } }) => (
+                  <Autocomplete
+                    listboxProps={{
+                      emptyContent: "سازمانی یافت نشد",
+                    }}
+                    defaultSelectedKey={PorInvoice?.organization}
+                    onSelectionChange={(value) => {
+                      onChange(value);
+                      setCompanyName(value!);
+                    }}
+                    isRequired
+                    size="lg"
+                    label="نام سازمان"
+                  >
+                    {uniqueCompanyName?.map((uniqueCompanyName) => (
+                      <AutocompleteItem key={uniqueCompanyName!}>
+                        {uniqueCompanyName}
+                      </AutocompleteItem>
+                    ))}
+                  </Autocomplete>
+                )}
+              />
+
+              <FormErrorMessage errorMessage={errors.organization?.message!} />
+            </div>
+
+            <div className="w-full">
+              <Controller
+                name="organizationBranch"
+                defaultValue={PorInvoice?.organizationBranch}
+                control={control}
+                render={({ field: { onChange } }) => (
+                  <Autocomplete
+                    listboxProps={{
+                      emptyContent: "شعبه ای یافت نشد",
+                    }}
+                    defaultSelectedKey={PorInvoice?.organizationBranch}
+                    onSelectionChange={(value) => {
+                      onChange(value);
+                      setCompanyBranch(value);
+                    }}
+                    isRequired
+                    size="lg"
+                    label="نام شعبه"
+                  >
+                    {organizationBranch?.map((organizationBranch) => (
+                      <AutocompleteItem key={organizationBranch!}>
+                        {organizationBranch}
+                      </AutocompleteItem>
+                    ))}
+                  </Autocomplete>
+                )}
+              />
+
+              <FormErrorMessage errorMessage={errors.organization?.message!} />
+            </div>
+
+            <div className="w-full">
+              <Controller
+                control={control}
+                name="expiredAt"
+                defaultValue={PorInvoice?.expiredAt.toISOString()}
+                render={({ field: { onChange } }) => (
+                  <DatePicker
+                    isRequired
+                    className="translate-y-3"
+                    description={`تاریخ شمسی : ${
+                      date || moment(Date()).format("jYYYY/jMM/jDD")
+                    }`}
+                    minValue={today(getLocalTimeZone())}
+                    onChange={(value) => {
+                      const formattedDate = value
+                        .toDate(getLocalTimeZone())
+                        .toISOString();
+                      onChange(formattedDate);
+                      setDate(moment(formattedDate).format("jYYYY/jMM/jDD"));
+                    }}
+                    size="lg"
+                    label="تاریخ انقضا"
+                  />
+                )}
+              />
+
+              <FormErrorMessage errorMessage={errors.expiredAt?.message!} />
+            </div>
+
+            <div className="col-span-4 max-md:col-span-2 max-sm:col-span-1 w-full">
+              <Input
+                size="lg"
+                defaultValue={PorInvoice?.description}
+                {...register("description")}
+                isRequired
+                label="توضیحات پیش فاکتور"
+              />
+
+              <FormErrorMessage errorMessage={errors?.description?.message!} />
+            </div>
           </div>
 
-          <div className="w-full">
-            <Controller
-              name="organizationBranch"
-              defaultValue={PorInvoice?.organizationBranch}
-              control={control}
-              render={({ field: { onChange } }) => (
-                <Autocomplete
-                  listboxProps={{
-                    emptyContent: "شعبه ای یافت نشد",
-                  }}
-                  defaultSelectedKey={PorInvoice?.organizationBranch}
-                  onSelectionChange={(value) => {
-                    onChange(value);
-                    setCompanyBranch(value);
-                  }}
-                  isRequired
-                  size="lg"
-                  label="نام شعبه"
-                >
-                  {organizationBranch?.map((organizationBranch) => (
-                    <AutocompleteItem key={organizationBranch!}>
-                      {organizationBranch}
-                    </AutocompleteItem>
-                  ))}
-                </Autocomplete>
-              )}
-            />
+          <div className="flex flex-row max-sm:flex-col-reverse justify-between items-center gap-5 mt-5 max-sm:mt-1 max-sm:gap-8">
+            <div className="flex flex-row gap-5 max-sm:gap-0">
+              <Button type="submit" color="primary" variant="shadow">
+                {PorInvoice ? "ویرایش پیش فاکتور" : "صدور پیش فاکتور جدید"}
+              </Button>
 
-            <FormErrorMessage errorMessage={errors.organization?.message!} />
-          </div>
+              <Button
+                onPress={() => router.push("/admin/porformaInvoice-issuing")}
+                color="danger"
+                variant="light"
+              >
+                انصراف
+              </Button>
+            </div>
 
-          <div className="w-full">
-            <Controller
-              control={control}
-              name="expiredAt"
-              defaultValue={PorInvoice?.expiredAt.toISOString()}
-              render={({ field: { onChange } }) => (
-                <DatePicker
-                  isRequired
-                  className="translate-y-3"
-                  description={`تاریخ شمسی : ${
-                    date || moment(Date()).format("jYYYY/jMM/jDD")
-                  }`}
-                  minValue={today(getLocalTimeZone())}
-                  onChange={(value) => {
-                    const formattedDate = value
-                      .toDate(getLocalTimeZone())
-                      .toISOString();
-                    onChange(formattedDate);
-                    setDate(moment(formattedDate).format("jYYYY/jMM/jDD"));
-                  }}
-                  size="lg"
-                  label="تاریخ انقضا"
-                />
-              )}
-            />
-
-            <FormErrorMessage errorMessage={errors.expiredAt?.message!} />
-          </div>
-
-          <div className="col-span-4 max-md:col-span-2 max-sm:col-span-1 w-full">
-            <Input
-              size="lg"
-              defaultValue={PorInvoice?.description}
-              {...register("description")}
-              isRequired
-              label="توضیحات پیش فاکتور"
-            />
-
-            <FormErrorMessage errorMessage={errors?.description?.message!} />
-          </div>
-        </div>
-
-        <div className="flex flex-row max-sm:flex-col-reverse justify-between items-center gap-5 mt-5 max-sm:mt-1 max-sm:gap-8">
-          <div className="flex flex-row gap-5 max-sm:gap-0">
-            <Button type="submit" color="primary" variant="shadow">
-              {PorInvoice ? "ویرایش پیش فاکتور" : "صدور پیش فاکتور جدید"}
+            <Button className="max-sm:w-full" color="secondary">
+              بارگذاری فایل پیش فاکتور
             </Button>
-
-            <Button
-              onPress={() => router.push("/admin/porformaInvoice-issuing")}
-              color="danger"
-              variant="light"
-            >
-              انصراف
-            </Button>
           </div>
-
-          <Button className="max-sm:w-full" color="secondary">
-            بارگذاری فایل پیش فاکتور
-          </Button>
-        </div>
-        <Toaster />
-      </Card>
-    </form>
+        </Card>
+      </form>
+      <Toaster />
+    </>
   );
 };
 

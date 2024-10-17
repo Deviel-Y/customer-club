@@ -3,7 +3,7 @@ import getSession from "@/app/libs/getSession";
 import { authorizeAdmin } from "@/app/utils/authorizeRole";
 import prisma from "@/prisma/client";
 import { Status } from "@prisma/client";
-import AdminPorformaInvoiceTable from "./AdminPorformaInvoiceTable";
+import dynamic from "next/dynamic";
 
 interface Props {
   searchParams: {
@@ -69,6 +69,14 @@ const porformaInvoiceListPage = async ({
     skip: (currentPage - 1) * pageSize,
     orderBy: { createdAt: "desc" },
   });
+
+  const AdminPorformaInvoiceTable = dynamic(
+    () =>
+      import("@/app/admin/porformaInvoice-issuing/AdminPorformaInvoiceTable"),
+    {
+      ssr: false,
+    }
+  );
 
   return (
     <div className="flex flex-col gap-1 px-5 py-2 w-full">
