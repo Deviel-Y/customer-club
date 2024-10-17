@@ -20,9 +20,13 @@ interface Props {
   title: string;
   content: string;
   successMessage: string;
-  iconStyle: string;
+  iconStyle?: string;
   buttonSize?: "sm" | "md" | "lg";
   redirectEndpont: string;
+  buttonLabel?: string;
+  variant?: "solid" | "light";
+  disableCondition?: boolean;
+  listOfIds?: string[];
 }
 
 export const DeleteConfirmationButton = ({
@@ -33,6 +37,10 @@ export const DeleteConfirmationButton = ({
   iconStyle,
   buttonSize = "md",
   redirectEndpont,
+  buttonLabel,
+  variant = "solid",
+  disableCondition = false,
+  listOfIds,
 }: Props) => {
   const [isLoading, setisLoading] = useState<boolean>(false);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -41,8 +49,15 @@ export const DeleteConfirmationButton = ({
   return (
     <>
       <div>
-        <Button size={buttonSize} isIconOnly color="danger" onPress={onOpen}>
-          <TrashIcon className={iconStyle} />
+        <Button
+          variant={variant}
+          size={buttonSize}
+          isIconOnly
+          color="danger"
+          onPress={onOpen}
+          isDisabled={disableCondition}
+        >
+          {buttonLabel || <TrashIcon className={iconStyle} />}
         </Button>
         <Modal backdrop="blur" isOpen={isOpen} onOpenChange={onOpenChange}>
           <ModalContent>
@@ -68,11 +83,10 @@ export const DeleteConfirmationButton = ({
                       setisLoading(true);
 
                       const myPromise = axios
-                        .delete(endpoint)
+                        .delete(endpoint, { data: listOfIds })
                         .then(() => {
                           router.push(redirectEndpont);
                           router.refresh();
-                          toast.success(successMessage);
                         })
                         .finally(() => {
                           setisLoading(false);
