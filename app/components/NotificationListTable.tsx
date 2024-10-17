@@ -114,4 +114,5 @@ const sectionMapping: Record<any, { label: any }> = {
 
   INFO: { label: "اطلاع رسانی" },
   WARNING: { label: "اخطار" },
+  EXPIRED: { label: "منقضی شده" },
 };

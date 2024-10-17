@@ -1,5 +1,5 @@
 import prisma from "@/prisma/client";
-import { addDays, endOfDay, startOfDay } from "date-fns";
+import { addDays, endOfDay } from "date-fns";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import AllProviders from "./AllProviders";
@@ -57,14 +57,12 @@ export default async function RootLayout({
 
   // Notify user if assigned porforma invoices will expire in 2 days
   const currentDate = new Date();
-  const twoDaysFromNowStart = startOfDay(addDays(currentDate, 2));
   const twoDaysFromNowEnd = endOfDay(addDays(currentDate, 2));
 
   const porformaInvoicesExpiringInTwoDays =
     await prisma.porformaInvoice.findMany({
       where: {
         expiredAt: {
-          gte: twoDaysFromNowStart,
           lte: twoDaysFromNowEnd,
         },
         status: "IN_PROGRESS",
@@ -78,6 +76,8 @@ export default async function RootLayout({
         where: {
           assignedToUserId: por_invoice.assignedToUserId,
           assignedToPorInvoiceId: por_invoice.id,
+          assignedToSection: "POR_INVOICE",
+          type: "WARNING",
         },
       });
 

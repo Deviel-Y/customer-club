@@ -167,7 +167,7 @@ const dropdownItemMapping: Record<
     warningLabel: "انقضای پیش فاکتور",
     infoLabel: "پیش فاکتور جدید",
     userHref: "/porformaInvoice",
-    adminHref: "/admin/invoice-issuing",
+    adminHref: "/admin/porformaInvoice-issuing",
     icon: (
       <HiOutlineShoppingBag
         size={35}
