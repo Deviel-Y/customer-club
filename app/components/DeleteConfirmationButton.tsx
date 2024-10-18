@@ -23,11 +23,7 @@ interface Props {
   iconStyle?: string;
   buttonSize?: "sm" | "md" | "lg";
   redirectEndpont: string;
-  buttonLabel?: string;
   variant?: "solid" | "light";
-  disableCondition?: boolean;
-  listOfIds?: string[];
-  isIconOnly?: boolean;
 }
 
 export const DeleteConfirmationButton = ({
