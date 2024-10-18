@@ -19,11 +19,12 @@ model User {
   image          String?
   role           Role    @default(USER)
 
-  notification     Notification[]
-  tickets          Ticket[]
-  proformaInvoices PorformaInvoice[]
-  invoices         Invoice[]
-  TicketMessage    TicketMessage[]
+  notification            Notification[]
+  tickets                 Ticket[]
+  proformaInvoices        PorformaInvoice[]
+  invoices                Invoice[]
+  TicketMessage           TicketMessage[]
+  ArchivedPorformaInvoice ArchivedPorformaInvoice[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -123,7 +124,29 @@ model Notification {
   assignedToUserId String
   user             User   @relation(fields: [assignedToUserId], references: [id])
 
+  ArchivedPorformaInvoice   ArchivedPorformaInvoice? @relation(fields: [archivedPorformaInvoiceId], references: [id])
+  archivedPorformaInvoiceId String?
+
   createdAt DateTime @default(now())
+}
+
+model ArchivedPorformaInvoice {
+  id                    String    @id @default(cuid())
+  porformaInvoiceNumber String    @unique
+  organization          String
+  description           String
+  organizationBranch    String
+  assignedToUserId      String
+  issuerId              String
+  status                Status    @default(ARCHIVED)
+  expiredAt             DateTime?
+
+  notifications Notification[]
+
+  User User @relation(fields: [assignedToUserId], references: [id])
+
+  createdAt  DateTime @default(now())
+  archivedAt DateTime @default(now())
 }
 
 enum Section {
@@ -153,6 +176,7 @@ enum TicketStatus {
 enum Status {
   IN_PROGRESS
   EXPIRED
+  ARCHIVED
 }
 
 enum Category {
