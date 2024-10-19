@@ -10,10 +10,8 @@ export const PATCH = async (
   { params: { id } }: Props
 ) => {
   try {
-    const body = await request.json();
-
     const updatedNotification = await prisma.notification.updateMany({
-      where: { id: { in: body.notificationIds }, assignedToUserId: id },
+      where: { assignedToUserId: id },
       data: { isRead: true },
     });
 

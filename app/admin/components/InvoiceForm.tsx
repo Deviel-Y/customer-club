@@ -25,6 +25,8 @@ interface Props {
 
 const InvoiceForm = ({ Userlist, invoice }: Props) => {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   const [companyBranch, setCompanyBranch] = useState<Key | null>(
     invoice?.organizationBranch || ""
   );
@@ -75,7 +77,8 @@ const InvoiceForm = ({ Userlist, invoice }: Props) => {
             user.companyName === companyName &&
             user.companyBranch === companyBranch
         )?.id;
-        if (!assignedToUserId) return toast("کاربر با این نام یافت نشد");
+
+        setIsLoading(true);
 
         const promise = invoice
           ? axios
@@ -84,20 +87,22 @@ const InvoiceForm = ({ Userlist, invoice }: Props) => {
                 assignedToUserId,
                 ...data,
               })
-              .finally(() => {
+              .then(() => {
                 router.push("/admin/invoice-issuing");
                 router.refresh();
               })
+              .finally(() => setIsLoading(false))
           : axios
               .post("/api/invoice", {
                 invoiceNumber: invoiceNumber.trim(),
                 assignedToUserId,
                 ...data,
               })
-              .finally(() => {
+              .then(() => {
                 router.push("/admin/invoice-issuing");
                 router.refresh();
-              });
+              })
+              .finally(() => setIsLoading(false));
 
         toast.promise(promise, {
           error: (error: AxiosError) => error.response?.data as string,
@@ -262,7 +267,12 @@ const InvoiceForm = ({ Userlist, invoice }: Props) => {
 
         <div className="flex flex-row max-sm:flex-col-reverse justify-between items-center gap-5 mt-5 max-sm:-mt-3">
           <div className="flex flex-row gap-5 max-sm:gap-0 max-sm:mt-3">
-            <Button type="submit" color="primary" variant="shadow">
+            <Button
+              isDisabled={isLoading}
+              type="submit"
+              color="primary"
+              variant="shadow"
+            >
               {invoice ? "ویرایش فاکتور" : "صدور فاکتور جدید"}
             </Button>
 

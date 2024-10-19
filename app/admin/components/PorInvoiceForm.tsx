@@ -29,6 +29,7 @@ interface Props {
 }
 
 const PorInvoiceForm = ({ Userlist, PorInvoice }: Props) => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [date, setDate] = useState(
     moment(PorInvoice?.expiredAt).format("jYYYY/jMM/jDD")
   );
@@ -67,6 +68,8 @@ const PorInvoiceForm = ({ Userlist, PorInvoice }: Props) => {
             user.companyBranch === companyBranch
         )?.id;
 
+        setIsLoading(true);
+
         const promise = PorInvoice
           ? axios
               .patch(`/api/porformaInvoice/${PorInvoice.id}`, {
@@ -74,20 +77,22 @@ const PorInvoiceForm = ({ Userlist, PorInvoice }: Props) => {
                 assignedToUserId,
                 ...data,
               })
-              .finally(() => {
+              .then(() => {
                 router.push("/admin/porformaInvoice-issuing");
                 router.refresh();
               })
+              .finally(() => setIsLoading(false))
           : axios
               .post("/api/porformaInvoice", {
                 porformaInvoiceNumber: porformaInvoiceNumber.trim(),
                 assignedToUserId,
                 ...data,
               })
-              .finally(() => {
+              .then(() => {
                 router.push("/admin/porformaInvoice-issuing");
                 router.refresh();
-              });
+              })
+              .finally(() => setIsLoading(false));
 
         toast.promise(promise, {
           error: (error: AxiosError) => error.response?.data as string,
@@ -231,7 +236,12 @@ const PorInvoiceForm = ({ Userlist, PorInvoice }: Props) => {
 
         <div className="flex flex-row max-sm:flex-col-reverse justify-between items-center gap-5 mt-5 max-sm:mt-1 max-sm:gap-8">
           <div className="flex flex-row gap-5 max-sm:gap-0">
-            <Button type="submit" color="primary" variant="shadow">
+            <Button
+              isDisabled={isLoading}
+              type="submit"
+              color="primary"
+              variant="shadow"
+            >
               {PorInvoice ? "ویرایش پیش فاکتور" : "صدور پیش فاکتور جدید"}
             </Button>
 

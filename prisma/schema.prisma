@@ -112,8 +112,8 @@ model Notification {
   isRead            Boolean          @default(false)
   assignedToSection Section
 
-  assignedToTicketId String?
-  ticket             TicketMessage? @relation(fields: [assignedToTicketId], references: [id])
+  assignedToTicketMessageId String?
+  TicketMessage             TicketMessage? @relation(fields: [assignedToTicketMessageId], references: [id])
 
   assignedToPorInvoiceId String?
   porformaInvoice        PorformaInvoice? @relation(fields: [assignedToPorInvoiceId], references: [id])

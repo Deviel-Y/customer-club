@@ -37,9 +37,7 @@ const NotificationListTable = ({ notifications, totalPage, user }: Props) => {
               size="sm"
               onPress={() =>
                 axios
-                  .patch(`/api/notification/setIsReadToTrue/${user.id}`, {
-                    notificationIds,
-                  })
+                  .patch(`/api/notification/setIsReadToTrue/${user.id}`)
                   .then(() => router.refresh())
               }
             >
