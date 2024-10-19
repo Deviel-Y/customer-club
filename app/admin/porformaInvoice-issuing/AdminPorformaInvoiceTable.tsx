@@ -19,6 +19,7 @@ import React, { useState } from "react";
 import { BsDownload } from "react-icons/bs";
 import StatusBadge from "../components/StatusBadge";
 import { DeleteMutiplePorInvoiceButton } from "./DeleteMutiplePorInvoiceButton";
+import PorInvoiceArchiveButton from "./PorInvoiceArchiveButton";
 
 interface Props {
   porformaInvoice: PorformaInvoice[];
@@ -42,10 +43,14 @@ const AdminPorformaInvoiceTable = ({ porformaInvoice, totalPage }: Props) => {
       topContent={
         <div className="flex flex-row justify-between">
           <h2>جدول پیش فاکتورها</h2>
-          <DeleteMutiplePorInvoiceButton
-            setListOfIds={(value) => setPorInvoiceIds(value)}
-            listOfIds={porInvoiceIds}
-          />
+          <div className="flex flex-row gap-5">
+            <DeleteMutiplePorInvoiceButton
+              setListOfIds={(value) => setPorInvoiceIds(value)}
+              listOfIds={porInvoiceIds}
+            />
+
+            <PorInvoiceArchiveButton />
+          </div>
         </div>
       }
       selectedKeys={new Set(porInvoiceIds)}

@@ -84,7 +84,7 @@ const InvoiceForm = ({ Userlist, invoice }: Props) => {
                 assignedToUserId,
                 ...data,
               })
-              .then(() => {
+              .finally(() => {
                 router.push("/admin/invoice-issuing");
                 router.refresh();
               })
@@ -94,7 +94,7 @@ const InvoiceForm = ({ Userlist, invoice }: Props) => {
                 assignedToUserId,
                 ...data,
               })
-              .then(() => {
+              .finally(() => {
                 router.push("/admin/invoice-issuing");
                 router.refresh();
               });
