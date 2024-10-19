@@ -46,29 +46,32 @@ const porformaInvoiceListPage = async ({
       : (statusFilter as Status);
 
   const currentPage = pageNumber || 1;
-  const pageSize: number = 6;
-  const porformaInvoiceCount: number = await prisma.porformaInvoice.count({
-    where: {
-      description: { contains: description },
-      porformaInvoiceNumber: { contains: number },
-      organization: { contains: organization },
-      organizationBranch: { contains: organizationBranch },
-      status: statusFilterEnum,
-    },
-  });
 
-  const adminSidePorformaInvoiceList = await prisma.porformaInvoice.findMany({
-    where: {
-      description: { contains: description },
-      porformaInvoiceNumber: { contains: number },
-      organization: { contains: organization },
-      organizationBranch: { contains: organizationBranch },
-      status: statusFilterEnum,
-    },
-    take: pageSize,
-    skip: (currentPage - 1) * pageSize,
-    orderBy: { createdAt: "desc" },
-  });
+  const [porformaInvoiceCount, adminSidePorformaInvoiceList] =
+    await Promise.all([
+      prisma.porformaInvoice.count({
+        where: {
+          description: { contains: description },
+          porformaInvoiceNumber: { contains: number },
+          organization: { contains: organization },
+          organizationBranch: { contains: organizationBranch },
+          status: statusFilterEnum,
+        },
+      }),
+
+      prisma.porformaInvoice.findMany({
+        where: {
+          description: { contains: description },
+          porformaInvoiceNumber: { contains: number },
+          organization: { contains: organization },
+          organizationBranch: { contains: organizationBranch },
+          status: statusFilterEnum,
+        },
+        take: pageSize,
+        skip: (currentPage - 1) * pageSize,
+        orderBy: { createdAt: "desc" },
+      }),
+    ]);
 
   const AdminPorformaInvoiceTable = dynamic(
     () =>
@@ -95,3 +98,5 @@ const porformaInvoiceListPage = async ({
 };
 
 export default porformaInvoiceListPage;
+
+const pageSize: number = 6;
