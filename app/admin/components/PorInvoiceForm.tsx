@@ -192,10 +192,12 @@ const PorInvoiceForm = ({ Userlist, PorInvoice }: Props) => {
               defaultValue={PorInvoice?.expiredAt.toISOString()}
               render={({ field: { onChange } }) => (
                 <DatePicker
+                  value={today(getLocalTimeZone())}
                   isRequired
                   className="translate-y-3"
                   description={`تاریخ شمسی : ${
-                    date || moment(Date()).format("jYYYY/jMM/jDD")
+                    moment(date).format("jYYYY/jMM/jDD") ||
+                    moment(Date()).format("jYYYY/jMM/jDD")
                   }`}
                   minValue={today(getLocalTimeZone())}
                   onChange={(value) => {

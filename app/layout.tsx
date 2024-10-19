@@ -84,9 +84,9 @@ export default async function RootLayout({
       if (!porInvoiceexpireNotification)
         await prisma.notification.create({
           data: {
-            assignedToUserId: por_invoice.assignedToUserId, // assuming each invoice has a user assigned
+            assignedToUserId: por_invoice.assignedToUserId,
             message: `شماره پیش فاکتور ${por_invoice.porformaInvoiceNumber} به زودی منقضی میشود`,
-            assignedToPorInvoiceId: por_invoice.id, // assuming you have an invoice ID reference in the notification model
+            assignedToPorInvoiceId: por_invoice.id,
             type: "WARNING",
             assignedToSection: "POR_INVOICE",
           },

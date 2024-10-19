@@ -22,7 +22,7 @@ export const POST = async (request: NextRequest) => {
     const porformaInvoices = await prisma.porformaInvoice.findMany({
       where: { createdAt: { lte: toDate, gte: fromDate } },
     });
-    if (!porformaInvoices)
+    if (porformaInvoices.length === 0)
       return NextResponse.json("پیش فاکتور در تاریخ ثبت شده یافت نشد", {
         status: 404,
       });

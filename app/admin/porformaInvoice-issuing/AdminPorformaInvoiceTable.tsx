@@ -36,14 +36,12 @@ const AdminPorformaInvoiceTable = ({ porformaInvoice, totalPage }: Props) => {
       ? setPorInvoiceIds(allPorInvoiceIds.map(String))
       : setPorInvoiceIds(Array.from(key).map(String));
 
-  console.log(porInvoiceIds);
-
   return (
     <Table
       topContent={
-        <div className="flex flex-row justify-between">
+        <div className="flex flex-row justify-between items-center w-full">
           <h2>جدول پیش فاکتورها</h2>
-          <div className="flex flex-row gap-5">
+          <div className="flex flex-row gap-3">
             <DeleteMutiplePorInvoiceButton
               setListOfIds={(value) => setPorInvoiceIds(value)}
               listOfIds={porInvoiceIds}
