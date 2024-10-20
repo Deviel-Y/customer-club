@@ -3,11 +3,15 @@ import {
   ArchivePorInvoiceDateType,
 } from "@/app/libs/validationSchema";
 import prisma from "@/prisma/client";
+import { endOfDay, startOfDay } from "date-fns";
 import { NextRequest, NextResponse } from "next/server";
 
 export const POST = async (request: NextRequest) => {
   const body: ArchivePorInvoiceDateType = await request.json();
   const { fromDate, toDate } = body;
+
+  const fromDateStart = startOfDay(fromDate);
+  const toDateEnd = endOfDay(toDate);
 
   const validation = archivePorInvoiceDate.safeParse(body);
   if (!validation.success)
@@ -20,7 +24,7 @@ export const POST = async (request: NextRequest) => {
 
   try {
     const porformaInvoices = await prisma.archivedPorformaInvoice.findMany({
-      where: { createdAt: { lte: toDate, gte: fromDate } },
+      where: { createdAt: { lte: toDateEnd, gte: fromDateStart } },
     });
     if (porformaInvoices.length === 0)
       return NextResponse.json("پیش فاکتور در تاریخ ثبت شده یافت نشد", {
@@ -42,7 +46,7 @@ export const POST = async (request: NextRequest) => {
     });
 
     await prisma.archivedPorformaInvoice.deleteMany({
-      where: { createdAt: { lte: toDate, gte: fromDate } },
+      where: { createdAt: { lte: toDateEnd, gte: fromDateStart } },
     });
 
     return NextResponse.json("Selected porforma invoices have been restored", {

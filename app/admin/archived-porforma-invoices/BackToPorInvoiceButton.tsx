@@ -62,6 +62,7 @@ const BackToPorInvoiceButton = () => {
                 name="fromDate"
                 render={({ field: { onChange } }) => (
                   <DatePicker
+                    showMonthAndYearPickers
                     isRequired
                     size="sm"
                     label="از تاریخ"
@@ -86,6 +87,7 @@ const BackToPorInvoiceButton = () => {
                 name="toDate"
                 render={({ field: { onChange } }) => (
                   <DatePicker
+                    showMonthAndYearPickers
                     isRequired
                     size="sm"
                     label="تا تاریخ"

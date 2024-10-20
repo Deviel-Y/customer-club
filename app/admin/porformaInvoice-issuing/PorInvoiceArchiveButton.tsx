@@ -58,8 +58,10 @@ const PorInvoiceArchiveButton = () => {
               <Controller
                 control={control}
                 name="fromDate"
+                defaultValue={today(getLocalTimeZone()).toString()}
                 render={({ field: { onChange } }) => (
                   <DatePicker
+                    showMonthAndYearPickers
                     isRequired
                     size="sm"
                     label="از تاریخ"
@@ -82,8 +84,10 @@ const PorInvoiceArchiveButton = () => {
               <Controller
                 control={control}
                 name="toDate"
+                defaultValue={today(getLocalTimeZone()).toString()}
                 render={({ field: { onChange } }) => (
                   <DatePicker
+                    showMonthAndYearPickers
                     isRequired
                     size="sm"
                     label="تا تاریخ"
