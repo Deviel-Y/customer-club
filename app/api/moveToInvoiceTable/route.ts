@@ -19,7 +19,7 @@ export const POST = async (request: NextRequest) => {
     });
 
   try {
-    const porformaInvoices = await prisma.porformaInvoice.findMany({
+    const porformaInvoices = await prisma.archivedPorformaInvoice.findMany({
       where: { createdAt: { lte: toDate, gte: fromDate } },
     });
     if (porformaInvoices.length === 0)
@@ -27,25 +27,25 @@ export const POST = async (request: NextRequest) => {
         status: 404,
       });
 
-    await prisma.archivedPorformaInvoice.createMany({
+    await prisma.porformaInvoice.createMany({
       data: porformaInvoices.map((por_invoice) => ({
-        assignedToUserId: por_invoice?.assignedToUserId,
-        description: por_invoice?.description,
-        issuerId: por_invoice?.issuerId,
-        organization: por_invoice?.organization,
-        organizationBranch: por_invoice?.organizationBranch,
-        porformaInvoiceNumber: por_invoice?.porformaInvoiceNumber,
-        createdAt: por_invoice?.createdAt,
-        expiredAt: por_invoice?.expiredAt,
+        assignedToUserId: por_invoice.assignedToUserId,
+        description: por_invoice.description,
+        issuerId: por_invoice.issuerId,
+        organization: por_invoice.organization,
+        organizationBranch: por_invoice.organizationBranch,
         status: por_invoice.status,
+        porformaInvoiceNumber: por_invoice.porformaInvoiceNumber,
+        createdAt: por_invoice.createdAt,
+        expiredAt: por_invoice.expiredAt!,
       })),
     });
 
-    await prisma.porformaInvoice.deleteMany({
+    await prisma.archivedPorformaInvoice.deleteMany({
       where: { createdAt: { lte: toDate, gte: fromDate } },
     });
 
-    return NextResponse.json("Selected porforma invoices have been archived", {
+    return NextResponse.json("Selected porforma invoices have been restored", {
       status: 201,
     });
   } catch (error) {
