@@ -45,7 +45,7 @@ const DeletePorInvoiceButton = () => {
               setIsLoading(true);
 
               axios
-                .post("/api/moveToInvoiceTable", data)
+                .post("/api/archivedPorInvoice/DeletePorInvoiceRange", data)
                 .then(() => {
                   toast.success("پیش فاکتورها با موفقیت حذف شدند");
                   router.refresh();
