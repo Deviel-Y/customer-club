@@ -32,8 +32,8 @@ const BackToPorInvoiceButton = () => {
     <>
       <Popover>
         <PopoverTrigger>
-          <Button size="sm" color="secondary">
-            انتقال به جدول پیش فاکتورها
+          <Button size="sm" color="secondary" variant="light">
+            انتقال پیش فاکتورها
           </Button>
         </PopoverTrigger>
 
@@ -65,6 +65,7 @@ const BackToPorInvoiceButton = () => {
                     showMonthAndYearPickers
                     isRequired
                     size="sm"
+                    color="secondary"
                     label="از تاریخ"
                     value={today(getLocalTimeZone())}
                     onChange={(value) => {
@@ -90,6 +91,7 @@ const BackToPorInvoiceButton = () => {
                     showMonthAndYearPickers
                     isRequired
                     size="sm"
+                    color="secondary"
                     label="تا تاریخ"
                     value={today(getLocalTimeZone())}
                     onChange={(value) => {
@@ -111,8 +113,9 @@ const BackToPorInvoiceButton = () => {
             <Button
               isLoading={isLoading}
               className="-translate-y-3"
-              color="primary"
+              color="secondary"
               type="submit"
+              variant="shadow"
             >
               انتقال
             </Button>

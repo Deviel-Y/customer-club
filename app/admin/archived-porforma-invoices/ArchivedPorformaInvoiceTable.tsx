@@ -13,10 +13,9 @@ import {
 } from "@nextui-org/react";
 import { ArchivedPorformaInvoice, PorformaInvoice } from "@prisma/client";
 import moment from "moment-jalaali";
-import React, { useState } from "react";
 import { BsDownload } from "react-icons/bs";
-import { DeleteMutiplePorInvoiceButton } from "../porformaInvoice-issuing/DeleteMutiplePorInvoiceButton";
 import BackToPorInvoiceButton from "./BackToPorInvoiceButton";
+import DeletePorInvoiceButton from "./DeletePorInvoiceButton";
 
 interface Props {
   archivedInvoice: ArchivedPorformaInvoice[];
@@ -27,14 +26,9 @@ const ArchivedPorformaInvoiceTable = ({
   archivedInvoice,
   totalPage,
 }: Props) => {
-  const [porInvoiceIds, setPorInvoiceIds] = useState<string[]>([]);
   const allPorInvoiceIds = archivedInvoice.map(
     (archivedPorInvoice) => archivedPorInvoice.id
   );
-  const handleSelectionChange = (key: "all" | Set<React.Key>) =>
-    key === "all"
-      ? setPorInvoiceIds(allPorInvoiceIds.map(String))
-      : setPorInvoiceIds(Array.from(key).map(String));
 
   return (
     <Table
@@ -42,18 +36,12 @@ const ArchivedPorformaInvoiceTable = ({
         <div className="flex flex-row justify-between items-center w-full">
           <h2>جدول پیش فاکتورها</h2>
           <div className="flex flex-row gap-3">
-            <DeleteMutiplePorInvoiceButton
-              setListOfIds={(value) => setPorInvoiceIds(value)}
-              listOfIds={porInvoiceIds}
-            />
+            <DeletePorInvoiceButton />
 
             <BackToPorInvoiceButton />
           </div>
         </div>
       }
-      selectedKeys={new Set(porInvoiceIds)}
-      selectionMode="multiple"
-      onSelectionChange={handleSelectionChange}
       color="primary"
       bottomContent={
         <div
