@@ -45,7 +45,7 @@ const PorInvoiceArchiveButton = () => {
               setIsLoading(true);
 
               axios
-                .post("/api/archivedPorInvoice", data)
+                .post("/api/porformaInvoice/archivedPorInvoice", data)
                 .then(() => {
                   toast.success("پیش فاکتورها با موفقیت بایگانی شدند");
                   router.refresh();

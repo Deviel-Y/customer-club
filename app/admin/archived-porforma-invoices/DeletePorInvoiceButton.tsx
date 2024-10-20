@@ -45,9 +45,12 @@ const DeletePorInvoiceButton = () => {
               setIsLoading(true);
 
               axios
-                .delete("/api/archivedPorInvoice/DeletePorInvoiceRange", {
-                  data: data,
-                })
+                .delete(
+                  "/api/porformaInvoice/archivedPorInvoice/Delete-archived-PorInvoiceRange",
+                  {
+                    data: data,
+                  }
+                )
                 .then(() => {
                   toast.success("پیش فاکتورها با موفقیت حذف شدند");
                   router.refresh();

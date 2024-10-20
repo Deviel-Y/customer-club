@@ -45,7 +45,10 @@ const BackToPorInvoiceButton = () => {
               setIsLoading(true);
 
               axios
-                .post("/api/moveToInvoiceTable", data)
+                .post(
+                  "/api/porformaInvoice/archivedPorInvoice/moveToInvoiceTable",
+                  data
+                )
                 .then(() => {
                   toast.success("پیش فاکتورها با موفقیت منتقل شدند");
                   router.refresh();
