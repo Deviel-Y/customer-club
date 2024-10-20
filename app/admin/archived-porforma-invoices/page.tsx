@@ -3,7 +3,6 @@ import getSession from "@/app/libs/getSession";
 import { authorizeAdmin } from "@/app/utils/authorizeRole";
 import prisma from "@/prisma/client";
 import dynamic from "next/dynamic";
-import ArchivedPorformaInvoiceTable from "./ArchivedPorformaInvoiceTable";
 
 interface Props {
   searchParams: {
@@ -29,9 +28,9 @@ const ArchivedPorformaInvoicesPage = async ({
 
   const currentPage = pageNumber || 1;
 
-  const [porformaInvoiceCount, adminSidePorformaInvoiceList] =
+  const [archivedPorInvoiceCount, archivedPorformaInvoiceList] =
     await Promise.all([
-      prisma.porformaInvoice.count({
+      prisma.archivedPorformaInvoice.count({
         where: {
           description: { contains: description },
           porformaInvoiceNumber: { contains: number },
@@ -40,7 +39,7 @@ const ArchivedPorformaInvoicesPage = async ({
         },
       }),
 
-      prisma.porformaInvoice.findMany({
+      prisma.archivedPorformaInvoice.findMany({
         where: {
           description: { contains: description },
           porformaInvoiceNumber: { contains: number },
@@ -53,9 +52,11 @@ const ArchivedPorformaInvoicesPage = async ({
       }),
     ]);
 
-  const AdminPorformaInvoiceTable = dynamic(
+  const ArchivedPorformaInvoiceTable = dynamic(
     () =>
-      import("@/app/admin/porformaInvoice-issuing/AdminPorformaInvoiceTable"),
+      import(
+        "@/app/admin/archived-porforma-invoices/ArchivedPorformaInvoiceTable"
+      ),
     {
       ssr: false,
     }
@@ -70,8 +71,8 @@ const ArchivedPorformaInvoicesPage = async ({
       />
 
       <ArchivedPorformaInvoiceTable
-        porformaInvoice={adminSidePorformaInvoiceList}
-        totalPage={Math.ceil(porformaInvoiceCount / pageSize)}
+        totalPage={Math.ceil(archivedPorInvoiceCount / pageSize)}
+        archivedInvoice={archivedPorformaInvoiceList}
       />
     </div>
   );

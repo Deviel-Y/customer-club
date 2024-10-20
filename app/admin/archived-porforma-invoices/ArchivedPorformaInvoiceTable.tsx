@@ -11,23 +11,26 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
-import { PorformaInvoice } from "@prisma/client";
+import { ArchivedPorformaInvoice, PorformaInvoice } from "@prisma/client";
 import moment from "moment-jalaali";
 import React, { useState } from "react";
 import { BsDownload } from "react-icons/bs";
 import { DeleteMutiplePorInvoiceButton } from "../porformaInvoice-issuing/DeleteMutiplePorInvoiceButton";
+import BackToPorInvoiceButton from "./BackToPorInvoiceButton";
 
 interface Props {
-  porformaInvoice: PorformaInvoice[];
+  archivedInvoice: ArchivedPorformaInvoice[];
   totalPage: number;
 }
 
 const ArchivedPorformaInvoiceTable = ({
-  porformaInvoice,
+  archivedInvoice,
   totalPage,
 }: Props) => {
   const [porInvoiceIds, setPorInvoiceIds] = useState<string[]>([]);
-  const allPorInvoiceIds = porformaInvoice.map((por_invoice) => por_invoice.id);
+  const allPorInvoiceIds = archivedInvoice.map(
+    (archivedPorInvoice) => archivedPorInvoice.id
+  );
   const handleSelectionChange = (key: "all" | Set<React.Key>) =>
     key === "all"
       ? setPorInvoiceIds(allPorInvoiceIds.map(String))
@@ -43,6 +46,8 @@ const ArchivedPorformaInvoiceTable = ({
               setListOfIds={(value) => setPorInvoiceIds(value)}
               listOfIds={porInvoiceIds}
             />
+
+            <BackToPorInvoiceButton />
           </div>
         </div>
       }
@@ -74,10 +79,10 @@ const ArchivedPorformaInvoiceTable = ({
         ))}
       </TableHeader>
       <TableBody
-        items={porformaInvoice}
+        items={archivedInvoice}
         emptyContent="پیش فاکتوری تعریف نشده است"
       >
-        {porformaInvoice.map((p_invoice) => (
+        {archivedInvoice.map((p_invoice) => (
           <TableRow key={p_invoice.id}>
             <TableCell>
               <div className="flex flex-row justify-center items-center gap-x-3">

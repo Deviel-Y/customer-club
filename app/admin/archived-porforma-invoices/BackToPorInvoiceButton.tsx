@@ -23,6 +23,7 @@ type DateType = { fromDate?: string; toDate?: string };
 const BackToPorInvoiceButton = () => {
   const router = useRouter();
   const [dates, setDates] = useState<DateType>();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const { control, handleSubmit } = useForm<ArchivePorInvoiceDateType>({
     resolver: zodResolver(archivePorInvoiceDate),
@@ -41,15 +42,18 @@ const BackToPorInvoiceButton = () => {
           <form
             className="flex flex-row gap-3 items-center justify-center w-full"
             onSubmit={handleSubmit((data) => {
-              const promise = axios
-                .post("/api/archivedPorInvoice", data)
-                .finally(() => router.refresh());
+              setIsLoading(true);
 
-              toast.promise(promise, {
-                loading: "در حال انتقال پیش فاکتور ها",
-                success: "پیش فاکتورها با موفقیت منتقل شدند",
-                error: (error: AxiosError) => error.response?.data as string,
-              });
+              axios
+                .post("/api/moveToInvoiceTable", data)
+                .then(() => {
+                  toast.success("پیش فاکتورها با موفقیت منتقل شدند");
+                  router.refresh();
+                })
+                .catch((error: AxiosError) =>
+                  toast.error(error.response?.data as string)
+                )
+                .finally(() => setIsLoading(false));
             })}
           >
             <div className="flex-row flex gap-3 w-full">
@@ -102,7 +106,12 @@ const BackToPorInvoiceButton = () => {
               />
             </div>
 
-            <Button className="-translate-y-3" color="primary" type="submit">
+            <Button
+              isLoading={isLoading}
+              className="-translate-y-3"
+              color="primary"
+              type="submit"
+            >
               انتقال
             </Button>
           </form>
