@@ -23,6 +23,7 @@ type DateType = { fromDate?: string; toDate?: string };
 const PorInvoiceArchiveButton = () => {
   const router = useRouter();
   const [dates, setDates] = useState<DateType>();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const { control, handleSubmit } = useForm<ArchivePorInvoiceDateType>({
     resolver: zodResolver(archivePorInvoiceDate),
@@ -41,15 +42,16 @@ const PorInvoiceArchiveButton = () => {
           <form
             className="flex flex-col gap-3 items-start justify-center w-full"
             onSubmit={handleSubmit((data) => {
-              const promise = axios
-                .post("/api/archivedPorInvoice", data)
-                .finally(() => router.refresh());
+              setIsLoading(true);
 
-              toast.promise(promise, {
-                loading: "در حال بایگانی پیش فاکتور ها",
-                success: "پیش فاکتور ها با موفقیت بایگانی شدند",
-                error: (error: AxiosError) => error.response?.data as string,
-              });
+              axios
+                .post("/api/archivedPorInvoice", data)
+                .then(() => {
+                  toast.success("پیش فاکتورها با موفقیت بایگانی شدند");
+                  router.refresh();
+                })
+                .catch((error: AxiosError) => error.response?.data as string)
+                .finally(() => setIsLoading(false));
             })}
           >
             <div className="flex-row flex gap-3 w-full">
@@ -103,7 +105,7 @@ const PorInvoiceArchiveButton = () => {
             </div>
 
             <div className="flex flex-row gap-5">
-              <Button color="primary" type="submit">
+              <Button isLoading={isLoading} color="primary" type="submit">
                 بایگانی
               </Button>
 

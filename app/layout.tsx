@@ -75,7 +75,7 @@ export default async function RootLayout({
       const porInvoiceexpireNotification = await prisma.notification.findFirst({
         where: {
           assignedToUserId: por_invoice.assignedToUserId,
-          assignedToPorInvoiceId: por_invoice.id,
+          message: { contains: por_invoice.porformaInvoiceNumber },
           assignedToSection: "POR_INVOICE",
           type: "WARNING",
         },

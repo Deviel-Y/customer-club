@@ -23,7 +23,6 @@ const statusMapping: Record<
   IN_PROGRESS: { color: "success", label: "دارای اعتبار" },
   CLOSED: { color: "success", label: "بسته شده" },
   OPEN: { color: "danger", label: "جدید" },
-  ARCHIVED: { color: "danger", label: "بایگانی شده" },
   INVESTIGATING: { color: "warning", label: "در حال بررسی" },
   true: { color: "success", label: "خوانده شده" },
   false: { color: "danger", label: "خوانده نشده" },

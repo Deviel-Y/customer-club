@@ -138,7 +138,7 @@ model ArchivedPorformaInvoice {
   organizationBranch    String
   assignedToUserId      String
   issuerId              String
-  status                Status    @default(ARCHIVED)
+  status                Status
   expiredAt             DateTime?
 
   notifications Notification[]
@@ -176,7 +176,6 @@ enum TicketStatus {
 enum Status {
   IN_PROGRESS
   EXPIRED
-  ARCHIVED
 }
 
 enum Category {
