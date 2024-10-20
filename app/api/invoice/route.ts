@@ -29,7 +29,7 @@ export const POST = async (request: NextRequest) => {
     });
     if (invoice)
       return NextResponse.json(
-        "فاکتور به همین شماره قبلا صادر شده است. لطفا شماره فاکتور را تغییر دهید.",
+        "فاکتوری به همین شماره قبلا صادر شده است. لطفا شماره فاکتور را تغییر دهید.",
         {
           status: 400,
         }

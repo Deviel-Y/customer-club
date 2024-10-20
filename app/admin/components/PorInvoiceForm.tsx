@@ -70,7 +70,7 @@ const PorInvoiceForm = ({ Userlist, PorInvoice }: Props) => {
 
         setIsLoading(true);
 
-        const promise = PorInvoice
+        PorInvoice
           ? axios
               .patch(`/api/porformaInvoice/${PorInvoice.id}`, {
                 porformaInvoiceNumber: porformaInvoiceNumber.trim(),
@@ -78,10 +78,16 @@ const PorInvoiceForm = ({ Userlist, PorInvoice }: Props) => {
                 ...data,
               })
               .then(() => {
-                router.push("/admin/porformaInvoice-issuing");
-                router.refresh();
+                toast.success("پیش فاکتور با موفقیت ویرایش شد");
+                setTimeout(() => {
+                  router.push("/admin/porformaInvoice-issuing");
+                  router.refresh();
+                }, 2000);
               })
-              .finally(() => setIsLoading(false))
+              .catch((error: AxiosError) => {
+                setIsLoading(false);
+                toast.error(error.response?.data as string);
+              })
           : axios
               .post("/api/porformaInvoice", {
                 porformaInvoiceNumber: porformaInvoiceNumber.trim(),
@@ -89,20 +95,16 @@ const PorInvoiceForm = ({ Userlist, PorInvoice }: Props) => {
                 ...data,
               })
               .then(() => {
-                router.push("/admin/porformaInvoice-issuing");
-                router.refresh();
+                toast.success("پیش فاکتور با موفقیت صادر شد");
+                setTimeout(() => {
+                  router.push("/admin/porformaInvoice-issuing");
+                  router.refresh();
+                }, 2000);
               })
-              .finally(() => setIsLoading(false));
-
-        toast.promise(promise, {
-          error: (error: AxiosError) => error.response?.data as string,
-          loading: PorInvoice
-            ? "در حال ویرایش پیش فاکتور"
-            : "در حال صدور پیش فاکتور",
-          success: PorInvoice
-            ? "پیش فاکتور با موفقیت ویرایش شد"
-            : "پیش فاکتور با موفقیت صادر شد",
-        });
+              .catch((error: AxiosError) => {
+                setIsLoading(false);
+                toast.error(error.response?.data as string);
+              });
       })}
       className="flex justify-center items-center"
     >
@@ -237,7 +239,7 @@ const PorInvoiceForm = ({ Userlist, PorInvoice }: Props) => {
         <div className="flex flex-row max-sm:flex-col-reverse justify-between items-center gap-5 mt-5 max-sm:mt-1 max-sm:gap-8">
           <div className="flex flex-row gap-5 max-sm:gap-0">
             <Button
-              isDisabled={isLoading}
+              isLoading={isLoading}
               type="submit"
               color="primary"
               variant="shadow"

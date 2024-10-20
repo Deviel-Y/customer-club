@@ -69,49 +69,54 @@ const InvoiceForm = ({ Userlist, invoice }: Props) => {
     }
   }, [price, isInputsManual, setValue]);
 
+  const submitHandler = handleSubmit(({ invoiceNumber, ...data }) => {
+    const assignedToUserId = Userlist.find(
+      (user) =>
+        user.companyName === companyName && user.companyBranch === companyBranch
+    )?.id;
+
+    setIsLoading(true);
+
+    invoice
+      ? axios
+          .patch(`/api/invoice/${invoice.id}`, {
+            invoiceNumber: invoiceNumber.trim(),
+            assignedToUserId,
+            ...data,
+          })
+          .then(() => {
+            toast.success("فاکتور با موفقیت صادر شد");
+            setTimeout(() => {
+              router.push("/admin/invoice-issuing");
+              router.refresh();
+            }, 2000);
+          })
+          .catch((error: AxiosError) => {
+            setIsLoading(false);
+            toast.error(error.response?.data as string);
+          })
+      : axios
+          .post("/api/invoice", {
+            invoiceNumber: invoiceNumber.trim(),
+            assignedToUserId,
+            ...data,
+          })
+          .then(() => {
+            toast.success("فاکتور با موفقیت ویرایش شد");
+            setTimeout(() => {
+              router.push("/admin/invoice-issuing");
+              router.refresh();
+            }, 2000);
+          })
+          .catch((error: AxiosError) => {
+            setIsLoading(false);
+            toast.error(error.response?.data as string);
+          });
+  });
+
   return (
     <form
-      onSubmit={handleSubmit(({ invoiceNumber, ...data }) => {
-        const assignedToUserId = Userlist.find(
-          (user) =>
-            user.companyName === companyName &&
-            user.companyBranch === companyBranch
-        )?.id;
-
-        setIsLoading(true);
-
-        const promise = invoice
-          ? axios
-              .patch(`/api/invoice/${invoice.id}`, {
-                invoiceNumber: invoiceNumber.trim(),
-                assignedToUserId,
-                ...data,
-              })
-              .then(() => {
-                router.push("/admin/invoice-issuing");
-                router.refresh();
-              })
-              .finally(() => setIsLoading(false))
-          : axios
-              .post("/api/invoice", {
-                invoiceNumber: invoiceNumber.trim(),
-                assignedToUserId,
-                ...data,
-              })
-              .then(() => {
-                router.push("/admin/invoice-issuing");
-                router.refresh();
-              })
-              .finally(() => setIsLoading(false));
-
-        toast.promise(promise, {
-          error: (error: AxiosError) => error.response?.data as string,
-          loading: invoice ? "در حال ویرایش فاکتور" : "در حال صدور فاکتور",
-          success: invoice
-            ? "فاکتور با موفقیت ویرایش شد"
-            : "فاکتور با موفقیت صادر شد",
-        });
-      })}
+      onSubmit={submitHandler}
       className="flex justify-center items-center max-sm:w-full"
     >
       <Card className="flex flex-col p-5 max-sm:p-2 gap-2 w-4/5">
@@ -268,7 +273,7 @@ const InvoiceForm = ({ Userlist, invoice }: Props) => {
         <div className="flex flex-row max-sm:flex-col-reverse justify-between items-center gap-5 mt-5 max-sm:-mt-3">
           <div className="flex flex-row gap-5 max-sm:gap-0 max-sm:mt-3">
             <Button
-              isDisabled={isLoading}
+              isLoading={isLoading}
               type="submit"
               color="primary"
               variant="shadow"
