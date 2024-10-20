@@ -29,7 +29,7 @@ export const POST = async (request: NextRequest) => {
       }),
     ]);
 
-    session?.user.role === "ADMIN" &&
+    session?.user.role === "ADMIN" && // change ticketMessage status to INVESTIGATING if admin send its response
       (await prisma?.ticket.update({
         where: { id: assignetoTicketId },
         data: { status: "INVESTIGATING" },
@@ -48,7 +48,7 @@ export const POST = async (request: NextRequest) => {
     )
       return NextResponse.json(
         "شما قادر به ارسال مجدد پیام نیستید. برای ارسال پیام باید منتظر پاسخ کاربر باشید",
-        { status: 403 }
+        { status: 400 }
       );
 
     if (
@@ -58,7 +58,7 @@ export const POST = async (request: NextRequest) => {
     )
       return NextResponse.json(
         "شما قادر به ارسال مجدد پیام نیستید. برای ارسال پیام باید منتظر پاسخ ادمین باشید",
-        { status: 403 }
+        { status: 400 }
       );
 
     await prisma.ticketMessage.updateMany({
@@ -79,6 +79,7 @@ export const POST = async (request: NextRequest) => {
       },
     });
 
+    // Notification Section
     const notificationMessage =
       ticketMessages.length === 0
         ? `تیکت جدیدی به شماره ${ticket?.ticketNumber} ایجاد شد`
@@ -95,7 +96,7 @@ export const POST = async (request: NextRequest) => {
         assignedToUserId: session?.user.id!,
         assignedToSection:
           ticketMessages.length === 0 ? "TICKET" : "TICKET_MESSAGE",
-        assignedToTicketId: newMesaage.id,
+        assignedToTicketMessageId: newMesaage.id,
       },
     });
 

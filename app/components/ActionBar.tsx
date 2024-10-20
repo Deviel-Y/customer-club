@@ -30,7 +30,7 @@ const ActionBar = ({ endpoint, buttonLabel, isAdmin = true }: Props) => {
 
   return (
     <div className=" flex flex-row max-sm:flex-col gap-5 max-sm:gap-0 max-sm:mt-5 w-full place-content-center place-items-center">
-      {isAdmin && (
+      {isAdmin && !pathname.includes("archived") && (
         <Button
           className="self-center max-sm:self-start"
           color="secondary"
@@ -85,21 +85,22 @@ const ActionBar = ({ endpoint, buttonLabel, isAdmin = true }: Props) => {
           variant="underlined"
         />
 
-        {pathname.includes("porformaInvoice") && (
-          <Autocomplete
-            defaultSelectedKey={searchParmas?.get("statusFilter") || ""}
-            listboxProps={{ emptyContent: "نتیجه ای یافت نشد" }}
-            onSelectionChange={statusFilterOnChangeHandler}
-            variant="underlined"
-            label="وضعیت اعتبار"
-          >
-            {statusFilter.map((status) => (
-              <AutocompleteItem key={status.value}>
-                {status.label}
-              </AutocompleteItem>
-            ))}
-          </Autocomplete>
-        )}
+        {pathname.includes("porformaInvoice") &&
+          !pathname.includes("archived") && (
+            <Autocomplete
+              defaultSelectedKey={searchParmas?.get("statusFilter") || ""}
+              listboxProps={{ emptyContent: "نتیجه ای یافت نشد" }}
+              onSelectionChange={statusFilterOnChangeHandler}
+              variant="underlined"
+              label="وضعیت اعتبار"
+            >
+              {statusFilter.map((status) => (
+                <AutocompleteItem key={status.value}>
+                  {status.label}
+                </AutocompleteItem>
+              ))}
+            </Autocomplete>
+          )}
       </div>
     </div>
   );
