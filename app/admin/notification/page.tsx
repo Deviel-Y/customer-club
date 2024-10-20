@@ -98,4 +98,4 @@ const AdminNotificationListPage = async ({
 
 export default AdminNotificationListPage;
 
-const pageSize: number = 9;
+const pageSize: number = 8;

@@ -154,7 +154,7 @@ const dropdownItemMapping: Record<
     userHref: "/invoice",
     adminHref: "/admin/invoice-issuing",
     icon: (
-      <HiOutlineNewspaper
+      <HiOutlineShoppingBag
         size={35}
         fill="white"
         className="stroke-[1.3px] bg-white group-hover:fill-white group-hover:stroke-black transition-all group-hover:bg-white   rounded-lg me-1 w-10"
@@ -169,7 +169,7 @@ const dropdownItemMapping: Record<
     userHref: "/porformaInvoice",
     adminHref: "/admin/porformaInvoice-issuing",
     icon: (
-      <HiOutlineShoppingBag
+      <HiOutlineNewspaper
         size={35}
         fill="white"
         className="stroke-[1.3px] bg-white group-hover:fill-white group-hover:stroke-black transition-all group-hover:bg-white   rounded-lg me-1 w-10"

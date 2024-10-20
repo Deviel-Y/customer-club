@@ -69,7 +69,7 @@ export default async function RootLayout({
       },
     });
 
-  // Create notification records for each invoice expiring in 2 days
+  // Create related notification record for it
   await Promise.all(
     porformaInvoicesExpiringInTwoDays.map(async (por_invoice) => {
       const porInvoiceexpireNotification = await prisma.notification.findFirst({
@@ -88,6 +88,38 @@ export default async function RootLayout({
             message: `شماره پیش فاکتور ${por_invoice.porformaInvoiceNumber} به زودی منقضی میشود`,
             assignedToPorInvoiceId: por_invoice.id,
             type: "WARNING",
+            assignedToSection: "POR_INVOICE",
+          },
+        });
+    })
+  );
+
+  // Notify user if assigned porforma invoices have been expired
+  const expiredPorformaInvoices = await prisma.porformaInvoice.findMany({
+    where: {
+      status: "EXPIRED",
+    },
+  });
+
+  // Create related notification record for it
+  await Promise.all(
+    expiredPorformaInvoices.map(async (por_invoice) => {
+      const porInvoiceexpireNotification = await prisma.notification.findFirst({
+        where: {
+          assignedToUserId: por_invoice.assignedToUserId,
+          assignedToPorInvoiceId: por_invoice.id,
+          assignedToSection: "POR_INVOICE",
+          type: "EXPIRED",
+        },
+      });
+
+      if (!porInvoiceexpireNotification)
+        await prisma.notification.create({
+          data: {
+            assignedToUserId: por_invoice.assignedToUserId,
+            message: `شماره پیش فاکتور ${por_invoice.porformaInvoiceNumber} منقضی شد`,
+            assignedToPorInvoiceId: por_invoice.id,
+            type: "EXPIRED",
             assignedToSection: "POR_INVOICE",
           },
         });

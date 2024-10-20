@@ -84,4 +84,4 @@ const UserNotificationListPage = async ({
 
 export default UserNotificationListPage;
 
-const pageSize: number = 6;
+const pageSize: number = 8;

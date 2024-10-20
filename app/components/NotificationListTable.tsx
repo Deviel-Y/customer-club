@@ -24,7 +24,6 @@ interface Props {
 
 const NotificationListTable = ({ notifications, totalPage, user }: Props) => {
   const router = useRouter();
-  const notificationIds = notifications.map((notification) => notification.id);
 
   return (
     <Table
