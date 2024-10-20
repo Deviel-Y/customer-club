@@ -1,19 +1,19 @@
 import {
-  archivePorInvoiceDate,
-  ArchivePorInvoiceDateType,
+  ModifyPorInvoiceType,
+  modifyPorInvoice,
 } from "@/app/libs/validationSchema";
 import prisma from "@/prisma/client";
 import { endOfDay, startOfDay } from "date-fns";
 import { NextRequest, NextResponse } from "next/server";
 
-export const POST = async (request: NextRequest) => {
-  const body: ArchivePorInvoiceDateType = await request.json();
+export const DELETE = async (request: NextRequest) => {
+  const body: ModifyPorInvoiceType = await request.json();
   const { fromDate, toDate } = body;
 
   const fromDateStart = startOfDay(fromDate);
   const toDateEnd = endOfDay(toDate);
 
-  const validation = archivePorInvoiceDate.safeParse(body);
+  const validation = modifyPorInvoice.safeParse(body);
   if (!validation.success)
     return NextResponse.json("ورودی داده صحیح نیست", { status: 400 });
 

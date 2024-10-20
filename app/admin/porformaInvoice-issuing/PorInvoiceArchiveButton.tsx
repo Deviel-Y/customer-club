@@ -1,6 +1,6 @@
 import {
-  archivePorInvoiceDate,
-  ArchivePorInvoiceDateType,
+  ModifyPorInvoiceType,
+  modifyPorInvoice,
 } from "@/app/libs/validationSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { getLocalTimeZone, today } from "@internationalized/date";
@@ -25,14 +25,14 @@ const PorInvoiceArchiveButton = () => {
   const [dates, setDates] = useState<DateType>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const { control, handleSubmit } = useForm<ArchivePorInvoiceDateType>({
-    resolver: zodResolver(archivePorInvoiceDate),
+  const { control, handleSubmit } = useForm<ModifyPorInvoiceType>({
+    resolver: zodResolver(modifyPorInvoice),
   });
   return (
     <>
       <Popover>
         <PopoverTrigger>
-          <Button size="sm" color="secondary">
+          <Button size="sm" color="secondary" variant="light">
             بایگانی پیش فاکتور
           </Button>
         </PopoverTrigger>
@@ -62,6 +62,7 @@ const PorInvoiceArchiveButton = () => {
                 render={({ field: { onChange } }) => (
                   <DatePicker
                     showMonthAndYearPickers
+                    color="secondary"
                     isRequired
                     size="sm"
                     label="از تاریخ"
@@ -88,6 +89,7 @@ const PorInvoiceArchiveButton = () => {
                 render={({ field: { onChange } }) => (
                   <DatePicker
                     showMonthAndYearPickers
+                    color="secondary"
                     isRequired
                     size="sm"
                     label="تا تاریخ"
@@ -109,13 +111,18 @@ const PorInvoiceArchiveButton = () => {
             </div>
 
             <div className="flex flex-row gap-5">
-              <Button isLoading={isLoading} color="primary" type="submit">
+              <Button
+                isLoading={isLoading}
+                color="secondary"
+                variant="shadow"
+                type="submit"
+              >
                 بایگانی
               </Button>
 
               <Button
                 onPress={() => router.push("/admin/archived-porforma-invoices")}
-                color="secondary"
+                color="primary"
                 type="button"
               >
                 پیش فاکتور های بایگانی شده

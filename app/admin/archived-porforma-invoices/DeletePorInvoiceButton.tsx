@@ -1,6 +1,6 @@
 import {
-  archivePorInvoiceDate,
-  ArchivePorInvoiceDateType,
+  ModifyPorInvoiceType,
+  modifyPorInvoice,
 } from "@/app/libs/validationSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { getLocalTimeZone, today } from "@internationalized/date";
@@ -25,8 +25,8 @@ const DeletePorInvoiceButton = () => {
   const [dates, setDates] = useState<DateType>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const { control, handleSubmit } = useForm<ArchivePorInvoiceDateType>({
-    resolver: zodResolver(archivePorInvoiceDate),
+  const { control, handleSubmit } = useForm<ModifyPorInvoiceType>({
+    resolver: zodResolver(modifyPorInvoice),
   });
   return (
     <>
@@ -45,7 +45,9 @@ const DeletePorInvoiceButton = () => {
               setIsLoading(true);
 
               axios
-                .post("/api/archivedPorInvoice/DeletePorInvoiceRange", data)
+                .delete("/api/archivedPorInvoice/DeletePorInvoiceRange", {
+                  data: data,
+                })
                 .then(() => {
                   toast.success("پیش فاکتورها با موفقیت حذف شدند");
                   router.refresh();

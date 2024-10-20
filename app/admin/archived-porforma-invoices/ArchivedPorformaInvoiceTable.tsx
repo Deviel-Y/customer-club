@@ -26,10 +26,6 @@ const ArchivedPorformaInvoiceTable = ({
   archivedInvoice,
   totalPage,
 }: Props) => {
-  const allPorInvoiceIds = archivedInvoice.map(
-    (archivedPorInvoice) => archivedPorInvoice.id
-  );
-
   return (
     <Table
       topContent={

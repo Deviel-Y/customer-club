@@ -1,6 +1,6 @@
 import {
-  archivePorInvoiceDate,
-  ArchivePorInvoiceDateType,
+  ModifyPorInvoiceType,
+  modifyPorInvoice,
 } from "@/app/libs/validationSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { getLocalTimeZone, today } from "@internationalized/date";
@@ -25,8 +25,8 @@ const BackToPorInvoiceButton = () => {
   const [dates, setDates] = useState<DateType>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const { control, handleSubmit } = useForm<ArchivePorInvoiceDateType>({
-    resolver: zodResolver(archivePorInvoiceDate),
+  const { control, handleSubmit } = useForm<ModifyPorInvoiceType>({
+    resolver: zodResolver(modifyPorInvoice),
   });
   return (
     <>

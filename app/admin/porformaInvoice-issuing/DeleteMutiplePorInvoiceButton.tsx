@@ -68,26 +68,23 @@ export const DeleteMutiplePorInvoiceButton = ({
                     onPress={() => {
                       setisLoading(true);
 
-                      const myPromise = axios
+                      axios
                         .delete("/api/porformaInvoice/deleteMultiple", {
                           data: listOfIds,
                         })
                         .then(() => {
+                          toast.success("پیش فاکتورها با موفقیت حذف شدند");
                           router.push("/admin/porformaInvoice-issuing");
                           router.refresh();
                         })
+                        .catch((error: AxiosError) =>
+                          toast.error(error.response?.data as string)
+                        )
                         .finally(() => {
                           setisLoading(false);
                           onClose();
                           setListOfIds([]);
                         });
-
-                      toast.promise(myPromise, {
-                        error: (error: AxiosError) =>
-                          error.response?.data as string,
-                        loading: "در حال حذف...",
-                        success: "پیش فاکتورها با موفقیت حذف شدند",
-                      });
                     }}
                   >
                     حذف

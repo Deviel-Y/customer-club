@@ -8,7 +8,7 @@ export type InvoiceSchemaType = z.infer<typeof invoiceSchema>;
 export type PorInvoiceSchemaType = z.infer<typeof porInvoiceSchema>;
 export type TicketSchemaType = z.infer<typeof ticketSchema>;
 export type TicketMessageSchemaType = z.infer<typeof ticketMessageSchema>;
-export type ArchivePorInvoiceDateType = z.infer<typeof archivePorInvoiceDate>;
+export type ModifyPorInvoiceType = z.infer<typeof modifyPorInvoice>;
 
 export const adminSide_userSchame = z
   .object({
@@ -279,7 +279,7 @@ export const ticketMessageSchema = z.object({
     .max(60_000, "متن پاسخ بیش از حد بلند می باشد"),
 });
 
-export const archivePorInvoiceDate = z.object({
+export const modifyPorInvoice = z.object({
   fromDate: z
     .string({ message: "وارد کردن این فیلد الزامی مبیاشد" })
     .datetime(),
