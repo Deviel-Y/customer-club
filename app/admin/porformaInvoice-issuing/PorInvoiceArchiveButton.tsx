@@ -37,9 +37,9 @@ const PorInvoiceArchiveButton = () => {
         </PopoverTrigger>
 
         <PopoverContent className="shadow-large w-[600px] flex flex-col gap-y-4 p-3">
-          <h2 className="text-lg self-start">فرم بایگانی پیش فاکتور ها</h2>
+          <h2 className="text-lg mb-3 self-start">فرم بایگانی پیش فاکتور ها</h2>
           <form
-            className="flex flex-row gap-3 items-center w-full"
+            className="flex flex-col gap-3 items-start justify-center w-full"
             onSubmit={handleSubmit((data) => {
               const promise = axios
                 .post("/api/archivedPorInvoice", data)
@@ -52,61 +52,69 @@ const PorInvoiceArchiveButton = () => {
               });
             })}
           >
-            <Controller
-              control={control}
-              name="fromDate"
-              render={({ field: { onChange } }) => (
-                <DatePicker
-                  isRequired
-                  size="sm"
-                  label="از تاریخ"
-                  value={today(getLocalTimeZone())}
-                  onChange={(value) => {
-                    const formattedDate = value
-                      .toDate(getLocalTimeZone())
-                      .toISOString();
+            <div className="flex-row flex gap-3 w-full">
+              <Controller
+                control={control}
+                name="fromDate"
+                render={({ field: { onChange } }) => (
+                  <DatePicker
+                    isRequired
+                    size="sm"
+                    label="از تاریخ"
+                    value={today(getLocalTimeZone())}
+                    onChange={(value) => {
+                      const formattedDate = value
+                        .toDate(getLocalTimeZone())
+                        .toISOString();
+                      onChange(formattedDate);
+                      setDates({ ...dates, fromDate: formattedDate });
+                    }}
+                    description={`تاریخ شمسی : ${
+                      moment(dates?.fromDate).format("jYYYY/jMM/jDD") ||
+                      moment(Date()).format("jYYYY/jMM/jDD")
+                    }`}
+                  />
+                )}
+              />
 
-                    onChange(formattedDate);
+              <Controller
+                control={control}
+                name="toDate"
+                render={({ field: { onChange } }) => (
+                  <DatePicker
+                    isRequired
+                    size="sm"
+                    label="تا تاریخ"
+                    value={today(getLocalTimeZone())}
+                    onChange={(value) => {
+                      const formattedDate = value
+                        .toDate(getLocalTimeZone())
+                        .toISOString();
+                      onChange(formattedDate);
+                      setDates({ ...dates, toDate: formattedDate });
+                    }}
+                    description={`تاریخ شمسی : ${
+                      moment(dates?.toDate).format("jYYYY/jMM/jDD") ||
+                      moment(Date()).format("jYYYY/jMM/jDD")
+                    }`}
+                  />
+                )}
+              />
+            </div>
 
-                    setDates({ ...dates, fromDate: formattedDate });
-                  }}
-                  description={`تاریخ شمسی : ${
-                    moment(dates?.fromDate).format("jYYYY/jMM/jDD") ||
-                    moment(Date()).format("jYYYY/jMM/jDD")
-                  }`}
-                />
-              )}
-            />
+            <div className="flex flex-row gap-5">
+              <Button color="primary" type="submit">
+                بایگانی
+              </Button>
 
-            <Controller
-              control={control}
-              name="toDate"
-              render={({ field: { onChange } }) => (
-                <DatePicker
-                  isRequired
-                  size="sm"
-                  label="تا تاریخ"
-                  value={today(getLocalTimeZone())}
-                  onChange={(value) => {
-                    const formattedDate = value
-                      .toDate(getLocalTimeZone())
-                      .toISOString();
-
-                    onChange(formattedDate);
-
-                    setDates({ ...dates, toDate: formattedDate });
-                  }}
-                  description={`تاریخ شمسی : ${
-                    moment(dates?.toDate).format("jYYYY/jMM/jDD") ||
-                    moment(Date()).format("jYYYY/jMM/jDD")
-                  }`}
-                />
-              )}
-            />
-
-            <Button className="-translate-y-3" color="primary" type="submit">
-              بایگانی
-            </Button>
+              <Button
+                onPress={() => router.push("/admin/archived-porforma-invoices")}
+                color="secondary"
+                type="button"
+              >
+                پیش فاکتور های بایگانی شده
+              </Button>
+            </div>
           </form>
         </PopoverContent>
       </Popover>
