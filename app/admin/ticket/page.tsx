@@ -43,7 +43,7 @@ const AdminTicketIssuingPage = async ({
 
   const currentPage = pageNumber || 1;
 
-  const [tickets, ticketCountCount] = await Promise.all([
+  const [tickets, ticketCountCount] = await prisma.$transaction([
     prisma.ticket.findMany({
       where: {
         title: { contains: title },

@@ -7,25 +7,26 @@ const HomePage = async () => {
   const session = await getSession();
   authorizeUser(session!);
 
-  const [invoiceCount, porInvoiceCount, userTicketCount] = await Promise.all([
-    prisma.invoice.count({
-      where: {
-        assignedToUserId: session?.user.id,
-      },
-    }),
+  const [invoiceCount, porInvoiceCount, userTicketCount] =
+    await prisma.$transaction([
+      prisma.invoice.count({
+        where: {
+          assignedToUserId: session?.user.id,
+        },
+      }),
 
-    prisma.porformaInvoice.count({
-      where: {
-        assignedToUserId: session?.user.id,
-      },
-    }),
+      prisma.porformaInvoice.count({
+        where: {
+          assignedToUserId: session?.user.id,
+        },
+      }),
 
-    prisma.ticket.count({
-      where: {
-        issuerId: session?.user.id,
-      },
-    }),
-  ]);
+      prisma.ticket.count({
+        where: {
+          issuerId: session?.user.id,
+        },
+      }),
+    ]);
 
   const dashboardCardInfo: { label: string; amount: number }[] = [
     { label: "userInvoice", amount: invoiceCount },
@@ -49,3 +50,5 @@ const HomePage = async () => {
 };
 
 export default HomePage;
+
+export const dynamic = "force-dynamic";

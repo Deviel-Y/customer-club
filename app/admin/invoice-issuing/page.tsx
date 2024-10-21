@@ -30,7 +30,7 @@ const InvoiceIssuingPage = async ({
   const currentPage = pageNumber || 1;
 
   const [invoiceCount, adminSideInvoiceList, adminSideAllInvoices] =
-    await Promise.all([
+    await prisma.$transaction([
       prisma.invoice.count({
         where: {
           description: { contains: description },

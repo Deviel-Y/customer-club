@@ -40,7 +40,7 @@ const UserNotificationListPage = async ({
   const currentPage = pageNumber || 1;
 
   const [notification, notificationCount, authenticatedUser] =
-    await Promise.all([
+    await prisma.$transaction([
       prisma.notification.findMany({
         where: {
           assignedToUserId: session?.user.id,

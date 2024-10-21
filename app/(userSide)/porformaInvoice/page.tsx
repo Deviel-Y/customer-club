@@ -25,7 +25,7 @@ const PorformaInvoicePage = async ({
     statusFilter === "ALL" ? undefined : (statusFilter as Status);
 
   const [porInvoiceCount, userPorInvoice, expiredPorInvoice] =
-    await Promise.all([
+    await prisma.$transaction([
       prisma.porformaInvoice.count({
         where: {
           description: { contains: description },

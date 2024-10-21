@@ -16,7 +16,7 @@ export const DELETE = async (
   { params: { id } }: Props
 ) => {
   try {
-    const [invoice, por_invocie, ticket] = await Promise.all([
+    const [invoice, por_invocie, ticket] = await prisma.$transaction([
       prisma.invoice.findFirst({
         where: { assignedToUserId: id },
       }),

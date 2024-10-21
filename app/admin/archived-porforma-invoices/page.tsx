@@ -29,7 +29,7 @@ const ArchivedPorformaInvoicesPage = async ({
   const currentPage = pageNumber || 1;
 
   const [archivedPorInvoiceCount, archivedPorformaInvoiceList] =
-    await Promise.all([
+    await prisma.$transaction([
       prisma.archivedPorformaInvoice.count({
         where: {
           description: { contains: description },

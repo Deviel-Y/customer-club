@@ -14,7 +14,7 @@ const TicketDetailPage = async ({ params: { id } }: Props) => {
   const session = await getSession();
   authorizeAdmin(session!);
 
-  const [ticket, ticketMessages, users] = await Promise.all([
+  const [ticket, ticketMessages, users] = await prisma.$transaction([
     prisma.ticket.findUnique({
       where: { id },
     }),

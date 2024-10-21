@@ -21,31 +21,33 @@ const InvoicePage = async ({
 
   const currentPage = pageNumber || 1;
 
-  const [invoiceCount, userInvoice, userAllInvoice] = await Promise.all([
-    prisma.invoice.count({
-      where: {
-        description: { contains: description },
-        invoiceNumber: { contains: number },
-      },
-    }),
-    prisma.invoice.findMany({
-      where: {
-        assignedToUserId: session?.user.id,
-        invoiceNumber: { contains: number },
-        description: { contains: description },
-      },
-      take: pageSize,
-      skip: (currentPage - 1) * pageSize,
-    }),
+  const [invoiceCount, userInvoice, userAllInvoice] = await prisma.$transaction(
+    [
+      prisma.invoice.count({
+        where: {
+          description: { contains: description },
+          invoiceNumber: { contains: number },
+        },
+      }),
+      prisma.invoice.findMany({
+        where: {
+          assignedToUserId: session?.user.id,
+          invoiceNumber: { contains: number },
+          description: { contains: description },
+        },
+        take: pageSize,
+        skip: (currentPage - 1) * pageSize,
+      }),
 
-    prisma.invoice.findMany({
-      where: {
-        assignedToUserId: session?.user.id,
-        invoiceNumber: { contains: number },
-        description: { contains: description },
-      },
-    }),
-  ]);
+      prisma.invoice.findMany({
+        where: {
+          assignedToUserId: session?.user.id,
+          invoiceNumber: { contains: number },
+          description: { contains: description },
+        },
+      }),
+    ]
+  );
 
   return (
     <div className="flex flex-col gap-5 max-sm:gap-0 px-5 py-2 max-sm:p-5 max-sm:-translate-y-12 w-full">

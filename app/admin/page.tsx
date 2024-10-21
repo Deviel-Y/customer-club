@@ -8,7 +8,7 @@ const AdminPage = async () => {
   authorizeAdmin(session!);
 
   const [invoiceCount, proFormaInvoiceCount, userCount, adminTicketCount] =
-    await Promise.all([
+    await prisma.$transaction([
       prisma.invoice.count(),
 
       prisma.porformaInvoice.count(),

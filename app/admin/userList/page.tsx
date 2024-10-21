@@ -22,7 +22,7 @@ const UserListPage = async ({
 
   const currentPage = pageNumber || 1;
 
-  const [users, userCount] = await Promise.all([
+  const [users, userCount] = await prisma.$transaction([
     prisma.user.findMany({
       where: {
         role: "USER",

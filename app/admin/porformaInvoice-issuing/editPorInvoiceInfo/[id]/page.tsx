@@ -12,7 +12,7 @@ const EditPorInvoiceInfoPage = async ({ params: { id } }: Props) => {
   const session = await getSession();
   authorizeAdmin(session!);
 
-  const [porformaInvoice, users] = await Promise.all([
+  const [porformaInvoice, users] = await prisma.$transaction([
     prisma.porformaInvoice.findUnique({
       where: { id },
     }),

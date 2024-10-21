@@ -48,7 +48,7 @@ const porformaInvoiceListPage = async ({
   const currentPage = pageNumber || 1;
 
   const [porformaInvoiceCount, adminSidePorformaInvoiceList] =
-    await Promise.all([
+    await prisma.$transaction([
       prisma.porformaInvoice.count({
         where: {
           description: { contains: description },
