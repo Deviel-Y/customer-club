@@ -19,15 +19,20 @@ model User {
   image          String?
   role           Role    @default(USER)
 
-  notification            Notification[]
-  tickets                 Ticket[]
-  proformaInvoices        PorformaInvoice[]
-  invoices                Invoice[]
-  TicketMessage           TicketMessage[]
+  tickets Ticket[]
+
+  proformaInvoices PorformaInvoice[]
+
+  notifications Notification[] @relation("UserNotifications")
+
+  invoices Invoice[]
+
+  TicketMessage TicketMessage[]
+
   ArchivedPorformaInvoice ArchivedPorformaInvoice[]
 
-  createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
 }
 
 enum Role {
@@ -91,13 +96,14 @@ model Ticket {
 }
 
 model TicketMessage {
-  id                String         @id @default(cuid())
-  message           String         @db.Text
+  id                String      @id @default(cuid())
+  message           String      @db.Text
   assignetoTicketId String
   messageType       MessageType
   issuerId          String
-  canBeModified     Boolean        @default(true)
-  notification      Notification[]
+  canBeModified     Boolean     @default(true)
+
+  assignedToNotificationId Notification[]
 
   User   User   @relation(fields: [issuerId], references: [id])
   Ticket Ticket @relation(fields: [assignetoTicketId], references: [id])
@@ -121,13 +127,12 @@ model Notification {
   assignedToInvoiceId String?
   invocie             Invoice? @relation(fields: [assignedToInvoiceId], references: [id])
 
-  assignedToUserId String
-  user             User   @relation(fields: [assignedToUserId], references: [id])
-
   ArchivedPorformaInvoice   ArchivedPorformaInvoice? @relation(fields: [archivedPorformaInvoiceId], references: [id])
   archivedPorformaInvoiceId String?
 
   createdAt DateTime @default(now())
+
+  users User[] @relation("UserNotifications")
 }
 
 model ArchivedPorformaInvoice {
