@@ -72,11 +72,13 @@ const Navbar = ({
                 <p className="-translate-y-1 text-gray-500">
                   {authenticatedUser?.role === "ADMIN"
                     ? "ادمین"
+                    : authenticatedUser.role === "SUPER_ADMIN"
+                    ? "سوپر ادمین"
                     : authenticatedUser?.companyBranch}
                 </p>
               </div>
 
-              <div className="flex flex-col">
+              <div className="flex flex-col gap-2">
                 <Button
                   onPress={() => {
                     setIsOpen(false);
@@ -91,6 +93,12 @@ const Navbar = ({
                 >
                   ویرایش اطلاعات کاربر
                 </Button>
+
+                {session.user.role === "SUPER_ADMIN" && (
+                  <Button onPress={() => router.push("/admin/logsPage")}>
+                    ریز گزارشات
+                  </Button>
+                )}
               </div>
             </div>
           </PopoverContent>
