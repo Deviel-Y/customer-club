@@ -99,7 +99,8 @@ const Sidebar = ({ session }: Props) => {
             </SidebarLink>
           ))}
 
-        {session.user?.role === "ADMIN" &&
+        {(session?.user?.role === "ADMIN" ||
+          session?.user?.role === "SUPER_ADMIN") &&
           adminLinkLabels.map((label) => (
             <SidebarLink
               key={label}

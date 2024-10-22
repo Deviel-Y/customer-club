@@ -15,7 +15,7 @@ const EditUserPage = async ({ params: { id } }: Props) => {
 
   return (
     <div>
-      <UserForm user={user!} />
+      <UserForm session={session!} user={user!} />
     </div>
   );
 };
