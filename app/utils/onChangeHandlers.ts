@@ -165,6 +165,32 @@ export const userSearchFieldOnchangeHandlers = (
   searchParmas: ReadonlyURLSearchParams,
   router: AppRouterInstance
 ) => {
+  const roleOnChangeHandler = (event: Key | null) => {
+    const newParams = new URLSearchParams(searchParmas);
+
+    if (event) {
+      newParams.set("role", event as string);
+    } else {
+      newParams.delete("role");
+    }
+
+    if (searchParmas.get("companyName"))
+      newParams.set("companyName", searchParmas.get("companyName")!);
+
+    if (searchParmas.get("companyBranch"))
+      newParams.set("companyBranch", searchParmas.get("companyBranch")!);
+
+    if (searchParmas.get("itManager"))
+      newParams.set("itManager", searchParmas.get("itManager")!);
+
+    if (searchParmas.get("email"))
+      newParams.set("email", searchParmas.get("email")!);
+
+    if (searchParmas.get("pageNumber")) newParams.delete("pageNumber");
+
+    router.push(`?${newParams.toString()}`);
+  };
+
   const componyNameOnChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
     const newParams = new URLSearchParams(searchParmas);
 
@@ -173,6 +199,9 @@ export const userSearchFieldOnchangeHandlers = (
     } else {
       newParams.delete("companyName");
     }
+
+    if (searchParmas.get("role"))
+      newParams.set("role", searchParmas.get("role")!);
 
     if (searchParmas.get("companyBranch"))
       newParams.set("companyBranch", searchParmas.get("companyBranch")!);
@@ -199,6 +228,9 @@ export const userSearchFieldOnchangeHandlers = (
       newParams.delete("companyBranch");
     }
 
+    if (searchParmas.get("role"))
+      newParams.set("role", searchParmas.get("role")!);
+
     if (searchParmas.get("companyName"))
       newParams.set("companyName", searchParmas.get("companyName")!);
 
@@ -224,6 +256,9 @@ export const userSearchFieldOnchangeHandlers = (
       newParams.delete("email");
     }
 
+    if (searchParmas.get("role"))
+      newParams.set("role", searchParmas.get("role")!);
+
     if (searchParmas.get("companyBranch"))
       newParams.set("companyBranch", searchParmas.get("companyBranch")!);
 
@@ -247,6 +282,9 @@ export const userSearchFieldOnchangeHandlers = (
       newParams.delete("itManager");
     }
 
+    if (searchParmas.get("role"))
+      newParams.set("role", searchParmas.get("role")!);
+
     if (searchParmas.get("companyBranch"))
       newParams.set("companyBranch", searchParmas.get("companyBranch")!);
 
@@ -266,6 +304,7 @@ export const userSearchFieldOnchangeHandlers = (
     componyBranchOnChangeHandler,
     emailAddressOnChangeHandler,
     itMnagerOnChangeHandler,
+    roleOnChangeHandler,
   };
 };
 
