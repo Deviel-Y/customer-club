@@ -10,6 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Card, Input } from "@nextui-org/react";
 import { User } from "@prisma/client";
 import axios, { AxiosError } from "axios";
+import { Session } from "next-auth";
 import { useRouter } from "next/navigation";
 import { Key, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -23,9 +24,10 @@ type PasswordVisibility = {
 
 interface Props {
   user?: User;
+  session: Session;
 }
 
-const UserForm = ({ user }: Props) => {
+const UserForm = ({ user, session }: Props) => {
   const router = useRouter();
   const [isLoading, setisLoading] = useState<boolean>(false);
   const [selectedRole, setSelectedRole] = useState<Key>();
@@ -87,7 +89,13 @@ const UserForm = ({ user }: Props) => {
         </div>
 
         <div className="grid grid-cols-4 max-sm:grid-cols-1 grid-rows-4 max-sm:grid-rows-8 gap-3 max-sm:gap-1 place-items-center">
-          <div className="col-span-2 max-md:col-span-2 w-full">
+          <div
+            className={`${
+              session?.user?.role === "SUPER_ADMIN"
+                ? "col-span-2 max-md:col-span-2"
+                : "col-span-4 max-md:col-span-4"
+            } w-full`}
+          >
             <Input
               {...register("email")}
               defaultValue={user?.email || ""}
@@ -99,34 +107,41 @@ const UserForm = ({ user }: Props) => {
             <FormErrorMessage errorMessage={errors.email?.message || ""} />
           </div>
 
-          <div className="col-span-1 max-md:col-span-2 w-full">
-            <Input
-              {...register("adminName")}
-              isDisabled={selectedRole === "CUSTOMER"}
-              defaultValue={user?.adminName || ""}
-              isRequired
-              label="نام ادمین"
-            />
+          {session?.user?.role === "SUPER_ADMIN" && (
+            <>
+              <div className="col-span-1 max-md:col-span-2 w-full">
+                <Input
+                  {...register("adminName")}
+                  isDisabled={selectedRole === "CUSTOMER"}
+                  defaultValue={user?.adminName || ""}
+                  isRequired
+                  label="نام ادمین"
+                />
+                <FormErrorMessage
+                  errorMessage={errors.adminName?.message || ""}
+                />
+              </div>
 
-            <FormErrorMessage errorMessage={errors.adminName?.message || ""} />
-          </div>
-          <div className="max-md:col-span-2 w-full">
-            <Controller
-              name="role"
-              control={control}
-              defaultValue={user?.role ? user?.role : undefined}
-              render={({ field: { onChange } }) => (
-                <RoleSelection
-                  userRole={user?.role!}
-                  selectedRole={(value) => (
-                    setSelectedRole(value!), onChange(value)
+              <div className="max-md:col-span-2 w-full">
+                <Controller
+                  name="role"
+                  control={control}
+                  defaultValue={user?.role ? user?.role : undefined}
+                  render={({ field: { onChange } }) => (
+                    <RoleSelection
+                      userRole={user?.role!}
+                      selectedRole={(value) => (
+                        setSelectedRole(value!), onChange(value)
+                      )}
+                    />
                   )}
                 />
-              )}
-            />
 
-            <FormErrorMessage errorMessage={errors.role?.message || ""} />
-          </div>
+                <FormErrorMessage errorMessage={errors.role?.message || ""} />
+              </div>
+            </>
+          )}
+
           <div className="col-span-2 w-full">
             <div className="flex flex-row justify-center items-center">
               <Input
@@ -178,7 +193,9 @@ const UserForm = ({ user }: Props) => {
               defaultValue={user?.companyName || ""}
               {...register("companyName")}
               isDisabled={selectedRole === "ADMIN"}
-              isRequired={selectedRole === "CUSTOMER"}
+              isRequired={
+                selectedRole === "CUSTOMER" || session?.user?.role === "ADMIN"
+              }
               size="md"
               label="نام سازمان"
             />
@@ -192,7 +209,9 @@ const UserForm = ({ user }: Props) => {
               defaultValue={user?.companyBranch || ""}
               {...register("companyBranch")}
               isDisabled={selectedRole === "ADMIN"}
-              isRequired={selectedRole === "CUSTOMER"}
+              isRequired={
+                selectedRole === "CUSTOMER" || session?.user?.role === "ADMIN"
+              }
               size="md"
               label="نام شعبه"
             />
@@ -206,7 +225,9 @@ const UserForm = ({ user }: Props) => {
               defaultValue={user?.itManager || ""}
               {...register("itManager")}
               isDisabled={selectedRole === "ADMIN"}
-              isRequired={selectedRole === "CUSTOMER"}
+              isRequired={
+                selectedRole === "CUSTOMER" || session?.user?.role === "ADMIN"
+              }
               size="md"
               label="مسئول انفوماتیک"
             />
@@ -218,7 +239,9 @@ const UserForm = ({ user }: Props) => {
               defaultValue={user?.address || ""}
               {...register("address")}
               isDisabled={selectedRole === "ADMIN"}
-              isRequired={selectedRole === "CUSTOMER"}
+              isRequired={
+                selectedRole === "CUSTOMER" || session?.user?.role === "ADMIN"
+              }
               size="md"
               label="آدرس"
             />
