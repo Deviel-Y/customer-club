@@ -117,9 +117,11 @@ export const fullUserSchame = z
       .optional()
       .nullable(),
     image: z.string().min(1).optional(),
-    role: z.enum(["CUSTOMER", "ADMIN"], {
-      errorMap: () => ({ message: "تعیین سطح درسترسی الزامی است" }),
-    }),
+    role: z
+      .enum(["CUSTOMER", "ADMIN", "SUPER_ADMIN"], {
+        errorMap: () => ({ message: "تعیین سطح درسترسی الزامی است" }),
+      })
+      .default("CUSTOMER"),
   })
   .refine(
     ({ newPassword, confirmPassword }) => newPassword === confirmPassword,

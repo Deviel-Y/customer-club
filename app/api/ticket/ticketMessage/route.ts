@@ -29,7 +29,7 @@ export const POST = async (request: NextRequest) => {
       }),
 
       prisma.user.findMany({
-        where: { role: "ADMIN" },
+        where: { role: { in: ["ADMIN", "SUPER_ADMIN"] } },
         select: { id: true },
       }),
     ]);
