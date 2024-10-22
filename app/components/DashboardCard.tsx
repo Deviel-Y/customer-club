@@ -87,7 +87,7 @@ const dataMapping: Record<
     ),
   },
 
-  adminUser: {
+  usersCount: {
     label: "تعداد کاربرها",
     backgroundColor:
       "bg-gradient-to-r bg-gradient-to-r bg-gradient-to-r from-neutral-300 to-stone-400",
