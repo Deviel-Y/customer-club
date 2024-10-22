@@ -15,7 +15,7 @@ export const POST = async (request: NextRequest) => {
     if (!validation.success)
       return NextResponse.json(validation.error.format(), { status: 400 });
 
-    const [ticketMessages, ticket, user] = await Promise.all([
+    const [ticketMessages, ticket, user, adminUsers] = await Promise.all([
       await prisma.ticketMessage.findMany({
         where: { assignetoTicketId },
       }),
@@ -26,6 +26,11 @@ export const POST = async (request: NextRequest) => {
 
       await prisma.user.findUnique({
         where: { id: session?.user.id },
+      }),
+
+      prisma.user.findMany({
+        where: { role: "ADMIN" },
+        select: { id: true },
       }),
     ]);
 
@@ -77,6 +82,7 @@ export const POST = async (request: NextRequest) => {
         messageType: session?.user.role === "ADMIN" ? "RESPONCE" : "REQUEST",
         issuerId: session?.user.id!,
       },
+      include: { Ticket: true },
     });
 
     // Notification Section
@@ -93,7 +99,12 @@ export const POST = async (request: NextRequest) => {
       data: {
         message: notificationMessage,
         type: "INFO",
-        assignedToUserId: session?.user.id!,
+        users: {
+          connect:
+            newMesaage.messageType === "REQUEST"
+              ? adminUsers.map((user) => ({ id: user.id }))
+              : { id: ticket?.issuerId },
+        },
         assignedToSection:
           ticketMessages.length === 0 ? "TICKET" : "TICKET_MESSAGE",
         assignedToTicketMessageId: newMesaage.id,

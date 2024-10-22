@@ -75,16 +75,6 @@ export const PATCH = async (
       },
     });
 
-    await prisma.notification.create({
-      data: {
-        message: `شماره فاکتور ${invoiceNumber} از سمت ادمین ویرایش شد`,
-        type: "INFO",
-        assignedToUserId,
-        assignedToSection: "INVOICE",
-        assignedToInvoiceId: updatedInvoice.id,
-      },
-    });
-
     return NextResponse.json(updatedInvoice);
   } catch (error) {
     console.log(error);

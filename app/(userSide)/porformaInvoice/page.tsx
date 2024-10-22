@@ -72,7 +72,7 @@ const PorformaInvoicePage = async ({
         assignedToSection: "POR_INVOICE",
         message: `پیش فاکتور شماره ${invocie.porformaInvoiceNumber} منضقی شد`,
         assignedToPorInvoiceId: invocie.id,
-        assignedToUserId: session?.user.id!,
+        users: { connect: { id: session?.user.id } },
         type: "EXPIRED",
       },
     });

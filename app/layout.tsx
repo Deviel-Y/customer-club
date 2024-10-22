@@ -1,5 +1,4 @@
 import prisma from "@/prisma/client";
-import { addDays, endOfDay } from "date-fns";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import AllProviders from "./AllProviders";
@@ -29,102 +28,40 @@ export default async function RootLayout({
 }>) {
   const session = await getSession();
 
-  const [notifications, unReadNotificationCount, authenticatedUser] =
+  const [allNotifications, unReadNotificationCount, authenticatedUser] =
     await Promise.all([
       prisma.notification.findMany({
         where: {
-          isRead: false,
-          assignedToUserId:
-            session?.user.role === "USER" ? session?.user.id : undefined,
+          AND: [
+            { isRead: false },
+            { users: { some: { id: session?.user.id } } },
+          ],
         },
 
         orderBy: { createdAt: "desc" },
         take: 5,
       }),
 
+      // unReadNotificationCount
       prisma.notification.count({
         where: {
-          isRead: false,
-          assignedToUserId:
-            session?.user.role === "ADMIN" ? undefined : session?.user.id,
+          AND: [
+            { isRead: false },
+            { users: { some: { id: session?.user.id } } },
+          ],
         },
       }),
 
+      // authenticatedUser
       session?.user
         ? prisma.user.findUnique({ where: { id: session?.user.id } })
         : undefined,
     ]);
 
-  // Notify user if assigned porforma invoices will expire in 2 days
-  const currentDate = new Date();
-  const twoDaysFromNowEnd = endOfDay(addDays(currentDate, 2));
-
-  const porformaInvoicesExpiringInTwoDays =
-    await prisma.porformaInvoice.findMany({
-      where: {
-        expiredAt: {
-          lte: twoDaysFromNowEnd,
-        },
-        status: "IN_PROGRESS",
-      },
-    });
-
-  // Create related notification record for it
-  await Promise.all(
-    porformaInvoicesExpiringInTwoDays.map(async (por_invoice) => {
-      const porInvoiceexpireNotification = await prisma.notification.findFirst({
-        where: {
-          assignedToUserId: por_invoice.assignedToUserId,
-          message: { contains: por_invoice.porformaInvoiceNumber },
-          assignedToSection: "POR_INVOICE",
-          type: "WARNING",
-        },
-      });
-
-      if (!porInvoiceexpireNotification)
-        await prisma.notification.create({
-          data: {
-            assignedToUserId: por_invoice.assignedToUserId,
-            message: `شماره پیش فاکتور ${por_invoice.porformaInvoiceNumber} به زودی منقضی میشود`,
-            assignedToPorInvoiceId: por_invoice.id,
-            type: "WARNING",
-            assignedToSection: "POR_INVOICE",
-          },
-        });
-    })
-  );
-
-  // Notify user if assigned porforma invoices have been expired
-  const expiredPorformaInvoices = await prisma.porformaInvoice.findMany({
-    where: {
-      status: "EXPIRED",
-    },
+  // Delete expired porforma invoice notifications
+  await prisma.notification.deleteMany({
+    where: { porformaInvoice: { status: "EXPIRED" } },
   });
-
-  // Create related notification record for it
-  await Promise.all(
-    expiredPorformaInvoices.map(async (por_invoice) => {
-      const porInvoiceexpireNotification = await prisma.notification.findFirst({
-        where: {
-          assignedToUserId: por_invoice.assignedToUserId,
-          assignedToPorInvoiceId: por_invoice.id,
-          assignedToSection: "POR_INVOICE",
-          type: "EXPIRED",
-        },
-      });
-
-      if (!porInvoiceexpireNotification)
-        await prisma.notification.create({
-          data: {
-            assignedToUserId: por_invoice.assignedToUserId,
-            message: `شماره پیش فاکتور ${por_invoice.porformaInvoiceNumber} منقضی شد`,
-            assignedToPorInvoiceId: por_invoice.id,
-            type: "EXPIRED",
-            assignedToSection: "POR_INVOICE",
-          },
-        });
-    })
-  );
 
   return (
     <html lang="fa" dir="rtl" className="bg-neutral-50">
@@ -142,7 +79,7 @@ export default async function RootLayout({
                 session={session!}
                 authenticatedUser={authenticatedUser!}
                 unReadNotificationCount={unReadNotificationCount}
-                notifications={notifications}
+                notifications={allNotifications}
               />
             </nav>
 

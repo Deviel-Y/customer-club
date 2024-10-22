@@ -52,16 +52,22 @@ const AdminNotificationListPage = async ({
       prisma.notification.findMany({
         where: {
           assignedToSection: { equals: notificationSection },
-          user: {
-            companyBranch: { contains: companyBranch },
-            companyName: { contains: companyName },
+          users: {
+            some: {
+              companyName: { contains: companyName },
+              companyBranch: { contains: companyBranch },
+            },
           },
+          // users: {
+          //   companyBranch: { contains: companyBranch },
+          //   companyName: { contains: companyName },
+          // },
           message: { contains: content },
           type: { equals: notificationType },
           isRead: isReadNotification,
         },
 
-        include: { user: true },
+        include: { users: true },
         take: pageSize,
         skip: (currentPage - 1) * pageSize,
         orderBy: { createdAt: "desc" },
@@ -70,9 +76,11 @@ const AdminNotificationListPage = async ({
       prisma.notification.count({
         where: {
           assignedToSection: { equals: notificationSection },
-          user: {
-            companyBranch: { contains: companyBranch },
-            companyName: { contains: companyName },
+          users: {
+            some: {
+              companyBranch: { contains: companyBranch },
+              companyName: { contains: companyName },
+            },
           },
           message: { contains: content },
           type: { equals: notificationType },

@@ -43,14 +43,14 @@ const UserNotificationListPage = async ({
     await prisma.$transaction([
       prisma.notification.findMany({
         where: {
-          assignedToUserId: session?.user.id,
+          users: { some: { id: session?.user.id } },
           assignedToSection: { equals: notificationSection },
           message: { contains: content },
           type: { equals: notificationType },
           isRead: isReadNotification,
         },
 
-        include: { user: true },
+        include: { users: true },
         take: pageSize,
         skip: (currentPage - 1) * pageSize,
         orderBy: { createdAt: "desc" },
@@ -58,7 +58,7 @@ const UserNotificationListPage = async ({
 
       prisma.notification.count({
         where: {
-          assignedToUserId: session?.user.id,
+          users: { some: { id: session?.user.id } },
           assignedToSection: { equals: notificationSection },
           message: { contains: content },
           type: { equals: notificationType },

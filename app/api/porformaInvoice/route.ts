@@ -2,6 +2,7 @@ import getSession from "@/app/libs/getSession";
 import { porInvoiceSchema } from "@/app/libs/validationSchema";
 import prisma from "@/prisma/client";
 import { PorformaInvoice } from "@prisma/client";
+import { addDays, endOfDay } from "date-fns";
 import { NextRequest, NextResponse } from "next/server";
 
 export const POST = async (request: NextRequest) => {
@@ -18,6 +19,9 @@ export const POST = async (request: NextRequest) => {
       organization,
     } = body;
 
+    const currentDate = new Date();
+    const twoDaysFromNowEnd = endOfDay(addDays(currentDate, 2));
+
     const validation = porInvoiceSchema.safeParse(body);
     if (!validation.success)
       return NextResponse.json(validation.error.format(), { status: 400 });
@@ -25,6 +29,7 @@ export const POST = async (request: NextRequest) => {
     const porformaInvoice = await prisma.porformaInvoice.findFirst({
       where: { porformaInvoiceNumber },
     });
+
     if (porformaInvoice)
       return NextResponse.json("پیش فاکتور با این شماره قبلا صادر شده است", {
         status: 400,
@@ -46,11 +51,24 @@ export const POST = async (request: NextRequest) => {
       data: {
         message: `پیش فاکتوری با شماره ${porformaInvoiceNumber} برای شما صادر شد`,
         type: "INFO",
-        assignedToUserId,
+        users: {
+          connect: { id: newPorformaInvoice.assignedToUserId },
+        },
         assignedToSection: "POR_INVOICE",
         assignedToPorInvoiceId: newPorformaInvoice.id,
       },
     });
+
+    if (newPorformaInvoice.expiredAt <= twoDaysFromNowEnd)
+      await prisma.notification.create({
+        data: {
+          users: { connect: { id: newPorformaInvoice.assignedToUserId } },
+          message: `شماره پیش فاکتور ${newPorformaInvoice.porformaInvoiceNumber} به زودی منقضی میشود`,
+          assignedToPorInvoiceId: newPorformaInvoice.id,
+          type: "WARNING",
+          assignedToSection: "POR_INVOICE",
+        },
+      });
 
     return NextResponse.json(newPorformaInvoice, { status: 201 });
   } catch (error) {

@@ -11,7 +11,7 @@ export const PATCH = async (
 ) => {
   try {
     const updatedNotification = await prisma.notification.updateMany({
-      where: { assignedToUserId: id },
+      where: { users: { some: { id } } },
       data: { isRead: true },
     });
 
