@@ -17,7 +17,7 @@ model User {
   itManager      String?
   address        String?
   image          String?
-  role           Role    @default(USER)
+  role           Role    @default(CUSTOMER)
 
   tickets Ticket[]
 
@@ -33,11 +33,6 @@ model User {
 
   updatedAt DateTime @updatedAt
   createdAt DateTime @default(now())
-}
-
-enum Role {
-  USER
-  ADMIN
 }
 
 model Invoice {
@@ -188,4 +183,9 @@ enum Category {
   PAYMENT
   FEATURE_REQUEST
   GENERAL_INQUIRY
+}
+
+enum Role {
+  CUSTOMER
+  ADMIN
 }

@@ -102,7 +102,7 @@ const UserForm = ({ user }: Props) => {
           <div className="col-span-1 max-md:col-span-2 w-full">
             <Input
               {...register("adminName")}
-              isDisabled={selectedRole === "USER"}
+              isDisabled={selectedRole === "CUSTOMER"}
               defaultValue={user?.adminName || ""}
               isRequired
               label="نام ادمین"
@@ -178,7 +178,7 @@ const UserForm = ({ user }: Props) => {
               defaultValue={user?.companyName || ""}
               {...register("companyName")}
               isDisabled={selectedRole === "ADMIN"}
-              isRequired={selectedRole === "USER"}
+              isRequired={selectedRole === "CUSTOMER"}
               size="md"
               label="نام سازمان"
             />
@@ -192,7 +192,7 @@ const UserForm = ({ user }: Props) => {
               defaultValue={user?.companyBranch || ""}
               {...register("companyBranch")}
               isDisabled={selectedRole === "ADMIN"}
-              isRequired={selectedRole === "USER"}
+              isRequired={selectedRole === "CUSTOMER"}
               size="md"
               label="نام شعبه"
             />
@@ -206,7 +206,7 @@ const UserForm = ({ user }: Props) => {
               defaultValue={user?.itManager || ""}
               {...register("itManager")}
               isDisabled={selectedRole === "ADMIN"}
-              isRequired={selectedRole === "USER"}
+              isRequired={selectedRole === "CUSTOMER"}
               size="md"
               label="مسئول انفوماتیک"
             />
@@ -218,7 +218,7 @@ const UserForm = ({ user }: Props) => {
               defaultValue={user?.address || ""}
               {...register("address")}
               isDisabled={selectedRole === "ADMIN"}
-              isRequired={selectedRole === "USER"}
+              isRequired={selectedRole === "CUSTOMER"}
               size="md"
               label="آدرس"
             />

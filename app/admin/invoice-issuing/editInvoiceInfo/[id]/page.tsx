@@ -15,7 +15,7 @@ const EditInvoiceInfoPage = async ({ params: { id } }: Props) => {
   const [invoice, users] = await prisma.$transaction([
     prisma.invoice.findUnique({ where: { id } }),
 
-    prisma.user.findMany({ where: { role: "USER" } }),
+    prisma.user.findMany({ where: { role: "CUSTOMER" } }),
   ]);
 
   if (!invoice) notFound();

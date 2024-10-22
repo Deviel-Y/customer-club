@@ -12,7 +12,7 @@ const LoginPage = async () => {
           شما در حال حاضر وارد شده اید!
           <Link
             className="mx-5 text-blue-600"
-            href={session.user.role === "USER" ? "/" : "/admin"}
+            href={session.user.role === "CUSTOMER" ? "/" : "/admin"}
           >
             بازگشت
           </Link>

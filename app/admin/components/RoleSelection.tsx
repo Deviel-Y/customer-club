@@ -28,6 +28,6 @@ const RoleSelection = ({ selectedRole, userRole }: Props) => {
 export default RoleSelection;
 
 const roles: { label: string; value: Role }[] = [
-  { label: "User", value: "USER" },
+  { label: "Customer", value: "CUSTOMER" },
   { label: "Admin", value: "ADMIN" },
 ];

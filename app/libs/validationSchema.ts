@@ -117,7 +117,7 @@ export const fullUserSchame = z
       .optional()
       .nullable(),
     image: z.string().min(1).optional(),
-    role: z.enum(["USER", "ADMIN"], {
+    role: z.enum(["CUSTOMER", "ADMIN"], {
       errorMap: () => ({ message: "تعیین سطح درسترسی الزامی است" }),
     }),
   })
@@ -130,7 +130,7 @@ export const fullUserSchame = z
   )
   .refine(
     ({ role, companyName, companyBranch, address, itManager }) => {
-      if (role === "USER") {
+      if (role === "CUSTOMER") {
         return (
           companyName?.length! > 0 &&
           companyBranch?.length! > 0 &&
@@ -149,7 +149,7 @@ export const fullUserSchame = z
       { role, companyName, companyBranch, address, itManager, adminName },
       ctx
     ) => {
-      if (role === "USER") {
+      if (role === "CUSTOMER") {
         if (!companyName || companyName.length === 0) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,

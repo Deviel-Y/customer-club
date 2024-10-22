@@ -30,7 +30,7 @@ const NotificationListTable = ({ notifications, totalPage, user }: Props) => {
       topContent={
         <div className="flex flex-row justify-between">
           <h2 className="text-lg">لیست اعلان ها</h2>
-          {user?.role === "USER" && (
+          {user?.role === "CUSTOMER" && (
             <Button
               color="primary"
               size="sm"

@@ -25,7 +25,7 @@ const UserListPage = async ({
   const [users, userCount] = await prisma.$transaction([
     prisma.user.findMany({
       where: {
-        role: "USER",
+        role: "CUSTOMER",
         companyName: { contains: companyName },
         companyBranch: { contains: companyBranch },
         email: { contains: email },
@@ -38,7 +38,7 @@ const UserListPage = async ({
 
     prisma.user.count({
       where: {
-        role: "USER",
+        role: "CUSTOMER",
         companyName: { contains: companyName },
         companyBranch: { contains: companyBranch },
         email: { contains: email },

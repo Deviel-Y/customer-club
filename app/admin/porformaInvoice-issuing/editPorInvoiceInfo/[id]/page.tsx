@@ -17,7 +17,7 @@ const EditPorInvoiceInfoPage = async ({ params: { id } }: Props) => {
       where: { id },
     }),
 
-    prisma.user.findMany({ where: { role: "USER" } }),
+    prisma.user.findMany({ where: { role: "CUSTOMER" } }),
   ]);
 
   if (!porformaInvoice) notFound();

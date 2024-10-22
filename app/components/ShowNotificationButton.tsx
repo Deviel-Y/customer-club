@@ -107,7 +107,7 @@ const ShowNotificationButton = ({
                 })
                 .then(() => {
                   router.push(
-                    session?.user.role === "USER"
+                    session?.user.role === "CUSTOMER"
                       ? dropdownItemMapping[notification.assignedToSection]
                           .userHref
                       : dropdownItemMapping[notification.assignedToSection]

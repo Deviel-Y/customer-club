@@ -14,7 +14,7 @@ const AdminPage = async () => {
       prisma.porformaInvoice.count(),
 
       prisma.user.count({
-        where: { role: "USER" },
+        where: { role: "CUSTOMER" },
       }),
       prisma.ticket.count({
         where: {

@@ -91,7 +91,7 @@ export const PATCH = async (
         }
       );
 
-    if (session?.user.role === "USER" && newPassword && confirmPassword) {
+    if (session?.user.role === "CUSTOMER" && newPassword && confirmPassword) {
       const isCurrentPasswordValid: boolean =
         !!currentPassword &&
         (await bcrypt.compare(currentPassword, user.hashedPassword));

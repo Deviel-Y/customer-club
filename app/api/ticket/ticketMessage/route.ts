@@ -58,7 +58,7 @@ export const POST = async (request: NextRequest) => {
 
     if (
       ticketMessages.length &&
-      session?.user.role === "USER" &&
+      session?.user.role === "CUSTOMER" &&
       lastTicketMessage?.messageType === "REQUEST"
     )
       return NextResponse.json(
