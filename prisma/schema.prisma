@@ -188,4 +188,5 @@ enum Category {
 enum Role {
   CUSTOMER
   ADMIN
+  SUPER_ADMIN
 }
