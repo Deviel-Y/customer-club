@@ -1,23 +1,26 @@
 import getSession from "@/app/libs/getSession";
-import { invoiceSchema } from "@/app/libs/validationSchema";
+import { invoiceSchema, InvoiceSchemaType } from "@/app/libs/validationSchema";
 import prisma from "@/prisma/client";
 import { Invoice } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
+
+type InvoiceType = Invoice & InvoiceSchemaType;
 
 export const POST = async (request: NextRequest) => {
   const session = await getSession();
 
   try {
-    const body: Invoice = await request.json();
+    const body: InvoiceType = await request.json();
     const {
       description,
       invoiceNumber,
       organization,
       organizationBranch,
-      assignedToUserId,
       price,
       tax,
       priceWithTax,
+      sendNotification,
+      assignedToUserId,
     } = body;
 
     const validation = invoiceSchema.safeParse(body);
@@ -48,6 +51,17 @@ export const POST = async (request: NextRequest) => {
         issuerId: session?.user.id!,
       },
     });
+
+    sendNotification &&
+      (await prisma.notification.create({
+        data: {
+          users: { connect: { id: assignedToUserId } },
+          message: `فاکتوری با شماره ${newInvoice.invoiceNumber} برای شما صادر شد`,
+          assignedToInvoiceId: newInvoice.id,
+          assignedToSection: "INVOICE",
+          type: "INFO",
+        },
+      }));
 
     return NextResponse.json(newInvoice, { status: 201 });
   } catch (error) {

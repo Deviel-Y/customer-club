@@ -69,64 +69,69 @@ const InvoiceForm = ({ Userlist, invoice }: Props) => {
     }
   }, [price, isInputsManual, setValue]);
 
-  const submitHandler = handleSubmit(({ invoiceNumber, ...data }) => {
-    const assignedToUserId = Userlist.find(
-      (user) =>
-        user.companyName === companyName && user.companyBranch === companyBranch
-    )?.id;
+  const submitHandler = handleSubmit(
+    ({ invoiceNumber, sendNotification, ...data }) => {
+      const assignedToUserId = Userlist.find(
+        (user) =>
+          user.companyName === companyName &&
+          user.companyBranch === companyBranch
+      )?.id;
 
-    setIsLoading(true);
+      setIsLoading(true);
 
-    invoice
-      ? axios
-          .patch(`/api/invoice/${invoice.id}`, {
-            invoiceNumber: invoiceNumber.trim(),
-            assignedToUserId,
-            ...data,
-          })
-          .then(() => {
-            toast.success("فاکتور با موفقیت صادر شد");
-            setTimeout(() => {
-              router.push("/admin/invoice-issuing");
-              router.refresh();
-            }, 2000);
-          })
-          .catch((error: AxiosError) => {
-            setIsLoading(false);
-            toast.error(error.response?.data as string);
-          })
-      : axios
-          .post("/api/invoice", {
-            invoiceNumber: invoiceNumber.trim(),
-            assignedToUserId,
-            ...data,
-          })
-          .then(() => {
-            toast.success("فاکتور با موفقیت ویرایش شد");
-            setTimeout(() => {
-              router.push("/admin/invoice-issuing");
-              router.refresh();
-            }, 2000);
-          })
-          .catch((error: AxiosError) => {
-            setIsLoading(false);
-            toast.error(error.response?.data as string);
-          });
-  });
+      invoice
+        ? axios
+            .patch(`/api/invoice/${invoice.id}`, {
+              invoiceNumber: invoiceNumber.trim(),
+              assignedToUserId,
+              sendNotification: sendNotification,
+              ...data,
+            })
+            .then(() => {
+              toast.success("فاکتور با موفقیت صادر شد");
+              setTimeout(() => {
+                router.push("/admin/invoice-issuing");
+                router.refresh();
+              }, 2000);
+            })
+            .catch((error: AxiosError) => {
+              setIsLoading(false);
+              toast.error(error.response?.data as string);
+            })
+        : axios
+            .post("/api/invoice", {
+              invoiceNumber: invoiceNumber.trim(),
+              sendNotification: sendNotification,
+              assignedToUserId,
+              ...data,
+            })
+            .then(() => {
+              toast.success("فاکتور با موفقیت ویرایش شد");
+              setTimeout(() => {
+                router.push("/admin/invoice-issuing");
+                router.refresh();
+              }, 2000);
+            })
+            .catch((error: AxiosError) => {
+              setIsLoading(false);
+              toast.error(error.response?.data as string);
+            });
+    }
+  );
 
   return (
     <form
       onSubmit={submitHandler}
       className="flex justify-center items-center max-sm:w-full"
     >
-      <Card className="flex flex-col p-5 max-sm:p-2 gap-2 w-4/5">
+      <Card className="flex flex-col p-5 max-sm:p-2 w-4/5">
         <div>
           <h2 className="text-[25px] max-sm:text-[20px] mb-5">
             اطلاعات فاکتور
           </h2>
         </div>
 
-        <div className="grid grid-cols-3 grid-rows-3 max-md:grid-cols-1 max-md:grid-rows-4 gap-2 max-md:gap-0 place-items-center">
+        <div className="grid grid-cols-3 grid-rows-3 max-md:grid-cols-1 max-md:grid-rows-4 gap-1 max-md:gap-0 place-items-center">
           <div className="w-full">
             <Input
               size="lg"
@@ -226,7 +231,7 @@ const InvoiceForm = ({ Userlist, invoice }: Props) => {
               isDisabled={!isInputsManual}
               size="lg"
               value={!isInputsManual ? undefined : undefined}
-              defaultValue={invoice?.tax?.toString()}
+              defaultValue={invoice?.tax?.toString() || "0"}
               onValueChange={(value) =>
                 isInputsManual && setValue("tax", parseInt(value))
               }
@@ -244,7 +249,7 @@ const InvoiceForm = ({ Userlist, invoice }: Props) => {
               isDisabled={!isInputsManual}
               size="lg"
               value={!isInputsManual ? undefined : undefined}
-              defaultValue={invoice?.priceWithTax?.toString()}
+              defaultValue={invoice?.priceWithTax?.toString() || "0"}
               onValueChange={(value) =>
                 isInputsManual && setValue("priceWithTax", parseInt(value))
               }
@@ -257,7 +262,7 @@ const InvoiceForm = ({ Userlist, invoice }: Props) => {
             <FormErrorMessage errorMessage={errors.priceWithTax?.message!} />
           </div>
 
-          <div className="col-span-3 max-md:col-span-1 w-full">
+          <div className="col-span-2 place-content-center place-items-center max-md:col-span-1 w-full">
             <Input
               size="lg"
               defaultValue={invoice?.description}
@@ -268,6 +273,22 @@ const InvoiceForm = ({ Userlist, invoice }: Props) => {
 
             <FormErrorMessage errorMessage={errors?.description?.message!} />
           </div>
+          <Controller
+            control={control}
+            defaultValue={true}
+            name="sendNotification"
+            render={({ field: { onChange } }) => (
+              <Checkbox
+                isRequired
+                defaultSelected={true}
+                className="col-span-1 -translate-y-2"
+                size="sm"
+                onChange={(event) => onChange(event.target.checked)}
+              >
+                اعلان برای کاربر ارسال شود
+              </Checkbox>
+            )}
+          />
         </div>
 
         <div className="flex flex-row max-sm:flex-col-reverse justify-between items-center gap-5 mt-5 max-sm:-mt-3">

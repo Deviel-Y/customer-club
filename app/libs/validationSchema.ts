@@ -238,6 +238,7 @@ export const invoiceSchema = z.object({
     .max(999_999_999_999, {
       message: "مبلغ نهایی از این حد نمیتواند بیشتر باشد",
     }),
+  sendNotification: z.boolean(),
 });
 
 export const porInvoiceSchema = z.object({
