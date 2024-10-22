@@ -14,14 +14,16 @@ import {
 } from "@nextui-org/react";
 import { User } from "@prisma/client";
 import moment from "moment-jalaali";
+import { Session } from "next-auth";
 import { useRouter } from "next/navigation";
 
 interface Props {
   users: User[];
+  session: Session;
   totalPage: number;
 }
 
-const UserListTable = ({ users, totalPage }: Props) => {
+const UserListTable = ({ users, totalPage, session }: Props) => {
   const router = useRouter();
 
   return (
@@ -41,7 +43,11 @@ const UserListTable = ({ users, totalPage }: Props) => {
       <TableHeader>
         {columns.map((column) => (
           <TableColumn
-            width={column.value === "companyName" ? 400 : undefined}
+            hidden={
+              session.user.role === "ADMIN"
+                ? column.value === "editInfo" || column.value === "role"
+                : undefined
+            }
             align="center"
             key={column.value}
           >
@@ -53,7 +59,7 @@ const UserListTable = ({ users, totalPage }: Props) => {
       <TableBody emptyContent="کاربری تعریف نشده">
         {users.map((user) => (
           <TableRow key={user.id}>
-            <TableCell>
+            <TableCell hidden={session.user.role === "ADMIN"}>
               <div className="flex flex-row justify-center items-center gap-x-3">
                 <DeleteConfirmationButton
                   redirectEndpont="/admin/userList"
@@ -72,6 +78,9 @@ const UserListTable = ({ users, totalPage }: Props) => {
                 </Button>
               </div>
             </TableCell>
+            <TableCell hidden={session?.user?.role === "ADMIN"}>
+              {roleMapping[user.role]?.label}
+            </TableCell>
             <TableCell>{user.companyName}</TableCell>
             <TableCell>{user.companyBranch}</TableCell>
             <TableCell>{user.email}</TableCell>
@@ -88,11 +97,17 @@ const UserListTable = ({ users, totalPage }: Props) => {
 
 export default UserListTable;
 
+const roleMapping: Record<any, { label: any }> = {
+  ADMIN: { label: "ادمین" },
+  CUSTOMER: { label: "مشتری" },
+};
+
 const columns: {
   label: string;
   value: keyof User | "editInfo";
 }[] = [
   { label: "حذف / ویرایش", value: "editInfo" },
+  { label: "سطح دسترسی", value: "role" },
   { label: "نام سازمان", value: "companyName" },
   { label: "شعبه", value: "companyBranch" },
   { label: "آدرس ایمیل", value: "email" },
