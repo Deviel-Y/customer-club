@@ -10,7 +10,7 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 import axios, { AxiosError } from "axios";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 
@@ -19,13 +19,12 @@ interface Props {
   setListOfIds: (ids: string[]) => void;
 }
 
-export const DeleteMutiplePorInvoiceButton = ({
-  listOfIds,
-  setListOfIds,
-}: Props) => {
+export const DeleteMutipleButton = ({ listOfIds, setListOfIds }: Props) => {
+  const router = useRouter();
+  const pathname = usePathname();
+
   const [isLoading, setisLoading] = useState<boolean>(false);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const router = useRouter();
 
   return (
     <>
@@ -38,19 +37,24 @@ export const DeleteMutiplePorInvoiceButton = ({
           onPress={onOpen}
           isDisabled={!listOfIds || listOfIds.length === 0}
         >
-          حذف پیش فاکتورها
+          {pathname.includes("porformaInvoice")
+            ? "حذف پیش فاکتورها"
+            : "حذف فاکتورها"}
         </Button>
         <Modal backdrop="blur" isOpen={isOpen} onOpenChange={onOpenChange}>
           <ModalContent>
             {(onClose) => (
               <div>
                 <ModalHeader className="flex flex-col">
-                  حذف پیش فاکتورها
+                  {pathname.includes("porformaInvoice")
+                    ? "حذف پیش فاکتور"
+                    : "حذف فاکتور"}
                 </ModalHeader>
                 <ModalBody>
                   <p>
-                    آیا از حذف پیش فاکتورهای انتخاب شده مطمئن هستید؟ این عمل غیر
-                    قابل بازگشت است
+                    {pathname.includes("porformaInvoice")
+                      ? "آیا از حذف پیش فاکتورهای انتخاب شده مطمئن هستید؟ این عمل غیر قابل بازگشت میباشد"
+                      : "آیا از حذف فاکتورهای انتخاب شده مطمئن هستید؟ این عمل غیر قابل بازگشت میباشد"}
                   </p>
                 </ModalBody>
                 <ModalFooter>
@@ -73,7 +77,13 @@ export const DeleteMutiplePorInvoiceButton = ({
                           data: listOfIds,
                         })
                         .then(() => {
-                          toast.success("پیش فاکتورها با موفقیت حذف شدند");
+                          toast.success(
+                            `${
+                              pathname.includes("porformaInvoice")
+                                ? "پیش فاکتورها با موفقیت حذف شدند"
+                                : "فاکتورها با موفقیت حذف شدند"
+                            }`
+                          );
                           router.push("/admin/porformaInvoice-issuing");
                           router.refresh();
                         })
