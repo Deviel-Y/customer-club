@@ -6,7 +6,7 @@ import prisma from "@/prisma/client";
 import { endOfDay, startOfDay } from "date-fns";
 import { NextRequest, NextResponse } from "next/server";
 
-export const POST = async (request: NextRequest) => {
+export const DELETE = async (request: NextRequest) => {
   const body: ModifyPorInvoiceType = await request.json();
   const { fromDate, toDate } = body;
 
@@ -23,40 +23,26 @@ export const POST = async (request: NextRequest) => {
     });
 
   try {
-    const Invoices = await prisma.invoice.findMany({
+    const archivedInvoices = await prisma.archivedInvoice.findMany({
       where: { createdAt: { lte: toDateEnd, gte: fromDateStart } },
     });
-    if (Invoices.length === 0)
+    if (archivedInvoices.length === 0)
       return NextResponse.json("فاکتور در تاریخ ثبت شده یافت نشد", {
         status: 404,
       });
 
-    await prisma.$transaction([
-      prisma.archivedInvoice.createMany({
-        data: Invoices.map((invoice) => ({
-          assignedToUserId: invoice?.assignedToUserId,
-          description: invoice?.description,
-          issuerId: invoice?.issuerId,
-          organization: invoice?.organization,
-          organizationBranch: invoice?.organizationBranch,
-          InvoiceNumber: invoice?.invoiceNumber,
-          createdAt: invoice?.createdAt,
-          price: invoice.price,
-          tax: invoice.tax,
-          priceWithTax: invoice.priceWithTax,
-        })),
-      }),
+    const archivedInvoiceIds = archivedInvoices.map(
+      (por_invoice) => por_invoice.id
+    );
 
-      prisma.invoice.deleteMany({
-        where: { createdAt: { lte: toDateEnd, gte: fromDateStart } },
-      }),
-    ]);
+    await prisma.archivedInvoice.deleteMany({
+      where: { id: { in: archivedInvoiceIds } },
+    });
 
-    return NextResponse.json("Selected invoices have been archived", {
+    return NextResponse.json("Selected invoices have been deleted", {
       status: 201,
     });
   } catch (error) {
-    console.log(error);
     return NextResponse.json(error, { status: 500 });
   }
 };

@@ -27,7 +27,7 @@ export const POST = async (request: NextRequest) => {
       where: { createdAt: { lte: toDateEnd, gte: fromDateStart } },
     });
     if (Invoices.length === 0)
-      return NextResponse.json("پیش فاکتور در تاریخ ثبت شده یافت نشد", {
+      return NextResponse.json("فاکتور در تاریخ ثبت شده یافت نشد", {
         status: 404,
       });
 
@@ -52,7 +52,7 @@ export const POST = async (request: NextRequest) => {
       }),
     ]);
 
-    return NextResponse.json("Selected porforma invoices have been restored", {
+    return NextResponse.json("Selected invoices have been restored", {
       status: 201,
     });
   } catch (error) {
