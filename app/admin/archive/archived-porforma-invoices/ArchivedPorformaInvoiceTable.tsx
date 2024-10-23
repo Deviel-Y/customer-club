@@ -14,8 +14,8 @@ import {
 import { ArchivedPorformaInvoice, PorformaInvoice } from "@prisma/client";
 import moment from "moment-jalaali";
 import { BsDownload } from "react-icons/bs";
+import DeleteButtonRange from "../../components/DeleteButtonRange";
 import BackToPorInvoiceButton from "./BackToPorInvoiceButton";
-import DeletePorInvoiceButton from "./DeletePorInvoiceButton";
 
 interface Props {
   archivedInvoice: ArchivedPorformaInvoice[];
@@ -32,7 +32,7 @@ const ArchivedPorformaInvoiceTable = ({
         <div className="flex flex-row justify-between items-center w-full">
           <h2>جدول پیش فاکتورها</h2>
           <div className="flex flex-row gap-3">
-            <DeletePorInvoiceButton />
+            <DeleteButtonRange />
 
             <BackToPorInvoiceButton />
           </div>

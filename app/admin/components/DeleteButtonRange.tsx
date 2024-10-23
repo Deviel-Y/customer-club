@@ -1,3 +1,5 @@
+"use client";
+
 import {
   ModifyPorInvoiceType,
   modifyPorInvoice,
@@ -13,14 +15,15 @@ import {
 } from "@nextui-org/react";
 import axios, { AxiosError } from "axios";
 import moment from "moment-jalaali";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
 
 type DateType = { fromDate?: string; toDate?: string };
 
-const DeletePorInvoiceButton = () => {
+const DeleteButtonRange = () => {
+  const pathname = usePathname();
   const router = useRouter();
   const [dates, setDates] = useState<DateType>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -33,12 +36,18 @@ const DeletePorInvoiceButton = () => {
       <Popover>
         <PopoverTrigger>
           <Button size="sm" color="danger" variant="light">
-            حذف دسته ای پیش فاکتورها
+            {pathname.includes("porformaInvoice")
+              ? "حذف دسته ای پیش فاکتورها"
+              : "حذف دسته ای فاکتورها"}
           </Button>
         </PopoverTrigger>
 
         <PopoverContent className="shadow-large w-[600px] flex flex-col gap-y-4 p-3">
-          <h2 className="text-lg mb-3 self-start">فرم حذف پیش فاکتور ها</h2>
+          <h2 className="text-lg mb-3 self-start">
+            {pathname.includes("porformaInvoice")
+              ? "فرم حذف پیش فاکتورها"
+              : "فرم حذف فاکتورها"}
+          </h2>
           <form
             className="flex flex-row gap-3 items-center justify-center w-full"
             onSubmit={handleSubmit((data) => {
@@ -46,13 +55,23 @@ const DeletePorInvoiceButton = () => {
 
               axios
                 .delete(
-                  "/api/porformaInvoice/archivedPorInvoice/Delete-archived-PorInvoiceRange",
+                  `${
+                    pathname.includes("porformaInvoice")
+                      ? "/api/porformaInvoice/archivedPorInvoice/Delete-archived-PorInvoiceRange"
+                      : "/api/Invoice/archivedInvoice/Delete-archived-InvoiceRange"
+                  }`,
                   {
                     data: data,
                   }
                 )
                 .then(() => {
-                  toast.success("پیش فاکتورها با موفقیت حذف شدند");
+                  toast.success(
+                    `${
+                      pathname.includes("porformaInvoice")
+                        ? "پیش فاکتورها با موفقیت حذف شدند"
+                        : "فاکتورها با موفقیت حذف شدند"
+                    }`
+                  );
                   router.refresh();
                 })
                 .catch((error: AxiosError) =>
@@ -132,4 +151,4 @@ const DeletePorInvoiceButton = () => {
   );
 };
 
-export default DeletePorInvoiceButton;
+export default DeleteButtonRange;
