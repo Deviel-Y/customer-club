@@ -74,7 +74,7 @@ const ShowNotificationButton = ({
 
                 router.push(
                   `${
-                    session?.user.role === "ADMIN"
+                    session?.user.role !== "CUSTOMER"
                       ? "/admin/notification"
                       : "/notification"
                   }`

@@ -13,13 +13,12 @@ interface Props {
     companyBranch: string;
     content: string;
     readStatus: boolean;
-    isRead: string;
     pageNumber: number;
   };
 }
 
 const UserNotificationListPage = async ({
-  searchParams: { section, content, type, isRead, pageNumber },
+  searchParams: { section, content, type, pageNumber },
 }: Props) => {
   const session = await getSession();
   authorizeUser(session!);
@@ -34,9 +33,6 @@ const UserNotificationListPage = async ({
     ? section
     : undefined;
 
-  const isReadNotification =
-    isRead === "true" ? true : isRead === "false" ? false : undefined;
-
   const currentPage = pageNumber || 1;
 
   const [notification, notificationCount, authenticatedUser] =
@@ -47,7 +43,7 @@ const UserNotificationListPage = async ({
           assignedToSection: { equals: notificationSection },
           message: { contains: content },
           type: { equals: notificationType },
-          isRead: isReadNotification,
+          isRead: false,
         },
 
         include: { users: true },
@@ -62,7 +58,7 @@ const UserNotificationListPage = async ({
           assignedToSection: { equals: notificationSection },
           message: { contains: content },
           type: { equals: notificationType },
-          isRead: isReadNotification,
+          isRead: false,
         },
       }),
 
@@ -74,6 +70,7 @@ const UserNotificationListPage = async ({
       <NotificationActionBar isAdmin={false} />
 
       <NotificationListTable
+        session={session!}
         user={authenticatedUser!}
         totalPage={Math.ceil(notificationCount / pageSize)}
         notifications={notification}

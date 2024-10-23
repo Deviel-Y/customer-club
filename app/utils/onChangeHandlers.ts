@@ -478,9 +478,6 @@ export const notificationActionBarOnchangeHandlers = (
     if (searchParmas.get("contenet"))
       newParams.set("contenet", searchParmas.get("contenet")!);
 
-    if (searchParmas.get("isRead"))
-      newParams.set("isRead", searchParmas.get("isRead")!);
-
     if (searchParmas.get("pageNumber")) newParams.delete("pageNumber");
 
     router.push(`?${newParams.toString()}`);
@@ -506,9 +503,6 @@ export const notificationActionBarOnchangeHandlers = (
 
     if (searchParmas.get("contenet"))
       newParams.set("contenet", searchParmas.get("contenet")!);
-
-    if (searchParmas.get("isRead"))
-      newParams.set("isRead", searchParmas.get("isRead")!);
 
     if (searchParmas.get("pageNumber")) newParams.delete("pageNumber");
 
@@ -536,9 +530,6 @@ export const notificationActionBarOnchangeHandlers = (
     if (searchParmas.get("contenet"))
       newParams.set("contenet", searchParmas.get("contenet")!);
 
-    if (searchParmas.get("isRead"))
-      newParams.set("isRead", searchParmas.get("isRead")!);
-
     if (searchParmas.get("pageNumber")) newParams.delete("pageNumber");
 
     router.push(`?${newParams.toString()}`);
@@ -564,38 +555,6 @@ export const notificationActionBarOnchangeHandlers = (
 
     if (searchParmas.get("contenet"))
       newParams.set("contenet", searchParmas.get("contenet")!);
-
-    if (searchParmas.get("isRead"))
-      newParams.set("isRead", searchParmas.get("isRead")!);
-
-    if (searchParmas.get("pageNumber")) newParams.delete("pageNumber");
-
-    router.push(`?${newParams.toString()}`);
-  };
-
-  const isReadOnChange = (event: Key | null) => {
-    const newParams = new URLSearchParams(searchParmas);
-
-    if (event) {
-      newParams.set("isRead", event as string);
-    } else {
-      newParams.delete("isRead");
-    }
-
-    if (searchParmas.get("type"))
-      newParams.set("type", searchParmas.get("type")!);
-
-    if (searchParmas.get("section"))
-      newParams.set("section", searchParmas.get("section")!);
-
-    if (searchParmas.get("companyName"))
-      newParams.set("companyName", searchParmas.get("companyName")!);
-
-    if (searchParmas.get("companyBranch"))
-      newParams.set("companyBranch", searchParmas.get("companyBranch")!);
-
-    if (searchParmas.get("content"))
-      newParams.set("content", searchParmas.get("content")!);
 
     if (searchParmas.get("pageNumber")) newParams.delete("pageNumber");
 
@@ -623,9 +582,6 @@ export const notificationActionBarOnchangeHandlers = (
     if (searchParmas.get("companyBranch"))
       newParams.set("companyBranch", searchParmas.get("companyBranch")!);
 
-    if (searchParmas.get("isRead"))
-      newParams.set("isRead", searchParmas.get("isRead")!);
-
     if (searchParmas.get("pageNumber")) newParams.delete("pageNumber");
 
     router.push(`?${newParams.toString()}`);
@@ -636,6 +592,5 @@ export const notificationActionBarOnchangeHandlers = (
     companyNameOnChange,
     companyBranchOnChange,
     contentOnChange,
-    isReadOnChange,
   };
 };

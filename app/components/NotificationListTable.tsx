@@ -13,26 +13,33 @@ import {
 import { Notification, User } from "@prisma/client";
 import axios from "axios";
 import moment from "moment-jalaali";
+import { Session } from "next-auth";
 import { useRouter } from "next/navigation";
-import StatusBadge from "../admin/components/StatusBadge";
 
 interface Props {
   notifications: any[];
   totalPage: number;
   user: User;
+  session: Session;
 }
 
-const NotificationListTable = ({ notifications, totalPage, user }: Props) => {
+const NotificationListTable = ({
+  notifications,
+  totalPage,
+  user,
+  session,
+}: Props) => {
   const router = useRouter();
 
   return (
     <Table
       topContent={
         <div className="flex flex-row justify-between">
-          <h2 className="text-lg">لیست اعلان ها</h2>
+          <h2 className="text-lg">اعلان های خوانده نشده</h2>
           {user?.role === "CUSTOMER" && (
             <Button
-              color="primary"
+              color="danger"
+              variant="light"
               size="sm"
               onPress={() =>
                 axios
@@ -40,7 +47,7 @@ const NotificationListTable = ({ notifications, totalPage, user }: Props) => {
                   .then(() => router.refresh())
               }
             >
-              تغییر همه اعلان ها به خوانده شده
+              حذف اعلان ها
             </Button>
           )}
         </div>
@@ -55,29 +62,38 @@ const NotificationListTable = ({ notifications, totalPage, user }: Props) => {
         </div>
       }
       isStriped
-      aria-label="Ticket list table"
+      aria-label="notification list table"
     >
       <TableHeader>
         {columns.map((column) => (
-          <TableColumn align="center" key={column.value}>
+          <TableColumn
+            hidden={
+              session.user.role === "CUSTOMER" &&
+              (column?.value === "companyName" ||
+                column?.value === "companyBranch")
+            }
+            align="center"
+            key={column.value}
+          >
             {column.label}
           </TableColumn>
         ))}
       </TableHeader>
 
-      <TableBody emptyContent="تیکتی یافت نشد">
+      <TableBody emptyContent="اعلانی یافت نشد">
         {notifications.map((notification) => (
           <TableRow key={notification?.id}>
             <TableCell>{sectionMapping[notification?.type]?.label}</TableCell>
             <TableCell>
               {sectionMapping[notification?.assignedToSection]?.label}
             </TableCell>
-            <TableCell>{notification?.user?.companyName}</TableCell>
-            <TableCell>{notification?.user?.companyBranch}</TableCell>
-            <TableCell>{notification?.message}</TableCell>
-            <TableCell>
-              <StatusBadge status={notification?.isRead} />
+            <TableCell hidden={session?.user?.role === "CUSTOMER"}>
+              {notification.users[0]?.companyName}
             </TableCell>
+            <TableCell hidden={session?.user?.role === "CUSTOMER"}>
+              {notification?.users[0].companyBranch}
+            </TableCell>
+            <TableCell>{notification?.message}</TableCell>
             <TableCell>
               {moment(notification?.createdAt).format("jYYYY/jM/jD")}
             </TableCell>
@@ -99,7 +115,6 @@ const columns: {
   { label: "نام سازمان", value: "companyName" },
   { label: "شعبه", value: "companyBranch" },
   { label: "متن اعلان", value: "message" },
-  { label: "وضعیت خوانده شده", value: "isRead" },
   { label: "تاریخ ایجاد", value: "createdAt" },
 ];
 
@@ -110,6 +125,6 @@ const sectionMapping: Record<any, { label: any }> = {
   TICKET_MESSAGE: { label: "پاسخ به تیکت" },
 
   INFO: { label: "اطلاع رسانی" },
-  WARNING: { label: "اخطار" },
+  WARNING: { label: "هشدار" },
   EXPIRED: { label: "منقضی شده" },
 };

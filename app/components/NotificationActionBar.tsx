@@ -21,7 +21,6 @@ const NotificationActionBar = ({ isAdmin = true }: Props) => {
     companyBranchOnChange,
     companyNameOnChange,
     contentOnChange,
-    isReadOnChange,
     sectionOnChange,
     typeOnChange,
   } = notificationActionBarOnchangeHandlers(searchParams, router);
@@ -88,18 +87,6 @@ const NotificationActionBar = ({ isAdmin = true }: Props) => {
           type="search"
           variant="underlined"
         />
-
-        <Autocomplete
-          defaultSelectedKey={searchParams.get("isRead") || ""}
-          onSelectionChange={isReadOnChange}
-          listboxProps={{ emptyContent: "وضعیت مورد نظر یافت نشد" }}
-          variant="underlined"
-          label="وضعیت خوانده شده"
-        >
-          <AutocompleteItem key="true">خوانده شده</AutocompleteItem>
-
-          <AutocompleteItem key="false">خوانده نشده</AutocompleteItem>
-        </Autocomplete>
       </div>
     </div>
   );

@@ -25,7 +25,6 @@ const AdminNotificationListPage = async ({
     companyName,
     content,
     type,
-    isRead,
     pageNumber,
   },
 }: Props) => {
@@ -42,9 +41,6 @@ const AdminNotificationListPage = async ({
     ? section
     : undefined;
 
-  const isReadNotification =
-    isRead === "true" ? true : isRead === "false" ? false : undefined;
-
   const currentPage = pageNumber || 1;
 
   const [notification, notificationCount, authenticatedUser] =
@@ -58,15 +54,10 @@ const AdminNotificationListPage = async ({
               companyBranch: { contains: companyBranch },
             },
           },
-          // users: {
-          //   companyBranch: { contains: companyBranch },
-          //   companyName: { contains: companyName },
-          // },
           message: { contains: content },
           type: { equals: notificationType },
-          isRead: isReadNotification,
+          isRead: false,
         },
-
         include: { users: true },
         take: pageSize,
         skip: (currentPage - 1) * pageSize,
@@ -84,7 +75,7 @@ const AdminNotificationListPage = async ({
           },
           message: { contains: content },
           type: { equals: notificationType },
-          isRead: isReadNotification,
+          isRead: false,
         },
       }),
 
@@ -96,6 +87,7 @@ const AdminNotificationListPage = async ({
       <NotificationActionBar />
 
       <NotificationListTable
+        session={session!}
         user={authenticatedUser!}
         totalPage={Math.ceil(notificationCount / pageSize)}
         notifications={notification}
