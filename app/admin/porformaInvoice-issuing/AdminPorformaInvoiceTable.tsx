@@ -18,7 +18,7 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { BsDownload } from "react-icons/bs";
 import ArchiveButton from "../components/ArchiveButton";
-import { DeleteMutipleButton } from "../components/DeleteMutipleButton";
+import { DeleteMutipleButton } from "../components/DeleteMultipleButton";
 import StatusBadge from "../components/StatusBadge";
 
 interface Props {

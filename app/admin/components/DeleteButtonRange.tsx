@@ -36,7 +36,7 @@ const DeleteButtonRange = () => {
       <Popover>
         <PopoverTrigger>
           <Button size="sm" color="danger" variant="light">
-            {pathname.includes("porformaInvoice")
+            {pathname.includes("porforma")
               ? "حذف دسته ای پیش فاکتورها"
               : "حذف دسته ای فاکتورها"}
           </Button>
@@ -44,7 +44,7 @@ const DeleteButtonRange = () => {
 
         <PopoverContent className="shadow-large w-[600px] flex flex-col gap-y-4 p-3">
           <h2 className="text-lg mb-3 self-start">
-            {pathname.includes("porformaInvoice")
+            {pathname.includes("porforma")
               ? "فرم حذف پیش فاکتورها"
               : "فرم حذف فاکتورها"}
           </h2>
@@ -56,22 +56,16 @@ const DeleteButtonRange = () => {
               axios
                 .delete(
                   `${
-                    pathname.includes("porformaInvoice")
-                      ? "/api/porformaInvoice/archivedPorInvoice/Delete-archived-PorInvoiceRange"
-                      : "/api/Invoice/archivedInvoice/Delete-archived-InvoiceRange"
+                    pathname.includes("porforma")
+                      ? "/api/porforma/archivedPorInvoice/Delete-archived-PorInvoiceRange"
+                      : "/api/invoice/archivedInvoice/Delete-archived-InvoiceRange"
                   }`,
                   {
                     data: data,
                   }
                 )
                 .then(() => {
-                  toast.success(
-                    `${
-                      pathname.includes("porformaInvoice")
-                        ? "پیش فاکتورها با موفقیت حذف شدند"
-                        : "فاکتورها با موفقیت حذف شدند"
-                    }`
-                  );
+                  toast.success("حذف با موفقیت انجام شد");
                   router.refresh();
                 })
                 .catch((error: AxiosError) =>

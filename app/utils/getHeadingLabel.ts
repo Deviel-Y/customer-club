@@ -18,6 +18,8 @@ export const getHeadingLabel = (path: string): string => {
 
   if (path === "/admin/archive/archived-porforma-invoices")
     return "پیش فاکتورهای بایگانی شده";
+  if (path === "/admin/archive/archived-invoices")
+    return "فاکتورهای بایگانی شده";
 
   if (path === "/admin/logs") return "گزارشات";
 

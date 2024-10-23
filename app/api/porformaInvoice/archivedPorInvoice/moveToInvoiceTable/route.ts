@@ -31,23 +31,25 @@ export const POST = async (request: NextRequest) => {
         status: 404,
       });
 
-    await prisma.porformaInvoice.createMany({
-      data: porformaInvoices.map((por_invoice) => ({
-        assignedToUserId: por_invoice.assignedToUserId,
-        description: por_invoice.description,
-        issuerId: por_invoice.issuerId,
-        organization: por_invoice.organization,
-        organizationBranch: por_invoice.organizationBranch,
-        status: por_invoice.status,
-        porformaInvoiceNumber: por_invoice.porformaInvoiceNumber,
-        createdAt: por_invoice.createdAt,
-        expiredAt: por_invoice.expiredAt!,
-      })),
-    });
+    await prisma.$transaction([
+      prisma.porformaInvoice.createMany({
+        data: porformaInvoices.map((por_invoice) => ({
+          assignedToUserId: por_invoice.assignedToUserId,
+          description: por_invoice.description,
+          issuerId: por_invoice.issuerId,
+          organization: por_invoice.organization,
+          organizationBranch: por_invoice.organizationBranch,
+          status: por_invoice.status,
+          porformaInvoiceNumber: por_invoice.porformaInvoiceNumber,
+          createdAt: por_invoice.createdAt,
+          expiredAt: por_invoice.expiredAt!,
+        })),
+      }),
 
-    await prisma.archivedPorformaInvoice.deleteMany({
-      where: { createdAt: { lte: toDateEnd, gte: fromDateStart } },
-    });
+      prisma.archivedPorformaInvoice.deleteMany({
+        where: { createdAt: { lte: toDateEnd, gte: fromDateStart } },
+      }),
+    ]);
 
     return NextResponse.json("Selected porforma invoices have been restored", {
       status: 201,

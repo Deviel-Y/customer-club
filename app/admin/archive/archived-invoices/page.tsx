@@ -62,11 +62,7 @@ const ArchivedInvoicesPage = async ({
 
   return (
     <div className="flex flex-col gap-1 px-5 py-2 w-full">
-      <ActionBar
-        isAdmin
-        buttonLabel="صدور پیش فاکتور جدید"
-        endpoint="/admin/porformaInvoice-issuing/createNewPorInvoice"
-      />
+      <ActionBar isAdmin buttonLabel="صدور پیش فاکتور جدید" />
 
       <ArchivedInvoiceTable
         totalPage={Math.ceil(archivedInvoiceCount / pageSize)}

@@ -34,7 +34,7 @@ const BackToInitialStateButton = () => {
       <Popover>
         <PopoverTrigger>
           <Button size="sm" color="secondary" variant="light">
-            {pathname.includes("porformaInvoice")
+            {pathname.includes("porforma")
               ? "انتقال پیش فاکتورها"
               : "انتقال فاکتورها"}
           </Button>
@@ -42,7 +42,7 @@ const BackToInitialStateButton = () => {
 
         <PopoverContent className="shadow-large w-[600px] flex flex-col gap-y-4 p-3">
           <h2 className="text-lg mb-3 self-start">
-            {pathname.includes("porformaInvoice")
+            {pathname.includes("porforma")
               ? "فرم انتقال پیش فاکتورها"
               : "فرم انتقال فاکتورها"}
           </h2>
@@ -54,16 +54,16 @@ const BackToInitialStateButton = () => {
               axios
                 .post(
                   `${
-                    pathname.includes("porformaInvoice")
+                    pathname.includes("porforma")
                       ? "/api/porformaInvoice/archivedPorInvoice/moveToInvoiceTable"
-                      : "/api/Invoice/archivedPorInvoice/moveToInvoiceTable"
+                      : "/api/invoice/archivedInvoice/moveToInvoiceTable"
                   }`,
                   data
                 )
                 .then(() => {
                   toast.success(
                     `${
-                      pathname.includes("porformaInvoice")
+                      pathname.includes("porforma")
                         ? "پیش فاکتورها با موفقیت منتقل شدند"
                         : "فاکتورها با موفقیت منتقل شدند"
                     }`

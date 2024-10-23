@@ -52,7 +52,14 @@ const ArchiveButton = () => {
               setIsLoading(true);
 
               axios
-                .post("/api/porformaInvoice/archivedPorInvoice", data)
+                .post(
+                  `${
+                    pathname.includes("porformaInvoice")
+                      ? "/api/porformaInvoice/archivedPorInvoice"
+                      : "/api/invoice/archivedInvoice"
+                  }`,
+                  data
+                )
                 .then(() => {
                   toast.success(
                     `${
@@ -137,12 +144,18 @@ const ArchiveButton = () => {
 
               <Button
                 onPress={() =>
-                  router.push("/admin/archive/archived-porforma-invoices")
+                  router.push(
+                    `${
+                      pathname.includes("porforma")
+                        ? "/admin/archive/archived-porforma-invoices"
+                        : "/admin/archive/archived-invoices"
+                    }`
+                  )
                 }
                 color="primary"
                 type="button"
               >
-                {pathname.includes("porformaInvoice")
+                {pathname.includes("porforma")
                   ? "پیش فاکتور های بایگانی شده"
                   : "فاکتور های بایگانی شده"}
               </Button>
