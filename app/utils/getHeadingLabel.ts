@@ -16,7 +16,7 @@ export const getHeadingLabel = (path: string): string => {
   if (path === "/ticket") return "تیکت های من";
   if (path.includes("/ticketDetail")) return "جزئیات تیکت";
 
-  if (path === "/admin/archived-porforma-invoices")
+  if (path === "/admin/archive/archived-porforma-invoices")
     return "پیش فاکتورهای بایگانی شده";
 
   if (path === "/admin/logs") return "گزارشات";

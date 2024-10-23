@@ -136,7 +136,9 @@ const ArchiveButton = () => {
               </Button>
 
               <Button
-                onPress={() => router.push("/admin/archived-porforma-invoices")}
+                onPress={() =>
+                  router.push("/admin/archive/archived-porforma-invoices")
+                }
                 color="primary"
                 type="button"
               >

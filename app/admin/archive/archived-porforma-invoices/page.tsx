@@ -55,7 +55,7 @@ const ArchivedPorformaInvoicesPage = async ({
   const ArchivedPorformaInvoiceTable = dynamic(
     () =>
       import(
-        "@/app/admin/archived-porforma-invoices/ArchivedPorformaInvoiceTable"
+        "@/app/admin/archive/archived-porforma-invoices/ArchivedPorformaInvoiceTable"
       ),
     {
       ssr: false,
