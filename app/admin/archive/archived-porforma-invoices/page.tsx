@@ -72,7 +72,7 @@ const ArchivedPorformaInvoicesPage = async ({
 
       <ArchivedPorformaInvoiceTable
         totalPage={Math.ceil(archivedPorInvoiceCount / pageSize)}
-        archivedInvoice={archivedPorformaInvoiceList}
+        archivedPorInvoice={archivedPorformaInvoiceList}
       />
     </div>
   );

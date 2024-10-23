@@ -11,21 +11,18 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
-import { ArchivedPorformaInvoice, PorformaInvoice } from "@prisma/client";
+import { ArchivedInvoice, PorformaInvoice } from "@prisma/client";
 import moment from "moment-jalaali";
 import { BsDownload } from "react-icons/bs";
 import BackToInitialStateButton from "../../components/BackToInitialStateButton";
 import DeleteButtonRange from "../../components/DeleteButtonRange";
 
 interface Props {
-  archivedPorInvoice: ArchivedPorformaInvoice[];
+  archivedInvoice: ArchivedInvoice[];
   totalPage: number;
 }
 
-const ArchivedPorformaInvoiceTable = ({
-  archivedPorInvoice,
-  totalPage,
-}: Props) => {
+const ArchivedInvoiceTable = ({ archivedInvoice, totalPage }: Props) => {
   return (
     <Table
       topContent={
@@ -63,19 +60,19 @@ const ArchivedPorformaInvoiceTable = ({
         ))}
       </TableHeader>
       <TableBody
-        items={archivedPorInvoice}
+        items={archivedInvoice}
         emptyContent="پیش فاکتوری تعریف نشده است"
       >
-        {archivedPorInvoice?.map((p_invoice) => (
-          <TableRow key={p_invoice?.id}>
+        {archivedInvoice?.map((invoice) => (
+          <TableRow key={invoice?.id}>
             <TableCell>
               <div className="flex flex-row justify-center items-center gap-x-3">
                 <DeleteConfirmationButton
-                  redirectEndpont="/admin/porformaInvoice-issuing"
+                  redirectEndpont="/admin/Invoice-issuing"
                   successMessage="پیش فاکتور با موفقیت حذف شد."
                   content="آیا از حذف این پیش فاکتور مطمئن اید؟"
                   title="حذف پیش فاکتور"
-                  endpoint={`/api/porformaInvoice/${p_invoice?.id}`}
+                  endpoint={`/api/Invoice/${invoice?.id}`}
                   iconStyle="min-w-5 w-4"
                 />
 
@@ -84,15 +81,12 @@ const ArchivedPorformaInvoiceTable = ({
                 </Button>
               </div>
             </TableCell>
-            <TableCell>{p_invoice.porformaInvoiceNumber}</TableCell>
-            <TableCell>{p_invoice.organization}</TableCell>
-            <TableCell>{p_invoice.organizationBranch}</TableCell>
-            <TableCell>{p_invoice.description}</TableCell>
+            <TableCell>{invoice.InvoiceNumber}</TableCell>
+            <TableCell>{invoice.organization}</TableCell>
+            <TableCell>{invoice.organizationBranch}</TableCell>
+            <TableCell>{invoice.description}</TableCell>
             <TableCell>
-              {moment(p_invoice.createdAt).format("jYYYY/jM/jD")}
-            </TableCell>
-            <TableCell>
-              {moment(p_invoice.expiredAt).format("jYYYY/jM/jD")}
+              {moment(invoice.createdAt).format("jYYYY/jM/jD")}
             </TableCell>
           </TableRow>
         ))}
@@ -101,7 +95,7 @@ const ArchivedPorformaInvoiceTable = ({
   );
 };
 
-export default ArchivedPorformaInvoiceTable;
+export default ArchivedInvoiceTable;
 
 const columns: { label: string; value: keyof PorformaInvoice | "operation" }[] =
   [
@@ -111,5 +105,4 @@ const columns: { label: string; value: keyof PorformaInvoice | "operation" }[] =
     { label: "شعبه", value: "organizationBranch" },
     { label: "توضیحات", value: "description" },
     { label: "تاریخ صدور", value: "createdAt" },
-    { label: "تاریخ انقضا", value: "expiredAt" },
   ];
