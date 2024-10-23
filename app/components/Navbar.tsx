@@ -95,7 +95,7 @@ const Navbar = ({
                 </Button>
 
                 {session.user.role === "SUPER_ADMIN" && (
-                  <Button onPress={() => router.push("/admin/logsPage")}>
+                  <Button onPress={() => router.push("/admin/logs")}>
                     ریز گزارشات
                   </Button>
                 )}
