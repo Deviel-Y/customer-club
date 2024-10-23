@@ -46,12 +46,12 @@ model Invoice {
   organization       String
   description        String
   organizationBranch String
-  assignedToUserId   String
   issuerId           String
   Notification       Notification[]
   // image String
 
-  User User @relation(fields: [assignedToUserId], references: [id])
+  assignedToUserId String
+  User             User   @relation(fields: [assignedToUserId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -160,12 +160,15 @@ model ArchivedInvoice {
   organization       String
   description        String
   organizationBranch String
-  assignedToUserId   String
   issuerId           String
+  price              Int
+  tax                Float
+  priceWithTax       Float
 
   notifications Notification[]
 
-  User User @relation(fields: [assignedToUserId], references: [id])
+  assignedToUserId String
+  User             User   @relation(fields: [assignedToUserId], references: [id])
 
   createdAt  DateTime @default(now())
   archivedAt DateTime @default(now())
