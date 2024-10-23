@@ -13,14 +13,15 @@ import {
 } from "@nextui-org/react";
 import axios, { AxiosError } from "axios";
 import moment from "moment-jalaali";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
 
 type DateType = { fromDate?: string; toDate?: string };
 
-const PorInvoiceArchiveButton = () => {
+const ArchiveButton = () => {
+  const pathname = usePathname();
   const router = useRouter();
   const [dates, setDates] = useState<DateType>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -33,12 +34,18 @@ const PorInvoiceArchiveButton = () => {
       <Popover>
         <PopoverTrigger>
           <Button size="sm" color="secondary" variant="light">
-            بایگانی پیش فاکتور
+            {pathname.includes("porformaInvoice")
+              ? "بایگانی پیش فاکتور"
+              : "بایگانی فاکتور"}
           </Button>
         </PopoverTrigger>
 
         <PopoverContent className="shadow-large w-[600px] flex flex-col gap-y-4 p-3">
-          <h2 className="text-lg mb-3 self-start">فرم بایگانی پیش فاکتور ها</h2>
+          <h2 className="text-lg mb-3 self-start">
+            {pathname.includes("porformaInvoice")
+              ? "فرم بایگانی پیش فاکتور"
+              : "فرم بایگانی فاکتور"}
+          </h2>
           <form
             className="flex flex-col gap-3 items-start justify-center w-full"
             onSubmit={handleSubmit((data) => {
@@ -47,7 +54,13 @@ const PorInvoiceArchiveButton = () => {
               axios
                 .post("/api/porformaInvoice/archivedPorInvoice", data)
                 .then(() => {
-                  toast.success("پیش فاکتورها با موفقیت بایگانی شدند");
+                  toast.success(
+                    `${
+                      pathname.includes("porformaInvoice")
+                        ? "پیش فاکتورها با موفقیت بایگانی شدند"
+                        : "فاکتورها با موفقیت بایگانی شدند"
+                    }`
+                  );
                   router.refresh();
                 })
                 .catch((error: AxiosError) =>
@@ -127,7 +140,9 @@ const PorInvoiceArchiveButton = () => {
                 color="primary"
                 type="button"
               >
-                پیش فاکتور های بایگانی شده
+                {pathname.includes("porformaInvoice")
+                  ? "پیش فاکتور های بایگانی شده"
+                  : "فاکتور های بایگانی شده"}
               </Button>
             </div>
           </form>
@@ -138,4 +153,4 @@ const PorInvoiceArchiveButton = () => {
   );
 };
 
-export default PorInvoiceArchiveButton;
+export default ArchiveButton;

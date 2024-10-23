@@ -18,6 +18,8 @@ import moment from "moment-jalaali";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { BsDownload } from "react-icons/bs";
+import ArchiveButton from "../components/ArchiveButton";
+import { DeleteMutipleButton } from "../components/DeleteMutipleButton";
 
 interface Props {
   invoices: Invoice[];
@@ -40,6 +42,19 @@ const AdminInvoiceTable = ({ invoices, totalPage, userRole }: Props) => {
       selectedKeys={new Set(invoiceIds)}
       selectionMode="multiple"
       onSelectionChange={handleSelection}
+      topContent={
+        <div className="flex flex-row justify-between items-center w-full">
+          <h2>جدول فاکتورها</h2>
+          <div className="flex flex-row gap-3">
+            <DeleteMutipleButton
+              setListOfIds={(value) => setInvocieIds(value)}
+              listOfIds={invoiceIds}
+            />
+
+            <ArchiveButton />
+          </div>
+        </div>
+      }
       bottomContent={
         <div
           className={`flex justify-center w-full ${

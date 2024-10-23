@@ -17,9 +17,9 @@ import moment from "moment-jalaali";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { BsDownload } from "react-icons/bs";
+import ArchiveButton from "../components/ArchiveButton";
+import { DeleteMutipleButton } from "../components/DeleteMutipleButton";
 import StatusBadge from "../components/StatusBadge";
-import { DeleteMutiplePorInvoiceButton } from "./DeleteMutiplePorInvoiceButton";
-import PorInvoiceArchiveButton from "./PorInvoiceArchiveButton";
 
 interface Props {
   porformaInvoice: PorformaInvoice[];
@@ -42,12 +42,12 @@ const AdminPorformaInvoiceTable = ({ porformaInvoice, totalPage }: Props) => {
         <div className="flex flex-row justify-between items-center w-full">
           <h2>جدول پیش فاکتورها</h2>
           <div className="flex flex-row gap-3">
-            <DeleteMutiplePorInvoiceButton
+            <DeleteMutipleButton
               setListOfIds={(value) => setPorInvoiceIds(value)}
               listOfIds={porInvoiceIds}
             />
 
-            <PorInvoiceArchiveButton />
+            <ArchiveButton />
           </div>
         </div>
       }
