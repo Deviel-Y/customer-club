@@ -31,6 +31,8 @@ model User {
 
   ArchivedPorformaInvoice ArchivedPorformaInvoice[]
 
+  ArchivedInvoice ArchivedInvoice[]
+
   updatedAt DateTime @updatedAt
   createdAt DateTime @default(now())
 }
@@ -125,6 +127,9 @@ model Notification {
   ArchivedPorformaInvoice   ArchivedPorformaInvoice? @relation(fields: [archivedPorformaInvoiceId], references: [id])
   archivedPorformaInvoiceId String?
 
+  ArchivedInvoice   ArchivedInvoice? @relation(fields: [archivedInvoiceId], references: [id])
+  archivedInvoiceId String?
+
   createdAt DateTime @default(now())
 
   users User[] @relation("UserNotifications")
@@ -140,6 +145,23 @@ model ArchivedPorformaInvoice {
   issuerId              String
   status                Status
   expiredAt             DateTime?
+
+  notifications Notification[]
+
+  User User @relation(fields: [assignedToUserId], references: [id])
+
+  createdAt  DateTime @default(now())
+  archivedAt DateTime @default(now())
+}
+
+model ArchivedInvoice {
+  id                 String @id @default(cuid())
+  InvoiceNumber      String @unique
+  organization       String
+  description        String
+  organizationBranch String
+  assignedToUserId   String
+  issuerId           String
 
   notifications Notification[]
 
