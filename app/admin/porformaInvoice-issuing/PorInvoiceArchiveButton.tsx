@@ -50,7 +50,9 @@ const PorInvoiceArchiveButton = () => {
                   toast.success("پیش فاکتورها با موفقیت بایگانی شدند");
                   router.refresh();
                 })
-                .catch((error: AxiosError) => error.response?.data as string)
+                .catch((error: AxiosError) =>
+                  toast.error(error.response?.data as string)
+                )
                 .finally(() => setIsLoading(false));
             })}
           >

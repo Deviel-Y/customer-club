@@ -16,6 +16,7 @@ import {
 import { Invoice, Role } from "@prisma/client";
 import moment from "moment-jalaali";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { BsDownload } from "react-icons/bs";
 
 interface Props {
@@ -27,8 +28,18 @@ interface Props {
 const AdminInvoiceTable = ({ invoices, totalPage, userRole }: Props) => {
   const router = useRouter();
 
+  const [invoiceIds, setInvocieIds] = useState<string[]>();
+  const handleSelection = (key: "all" | Set<React.Key>) => {
+    key === "all"
+      ? setInvocieIds(invoiceIds?.map(String))
+      : setInvocieIds(Array.from(key).map(String));
+  };
+
   return (
     <Table
+      selectedKeys={new Set(invoiceIds)}
+      selectionMode="multiple"
+      onSelectionChange={handleSelection}
       bottomContent={
         <div
           className={`flex justify-center w-full ${
@@ -92,9 +103,6 @@ const AdminInvoiceTable = ({ invoices, totalPage, userRole }: Props) => {
             <TableCell>
               {moment(invoice.createdAt).format("jYYYY/jM/jD")}
             </TableCell>
-            <TableCell>
-              {moment(invoice.updatedAt).format("jYYYY/jM/jD")}
-            </TableCell>
           </TableRow>
         ))}
       </TableBody>
@@ -114,5 +122,4 @@ const columns: { label: string; value: keyof Invoice | "operation" }[] = [
   { label: "مالیات (ریال)", value: "tax" },
   { label: "مبلغ با مالیات (ریال)", value: "priceWithTax" },
   { label: "تاریخ صدور", value: "createdAt" },
-  { label: "تاریخ بروزسانی", value: "updatedAt" },
 ];
