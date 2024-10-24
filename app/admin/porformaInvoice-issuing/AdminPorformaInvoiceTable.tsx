@@ -65,7 +65,7 @@ const AdminPorformaInvoiceTable = ({ porformaInvoice, totalPage }: Props) => {
         </div>
       }
       isStriped
-      aria-label="Invoices Table"
+      aria-label="Porforma Invoices Table"
     >
       <TableHeader>
         {columns.map((column) => (

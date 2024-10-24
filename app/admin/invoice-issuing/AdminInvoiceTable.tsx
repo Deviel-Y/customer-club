@@ -31,16 +31,18 @@ const AdminInvoiceTable = ({ invoices, totalPage, userRole }: Props) => {
   const router = useRouter();
 
   const [invoiceIds, setInvocieIds] = useState<string[]>();
+  const allPorInvoiceIds = invoices.map((invoice) => invoice.id);
+
   const handleSelection = (key: "all" | Set<React.Key>) => {
     key === "all"
-      ? setInvocieIds(invoiceIds?.map(String))
+      ? setInvocieIds(allPorInvoiceIds?.map(String))
       : setInvocieIds(Array.from(key).map(String));
   };
 
   return (
     <Table
-      selectedKeys={new Set(invoiceIds)}
       selectionMode="multiple"
+      selectedKeys={new Set(invoiceIds)}
       onSelectionChange={handleSelection}
       topContent={
         <div className="flex flex-row justify-between items-center w-full">
