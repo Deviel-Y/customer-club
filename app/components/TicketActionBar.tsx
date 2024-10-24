@@ -78,7 +78,7 @@ const TicketActionBar = ({ isAdmin = true }: Props) => {
           listboxProps={{ emptyContent: "نتیجه ای یافت نشد" }}
           onSelectionChange={statusOnChangeHandler}
           variant="underlined"
-          label="وضعیت اعتبار"
+          label="وضعیت بررسی تیکت"
         >
           {statusFilter.map((status) => (
             <AutocompleteItem key={status.value}>
