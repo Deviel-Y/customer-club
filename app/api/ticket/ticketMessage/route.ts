@@ -34,7 +34,7 @@ export const POST = async (request: NextRequest) => {
       }),
     ]);
 
-    session?.user.role === "ADMIN" && // change ticketMessage status to INVESTIGATING if admin send its response
+    (session?.user.role === "ADMIN" || session?.user.role === "SUPER_ADMIN") && // change ticketMessage status to INVESTIGATING if admin send its response
       (await prisma?.ticket.update({
         where: { id: assignetoTicketId },
         data: { status: "INVESTIGATING" },
@@ -79,7 +79,7 @@ export const POST = async (request: NextRequest) => {
       data: {
         message,
         assignetoTicketId,
-        messageType: session?.user.role === "ADMIN" ? "RESPONCE" : "REQUEST",
+        messageType: session?.user.role === "CUSTOMER" ? "REQUEST" : "RESPONCE",
         issuerId: session?.user.id!,
       },
       include: { Ticket: true },
