@@ -38,30 +38,47 @@ export const POST = async (request: NextRequest) => {
         }
       );
 
-    const newInvoice = await prisma.invoice.create({
-      data: {
-        description,
-        invoiceNumber,
-        organization,
-        organizationBranch,
-        assignedToUserId,
-        price,
-        priceWithTax,
-        tax,
-        issuerId: session?.user.id!,
-      },
-    });
+    const [issuer, newInvoice] = await prisma.$transaction([
+      prisma.user.findUnique({
+        where: { id: session?.user?.id },
+        select: { adminName: true },
+      }),
 
-    sendNotification &&
-      (await prisma.notification.create({
+      prisma.invoice.create({
         data: {
-          users: { connect: { id: assignedToUserId } },
-          message: `فاکتوری با شماره ${newInvoice.invoiceNumber} برای شما صادر شد`,
-          assignedToInvoiceId: newInvoice.id,
-          assignedToSection: "INVOICE",
-          type: "INFO",
+          description,
+          invoiceNumber,
+          organization,
+          organizationBranch,
+          assignedToUserId,
+          price,
+          priceWithTax,
+          tax,
+          issuerId: session?.user.id!,
         },
-      }));
+      }),
+    ]);
+
+    await Promise.all([
+      sendNotification &&
+        prisma.notification.create({
+          data: {
+            users: { connect: { id: assignedToUserId } },
+            message: `فاکتوری با شماره ${newInvoice.invoiceNumber} برای شما صادر شد`,
+            assignedToInvoiceId: newInvoice.id,
+            assignedToSection: "INVOICE",
+            type: "INFO",
+          },
+        }),
+
+      prisma.log.create({
+        data: {
+          assignedToSection: "INVOICE",
+          issuer: issuer?.adminName!,
+          message: `کاربر ${issuer?.adminName} فاکتور به شماره ${newInvoice.invoiceNumber} را برای ${newInvoice.organization} شعبه ${newInvoice.organizationBranch} صادر کرد`,
+        },
+      }),
+    ]);
 
     return NextResponse.json(newInvoice, { status: 201 });
   } catch (error) {

@@ -60,24 +60,39 @@ export const PATCH = async (
         status: 400,
       });
 
-    const updatedInvoice = await prisma.invoice.update({
-      where: { id },
+    const [updatedInvoice, issuer] = await prisma.$transaction([
+      prisma.invoice.update({
+        where: { id },
+        data: {
+          assignedToUserId,
+          description: description.trim(),
+          invoiceNumber: invoiceNumber.trim(),
+          organizationBranch,
+          issuerId: session?.user.id,
+          organization,
+          price,
+          tax,
+          priceWithTax,
+        },
+      }),
+
+      prisma.user.findUnique({
+        where: { id: session?.user?.id },
+        select: { adminName: true },
+      }),
+    ]);
+
+    const logMessage = `کاربر ${issuer?.adminName} فاکتور به شماره ${updatedInvoice.invoiceNumber} را ویرایش کرد`;
+    await prisma.log.create({
       data: {
-        assignedToUserId,
-        description: description.trim(),
-        invoiceNumber: invoiceNumber.trim(),
-        organizationBranch,
-        issuerId: session?.user.id,
-        organization,
-        price,
-        tax,
-        priceWithTax,
+        assignedToSection: "INVOICE",
+        issuer: issuer?.adminName!,
+        message: logMessage,
       },
     });
 
     return NextResponse.json(updatedInvoice);
   } catch (error) {
-    console.log(error);
     return NextResponse.json(error, { status: 500 });
   }
 };

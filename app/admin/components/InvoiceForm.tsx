@@ -88,7 +88,7 @@ const InvoiceForm = ({ Userlist, invoice }: Props) => {
               ...data,
             })
             .then(() => {
-              toast.success("فاکتور با موفقیت صادر شد");
+              toast.success("فاکتور با موفقیت ویرایش شد");
               setTimeout(() => {
                 router.push("/admin/invoice-issuing");
                 router.refresh();
@@ -106,7 +106,7 @@ const InvoiceForm = ({ Userlist, invoice }: Props) => {
               ...data,
             })
             .then(() => {
-              toast.success("فاکتور با موفقیت ویرایش شد");
+              toast.success("فاکتور با موفقیت صادر شد");
               setTimeout(() => {
                 router.push("/admin/invoice-issuing");
                 router.refresh();
