@@ -3,6 +3,7 @@ import getSession from "@/app/libs/getSession";
 import { authorizeUser } from "@/app/utils/authorizeRole";
 import prisma from "@/prisma/client";
 import { NotificationType, Section } from "@prisma/client";
+import { subMonths } from "date-fns";
 import NotificationListTable from "../../components/NotificationListTable";
 
 interface Props {
@@ -22,6 +23,12 @@ const UserNotificationListPage = async ({
 }: Props) => {
   const session = await getSession();
   authorizeUser(session!);
+
+  const currentDate = new Date();
+  const twoMonthsFromNow = subMonths(currentDate, 2);
+  await prisma.notification.deleteMany({
+    where: { createdAt: { lte: twoMonthsFromNow } },
+  });
 
   const prismaNotificationType = Object.values(NotificationType);
   const notificationType = prismaNotificationType.includes(type)
