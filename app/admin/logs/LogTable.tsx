@@ -1,5 +1,6 @@
 "use client";
 
+import PaginationControl from "@/app/components/PaginationControl";
 import {
   Table,
   TableBody,
@@ -8,16 +9,27 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
-import { Log } from "@prisma/client";
+import { Log, Section } from "@prisma/client";
 import moment from "moment-jalaali";
 
 interface Props {
   logs: Log[];
+  totalPage: number;
 }
 
-const LogTable = ({ logs }: Props) => {
+const LogTable = ({ logs, totalPage }: Props) => {
   return (
-    <Table>
+    <Table
+      bottomContent={
+        <div
+          className={`flex justify-center w-full ${
+            totalPage === 1 && "hidden"
+          }`}
+        >
+          <PaginationControl totalPage={totalPage} />
+        </div>
+      }
+    >
       <TableHeader>
         {columns.map((column) => (
           <TableColumn align="center" key={column.value}>
@@ -30,7 +42,9 @@ const LogTable = ({ logs }: Props) => {
         {logs.map((log) => (
           <TableRow key={log.id}>
             <TableCell>{log.issuer}</TableCell>
-            <TableCell>{log.assignedToSection}</TableCell>
+            <TableCell>
+              {sesctionMapping[log.assignedToSection].label}
+            </TableCell>
             <TableCell>{log.message}</TableCell>
             <TableCell>{moment(log.createdAt).format("jYYYY/jM/jD")}</TableCell>
           </TableRow>
@@ -41,6 +55,13 @@ const LogTable = ({ logs }: Props) => {
 };
 
 export default LogTable;
+
+const sesctionMapping: Record<Section, { label: string }> = {
+  INVOICE: { label: "فاکتور" },
+  POR_INVOICE: { label: "پیش فاکتور" },
+  TICKET: { label: "تیکت" },
+  TICKET_MESSAGE: { label: "پاسخ به تیکت" },
+};
 
 const columns: { label: string; value: keyof Log }[] = [
   { label: "صادر کننده", value: "issuer" },
