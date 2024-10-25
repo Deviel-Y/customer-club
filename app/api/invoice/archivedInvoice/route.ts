@@ -1,17 +1,23 @@
+import getSession from "@/app/libs/getSession";
 import {
   ModifyPorInvoiceType,
   modifyPorInvoice,
 } from "@/app/libs/validationSchema";
 import prisma from "@/prisma/client";
 import { endOfDay, startOfDay } from "date-fns";
+import moment from "moment-jalaali";
 import { NextRequest, NextResponse } from "next/server";
 
 export const POST = async (request: NextRequest) => {
+  const session = await getSession();
   const body: ModifyPorInvoiceType = await request.json();
   const { fromDate, toDate } = body;
 
   const fromDateStart = startOfDay(fromDate);
   const toDateEnd = endOfDay(toDate);
+
+  const jalaliFromDateStart = moment(fromDateStart).format("jYYYY/jM/jD");
+  const jalaliToDateEnd = moment(toDateEnd).format("jYYYY/jM/jD");
 
   const validation = modifyPorInvoice.safeParse(body);
   if (!validation.success)
@@ -31,32 +37,45 @@ export const POST = async (request: NextRequest) => {
         status: 404,
       });
 
-    await prisma.$transaction([
-      prisma.archivedInvoice.createMany({
-        data: Invoices.map((invoice) => ({
-          assignedToUserId: invoice?.assignedToUserId,
-          description: invoice?.description,
-          issuerId: invoice?.issuerId,
-          organization: invoice?.organization,
-          organizationBranch: invoice?.organizationBranch,
-          InvoiceNumber: invoice?.invoiceNumber,
-          createdAt: invoice?.createdAt,
-          price: invoice.price,
-          tax: invoice.tax,
-          priceWithTax: invoice.priceWithTax,
-        })),
-      }),
+    const [_archivedInvoice, _deletedInvoice, issuer] =
+      await prisma.$transaction([
+        prisma.archivedInvoice.createMany({
+          data: Invoices.map((invoice) => ({
+            assignedToUserId: invoice?.assignedToUserId,
+            description: invoice?.description,
+            issuerId: invoice?.issuerId,
+            organization: invoice?.organization,
+            organizationBranch: invoice?.organizationBranch,
+            InvoiceNumber: invoice?.invoiceNumber,
+            createdAt: invoice?.createdAt,
+            price: invoice.price,
+            tax: invoice.tax,
+            priceWithTax: invoice.priceWithTax,
+          })),
+        }),
 
-      prisma.invoice.deleteMany({
-        where: { createdAt: { lte: toDateEnd, gte: fromDateStart } },
-      }),
-    ]);
+        prisma.invoice.deleteMany({
+          where: { createdAt: { lte: toDateEnd, gte: fromDateStart } },
+        }),
+
+        prisma.user.findUnique({
+          where: { id: session?.user?.id },
+          select: { adminName: true },
+        }),
+      ]);
+
+    await prisma.log.create({
+      data: {
+        assignedToSection: "INVOICE",
+        issuer: issuer?.adminName!,
+        message: `کاربر ${issuer?.adminName} فاکتورهای از تاریخ ${jalaliFromDateStart} تا تاریخ ${jalaliToDateEnd} را بایگانی کرد`,
+      },
+    });
 
     return NextResponse.json("Selected invoices have been archived", {
       status: 201,
     });
   } catch (error) {
-    console.log(error);
     return NextResponse.json(error, { status: 500 });
   }
 };
