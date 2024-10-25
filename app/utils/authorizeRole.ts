@@ -16,5 +16,6 @@ export const authorizeAdmin = (session: Session) => {
 export const authorizeSuperAdmin = (session: Session) => {
   if (!session) redirect("/api/auth/signin");
 
-  if (session?.user?.role !== "SUPER_ADMIN") redirect("/");
+  if (session?.user?.role !== "SUPER_ADMIN")
+    redirect(session?.user?.role === "ADMIN" ? "/admin" : "/");
 };
