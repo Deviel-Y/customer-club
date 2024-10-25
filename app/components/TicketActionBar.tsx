@@ -3,7 +3,7 @@
 import { Autocomplete, AutocompleteItem, Input } from "@nextui-org/react";
 import { Category, TicketStatus } from "@prisma/client";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import NewTicketPopoverButton from "../(userSide)/ticket/NewTicketPopoverButton";
+import NewTicketPopoverButton from "../(customerSide)/ticket/NewTicketPopoverButton";
 import { ticketActionBarOnchangeHandlers } from "../utils/onChangeHandlers";
 
 interface Props {
