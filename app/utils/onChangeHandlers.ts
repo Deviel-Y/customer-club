@@ -594,3 +594,74 @@ export const notificationActionBarOnchangeHandlers = (
     contentOnChange,
   };
 };
+
+export const logActionBarOnchangeHandlers = (
+  searchParmas: ReadonlyURLSearchParams,
+  router: AppRouterInstance
+) => {
+  const sectionOnChange = (event: Key | null) => {
+    const newParams = new URLSearchParams(searchParmas);
+
+    if (event) {
+      newParams.set("section", event as string);
+    } else {
+      newParams.delete("section");
+    }
+
+    if (searchParmas.get("message"))
+      newParams.set("message", searchParmas.get("message")!);
+
+    if (searchParmas.get("issuer"))
+      newParams.set("issuer", searchParmas.get("issuer")!);
+
+    if (searchParmas.get("pageNumber")) newParams.delete("pageNumber");
+
+    router.push(`?${newParams.toString()}`);
+  };
+
+  const messageOnChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const newParams = new URLSearchParams(searchParmas);
+
+    if (event.target.value) {
+      newParams.set("message", event.target.value as string);
+    } else {
+      newParams.delete("message");
+    }
+
+    if (searchParmas.get("section"))
+      newParams.set("section", searchParmas.get("section")!);
+
+    if (searchParmas.get("issuer"))
+      newParams.set("issuer", searchParmas.get("issuer")!);
+
+    if (searchParmas.get("pageNumber")) newParams.delete("pageNumber");
+
+    router.push(`?${newParams.toString()}`);
+  };
+
+  const issuerOnChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const newParams = new URLSearchParams(searchParmas);
+
+    if (event.target.value) {
+      newParams.set("issuer", event.target.value as string);
+    } else {
+      newParams.delete("issuer");
+    }
+
+    if (searchParmas.get("section"))
+      newParams.set("section", searchParmas.get("section")!);
+
+    if (searchParmas.get("message"))
+      newParams.set("message", searchParmas.get("message")!);
+
+    if (searchParmas.get("pageNumber")) newParams.delete("pageNumber");
+
+    router.push(`?${newParams.toString()}`);
+  };
+
+  return {
+    sectionOnChange,
+    messageOnChange,
+    issuerOnChange,
+  };
+};
