@@ -66,7 +66,7 @@ export default async function RootLayout({
   return (
     <html
       suppressHydrationWarning
-      lang="fa"
+      lang="fa-IR"
       dir="rtl"
       className="light:bg-neutral-50"
     >
