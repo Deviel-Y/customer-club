@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Table,
   TableBody,
@@ -18,11 +20,13 @@ const LogTable = ({ logs }: Props) => {
     <Table>
       <TableHeader>
         {columns.map((column) => (
-          <TableColumn key={column.value}>{column.label}</TableColumn>
+          <TableColumn align="center" key={column.value}>
+            {column.label}
+          </TableColumn>
         ))}
       </TableHeader>
 
-      <TableBody>
+      <TableBody emptyContent="گزارشی یافت نشد">
         {logs.map((log) => (
           <TableRow key={log.id}>
             <TableCell>{log.issuer}</TableCell>
