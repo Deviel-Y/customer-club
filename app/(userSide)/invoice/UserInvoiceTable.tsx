@@ -36,11 +36,7 @@ const UserInvoiceTable = ({ invoices, totalPage }: Props) => {
     >
       <TableHeader>
         {columns.map((column) => (
-          <TableColumn
-            width={column.value === "description" ? 500 : undefined}
-            align="center"
-            key={column.value}
-          >
+          <TableColumn align="center" key={column.value}>
             {column.label}
           </TableColumn>
         ))}

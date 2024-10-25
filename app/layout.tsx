@@ -64,7 +64,12 @@ export default async function RootLayout({
   });
 
   return (
-    <html lang="fa" dir="rtl" className="bg-neutral-50">
+    <html
+      suppressHydrationWarning
+      lang="fa"
+      dir="rtl"
+      className="light:bg-neutral-50"
+    >
       <body
         className={`${iranYekan_bold.variable} ${iranYekan_regular.variable} antialiased relative `}
       >

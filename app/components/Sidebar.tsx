@@ -42,7 +42,7 @@ const Sidebar = ({ session }: Props) => {
       variants={containerVariant}
       animate={containerControls}
       initial="close"
-      className="bg-[#ececec] border-l-1 border-neutral-300 flex flex-col z-50 gap-20 p-3 fixed top-0 right-0 h-screen"
+      className="bg-[#ececec] dark:bg-[#868686] border-l-1 border-neutral-300 dark:border-neutral-700 flex flex-col z-50 gap-20 p-3 fixed top-0 right-0 h-screen"
     >
       <div className="flex flex-row w-full justify-between items-center">
         <Image
@@ -72,7 +72,7 @@ const Sidebar = ({ session }: Props) => {
             viewBox="0 0 24 24"
             strokeWidth={1}
             stroke="currentColor"
-            className="w-6 h-6 stroke-neutral-700"
+            className="w-6 h-6 stroke-neutral-700 dark:stroke-slate-50"
           >
             <motion.path
               initial="close"

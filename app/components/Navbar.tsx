@@ -14,6 +14,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { getHeadingLabel } from "../utils/getHeadingLabel";
 import ShowNotificationButton from "./ShowNotificationButton";
+import ThemeToggle from "./ThemeToggle";
 
 interface Props {
   notifications: Notification[];
@@ -42,7 +43,9 @@ const Navbar = ({
         {heading}
       </h1>
 
-      <div className="flex flex-row gap-5 justify-center items-center">
+      <div className="flex flex-row gap-3 justify-center items-center">
+        <ThemeToggle />
+
         <ShowNotificationButton
           unReadNotificationCount={unReadNotificationCount}
           notifications={notifications}

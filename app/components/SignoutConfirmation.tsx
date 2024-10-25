@@ -23,8 +23,8 @@ export const SignOutConfirmation = () => {
         className="bg-transparent p-0 group w-full h-full group"
         onPress={onOpen}
       >
-        <PowerIcon className="transition-all stroke-[0.90px] min-w-[35px] w-[40px] ps-[4px] self-center group-hover:stroke-neutral-100 stroke-neutral-600" />
-        <p className="transition-all whitespace-nowrap text-inherit tracking-wide w-full h-full translate-y-2 ms-3 text-neutral-600 group-hover:text-neutral-100">
+        <PowerIcon className="transition-all dark:stroke-neutral-50 stroke-[0.90px] min-w-[35px] w-[40px] ps-[4px] self-center group-hover:stroke-neutral-100 stroke-neutral-600" />
+        <p className="transition-all dark:text-neutral-50 whitespace-nowrap text-inherit tracking-wide w-full h-full translate-y-2 ms-3 text-neutral-600 group-hover:text-neutral-100">
           خروج
         </p>
       </Link>

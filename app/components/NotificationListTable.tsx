@@ -36,7 +36,7 @@ const NotificationListTable = ({
       topContent={
         <div className="flex flex-row justify-between">
           <h2 className="text-lg">اعلان های خوانده نشده</h2>
-          {user?.role === "CUSTOMER" && (
+          {user?.role !== "SUPER_ADMIN" && (
             <Button
               color="danger"
               variant="light"
