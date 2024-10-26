@@ -26,7 +26,7 @@ export const POST = async (request: NextRequest) => {
     if (!validation.success)
       return NextResponse.json(validation.error.format(), { status: 400 });
 
-    const porformaInvoice = await prisma.porformaInvoice.findFirst({
+    const porformaInvoice = await prisma.porformaInvoice.findUnique({
       where: { porformaInvoiceNumber },
     });
 
@@ -35,40 +35,57 @@ export const POST = async (request: NextRequest) => {
         status: 400,
       });
 
-    const newPorformaInvoice = await prisma.porformaInvoice.create({
-      data: {
-        assignedToUserId,
-        description,
-        expiredAt,
-        porformaInvoiceNumber,
-        organizationBranch,
-        organization,
-        issuerId: session?.user.id!,
-      },
-    });
-
-    await prisma.notification.create({
-      data: {
-        message: `پیش فاکتوری با شماره ${porformaInvoiceNumber} برای شما صادر شد`,
-        type: "INFO",
-        users: {
-          connect: { id: newPorformaInvoice.assignedToUserId },
-        },
-        assignedToSection: "POR_INVOICE",
-        assignedToPorInvoiceId: newPorformaInvoice.id,
-      },
-    });
-
-    if (newPorformaInvoice.expiredAt <= twoDaysFromNowEnd)
-      await prisma.notification.create({
+    const [newPorformaInvoice, issuer] = await prisma.$transaction([
+      prisma.porformaInvoice.create({
         data: {
-          users: { connect: { id: newPorformaInvoice.assignedToUserId } },
-          message: `شماره پیش فاکتور ${newPorformaInvoice.porformaInvoiceNumber} به زودی منقضی میشود`,
-          assignedToPorInvoiceId: newPorformaInvoice.id,
-          type: "WARNING",
-          assignedToSection: "POR_INVOICE",
+          assignedToUserId,
+          description,
+          expiredAt,
+          porformaInvoiceNumber,
+          organizationBranch,
+          organization,
+          issuerId: session?.user.id!,
         },
-      });
+      }),
+
+      prisma.user.findUnique({
+        where: { id: session?.user.id },
+        select: { adminName: true },
+      }),
+    ]);
+
+    await Promise.all([
+      prisma.notification.create({
+        data: {
+          message: `پیش فاکتوری با شماره ${porformaInvoiceNumber} برای شما صادر شد`,
+          type: "INFO",
+          users: {
+            connect: { id: newPorformaInvoice.assignedToUserId },
+          },
+          assignedToSection: "POR_INVOICE",
+          assignedToPorInvoiceId: newPorformaInvoice.id,
+        },
+      }),
+
+      prisma.log.create({
+        data: {
+          assignedToSection: "POR_INVOICE",
+          issuer: issuer?.adminName!,
+          message: `پیش فاکتور به شماره ${newPorformaInvoice.porformaInvoiceNumber} برای سازمان ${newPorformaInvoice.organization} شعبه ${newPorformaInvoice.organizationBranch} صادر شد`,
+        },
+      }),
+
+      newPorformaInvoice.expiredAt <= twoDaysFromNowEnd &&
+        prisma.notification.create({
+          data: {
+            users: { connect: { id: newPorformaInvoice.assignedToUserId } },
+            message: `شماره پیش فاکتور ${newPorformaInvoice.porformaInvoiceNumber} به زودی منقضی میشود`,
+            assignedToPorInvoiceId: newPorformaInvoice.id,
+            type: "WARNING",
+            assignedToSection: "POR_INVOICE",
+          },
+        }),
+    ]);
 
     return NextResponse.json(newPorformaInvoice, { status: 201 });
   } catch (error) {
