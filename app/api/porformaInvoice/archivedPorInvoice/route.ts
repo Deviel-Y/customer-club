@@ -66,7 +66,7 @@ export const POST = async (request: NextRequest) => {
 
     await prisma.log.create({
       data: {
-        assignedToSection: "INVOICE",
+        assignedToSection: "POR_INVOICE",
         issuer: issuer?.adminName!,
         message: `کاربر ${issuer?.adminName} پیش فاکتورهای از تاریخ ${jalaalifromDateStart} تا تاریخ ${jalaalitoDateEnd} را بایگانی کرد`,
       },
