@@ -43,7 +43,7 @@ const LogTable = ({ logs, totalPage }: Props) => {
           <TableRow key={log.id}>
             <TableCell>{log.issuer}</TableCell>
             <TableCell>
-              {sesctionMapping[log.assignedToSection].label}
+              {sesctionMapping[log.assignedToSection]?.label}
             </TableCell>
             <TableCell>{log.message}</TableCell>
             <TableCell>{moment(log.createdAt).format("jYYYY/jM/jD")}</TableCell>
@@ -61,6 +61,7 @@ const sesctionMapping: Record<Section, { label: string }> = {
   POR_INVOICE: { label: "پیش فاکتور" },
   TICKET: { label: "تیکت" },
   TICKET_MESSAGE: { label: "پاسخ به تیکت" },
+  LOGIN: { label: "احراز هویت" },
 };
 
 const columns: { label: string; value: keyof Log }[] = [

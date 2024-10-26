@@ -182,6 +182,7 @@ enum Section {
   POR_INVOICE
   TICKET
   TICKET_MESSAGE
+  LOGIN
 }
 
 enum NotificationType {

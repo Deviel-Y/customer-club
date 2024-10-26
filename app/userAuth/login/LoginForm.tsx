@@ -19,8 +19,8 @@ import {
 import { BsKey } from "react-icons/bs";
 
 const LoginForm = () => {
-  const { data: session } = useSession();
   const router = useRouter();
+  const { data: session } = useSession(); // Moved outside to access session data after login
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [isLoading, setLoading] = useState(false);
 
@@ -31,34 +31,30 @@ const LoginForm = () => {
   } = useForm<SignInUserSchemaType>({
     resolver: zodResolver(signInUserSchema),
   });
+
+  const onSubmit = async ({ email, password }: SignInUserSchemaType) => {
+    setLoading(true);
+    const res = await signIn("credentials", {
+      email: email.trim(),
+      password,
+      redirect: false,
+    });
+
+    if (res?.error) {
+      toast.error("رمز عبور یا آدرس ایمیل اشتباه است");
+      setLoading(false);
+    } else {
+      router.push(session?.user.role === "ADMIN" ? "/admin" : "/");
+      router.refresh();
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="w-full flex justify-center items-center">
-      <form
-        className="w-3/4 max-lg:w-5/6"
-        onSubmit={handleSubmit(async ({ email, password }) => {
-          setLoading(true);
-          const res = await signIn("credentials", {
-            email: email.trim(),
-            password,
-            redirect: false,
-          });
-
-          res?.error
-            ? (toast.error("رمز عبور یا آدرس ایمیل اشتباه است"),
-              setLoading(false))
-            : signIn("credentials", {
-                email: email.trim(),
-                password,
-                redirect: false,
-              }).then(() => {
-                router.push(session?.user.role === "ADMIN" ? "/admin" : "/");
-                router.refresh();
-              });
-        })}
-      >
+      <form className="w-3/4 max-lg:w-5/6" onSubmit={handleSubmit(onSubmit)}>
         <Card isBlurred className="flex flex-col p-5" shadow="lg">
           <h1 className="font-bold text-[30px]">ورود</h1>
-
           <p className="text-[15px] mt-2 mb-5">برای ادامه وارد شوید</p>
 
           <Input
@@ -86,7 +82,7 @@ const LoginForm = () => {
             size="lg"
             isRequired
             startContent={<BsKey size={19} />}
-            type={isVisible ? "text" : "Password"}
+            type={isVisible ? "text" : "password"}
             label="رمز عبور"
             placeholder="رمز عبور خود را وارد کنید"
             variant="underlined"

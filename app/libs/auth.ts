@@ -1,6 +1,7 @@
 import prisma from "@/prisma/client";
 import { Role } from "@prisma/client";
 import bcrypt from "bcrypt";
+import moment from "moment-jalaali";
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 
@@ -39,6 +40,19 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           credentials.password as string,
           user.hashedPassword!
         );
+
+        await prisma.log.create({
+          data: {
+            assignedToSection: "LOGIN",
+            issuer:
+              user.role === "CUSTOMER"
+                ? `${user.companyName} شعبه ${user.companyBranch}`
+                : user.adminName!,
+            message: `کاربر در تاریخ ${moment(new Date()).format(
+              "jYYYY/jM/jD"
+            )} لاگین کرد`,
+          },
+        });
 
         return isPasswordsMatch ? user : null;
       },

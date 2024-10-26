@@ -58,6 +58,7 @@ export default LogActionBar;
 
 const sectionFilter: { label: string; value: Section | "ALL" }[] = [
   { label: "همه بخش ها", value: "ALL" },
+  { label: "احراز هویت", value: "LOGIN" },
   { label: "فاکتور", value: "INVOICE" },
   { label: "پیش فاکتور", value: "POR_INVOICE" },
   { label: "تیکت", value: "TICKET" },
