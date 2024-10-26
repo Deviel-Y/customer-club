@@ -103,4 +103,5 @@ const typeMapping: Record<NotificationType | Section, { label: string }> = {
   POR_INVOICE: { label: "پیش فاکتور" },
   TICKET: { label: "تیکت" },
   TICKET_MESSAGE: { label: "پاسخ به تیکت" },
+  LOGIN: { label: "احراز هویت" },
 };

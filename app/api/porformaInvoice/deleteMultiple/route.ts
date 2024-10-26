@@ -8,15 +8,15 @@ export const DELETE = async (request: NextRequest) => {
   try {
     const body: string[] = await request.json();
 
-    const [deletedPorInvoices, deletedPorInvoiceNumbers, issuer] =
+    const [porInvoicesList, deleteSelectedPorInvoices, issuer] =
       await prisma.$transaction([
-        prisma.porformaInvoice.deleteMany({
+        prisma.porformaInvoice.findMany({
           where: { id: { in: body } },
+          select: { porformaInvoiceNumber: true },
         }),
 
-        prisma.porformaInvoice.findMany({
-          where: { porformaInvoiceNumber: { in: body } },
-          select: { porformaInvoiceNumber: true },
+        prisma.porformaInvoice.deleteMany({
+          where: { id: { in: body } },
         }),
 
         prisma?.user?.findUnique({
@@ -27,7 +27,7 @@ export const DELETE = async (request: NextRequest) => {
         }),
       ]);
 
-    const deletedPorInvoiceIds = deletedPorInvoiceNumbers
+    const deletedPorInvoiceNumbers = porInvoicesList
       .map((porInvoice) => porInvoice.porformaInvoiceNumber)
       .join(", ");
 
@@ -35,11 +35,11 @@ export const DELETE = async (request: NextRequest) => {
       data: {
         assignedToSection: "POR_INVOICE",
         issuer: issuer?.adminName!,
-        message: `کاربر پیش فاکتور به شماره های ${deletedPorInvoiceIds} را حذف کرد`,
+        message: `کاربر ${issuer?.adminName} تعداد ${deleteSelectedPorInvoices.count} به شماره های ${deletedPorInvoiceNumbers} را حذف کرد`,
       },
     });
 
-    return NextResponse.json(deletedPorInvoices);
+    return NextResponse.json("Selected porforma invoices have been deleted");
   } catch (error) {
     return NextResponse.json(error, { status: 500 });
   }

@@ -32,7 +32,7 @@ export const DELETE = async (request: NextRequest) => {
       data: {
         assignedToSection: "INVOICE",
         issuer: issuer?.adminName!,
-        message: `کاربر ${issuer?.adminName} تعداد ${deletedInvoices.count} به شماره های ${deletedInvoiceNumbers} را حذف کرد`,
+        message: `کاربر ${issuer?.adminName} تعداد ${deletedInvoices.count} فاکتور به شماره های ${deletedInvoiceNumbers} را حذف کرد`,
       },
     });
 

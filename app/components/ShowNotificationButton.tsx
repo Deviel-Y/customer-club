@@ -202,4 +202,18 @@ const dropdownItemMapping: Record<
       />
     ),
   },
+
+  LOGIN: {
+    // This is not used anywhere
+    infoLabel: "تیکت جدید",
+    userHref: "/ticket",
+    adminHref: "/admin/ticket",
+    icon: (
+      <HiOutlineTicket
+        size={35}
+        fill="white"
+        className="stroke-[1.3px] bg-white group-hover:fill-white group-hover:stroke-black transition-all group-hover:bg-white   rounded-lg me-1 w-10"
+      />
+    ),
+  },
 };

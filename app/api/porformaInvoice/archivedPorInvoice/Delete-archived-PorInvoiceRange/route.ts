@@ -45,13 +45,9 @@ export const DELETE = async (request: NextRequest) => {
         status: 404,
       });
 
-    const archivedPorformaInvoiceIds = archivedPorformaInvoices.map(
-      (por_invoice) => por_invoice.id
-    );
-
     await prisma.$transaction([
       prisma.archivedPorformaInvoice.deleteMany({
-        where: { id: { in: archivedPorformaInvoiceIds } },
+        where: { createdAt: { lte: toDateEnd, gte: fromDateStart } },
       }),
 
       prisma.log.create({
@@ -63,9 +59,7 @@ export const DELETE = async (request: NextRequest) => {
       }),
     ]);
 
-    return NextResponse.json("Selected porforma invoices have been deleted", {
-      status: 201,
-    });
+    return NextResponse.json("Selected porforma invoices have been deleted");
   } catch (error) {
     console.log(error);
     return NextResponse.json(error, { status: 500 });

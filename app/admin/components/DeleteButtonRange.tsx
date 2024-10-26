@@ -56,8 +56,8 @@ const DeleteButtonRange = () => {
               axios
                 .delete(
                   `${
-                    pathname.includes("porforma")
-                      ? "/api/porforma/archivedPorInvoice/Delete-archived-PorInvoiceRange"
+                    pathname.includes("archived-porforma-invoices")
+                      ? "/api/porformaInvoice/archivedPorInvoice/Delete-archived-PorInvoiceRange"
                       : "/api/invoice/archivedInvoice/Delete-archived-InvoiceRange"
                   }`,
                   {

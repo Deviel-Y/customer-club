@@ -67,6 +67,7 @@ export const DeleteMutipleButton = ({ listOfIds, setListOfIds }: Props) => {
                     انصراف
                   </Button>
                   <Button
+                    variant="shadow"
                     color="danger"
                     isLoading={isLoading}
                     onPress={() => {
