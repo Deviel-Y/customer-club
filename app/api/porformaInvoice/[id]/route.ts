@@ -42,6 +42,7 @@ export const PATCH = async (
 
   const porInvoice = await prisma.porformaInvoice.findUnique({
     where: { id },
+    select: { id: true },
   });
   if (!porInvoice)
     return NextResponse.json("پیش فاکتوری یافت نشد.", { status: 404 });
@@ -61,16 +62,31 @@ export const PATCH = async (
       status: 400,
     });
 
-  const updatedPorInvoice = await prisma.porformaInvoice.update({
-    where: { id },
+  const [updatedPorInvoice, issuer] = await prisma.$transaction([
+    prisma.porformaInvoice.update({
+      where: { id },
+      data: {
+        assignedToUserId,
+        description,
+        expiredAt,
+        organization,
+        organizationBranch,
+        porformaInvoiceNumber,
+        issuerId: session?.user.id,
+      },
+    }),
+
+    prisma.user.findUnique({
+      where: { id: session?.user.id },
+      select: { adminName: true },
+    }),
+  ]);
+
+  await prisma.log.create({
     data: {
-      assignedToUserId,
-      description,
-      expiredAt,
-      organization,
-      organizationBranch,
-      porformaInvoiceNumber,
-      issuerId: session?.user.id,
+      assignedToSection: "POR_INVOICE",
+      issuer: issuer?.adminName!,
+      message: `پیش فاکتور به شماره ${updatedPorInvoice.porformaInvoiceNumber} توسط کاربر ${issuer?.adminName} ویرایش شد`,
     },
   });
 
