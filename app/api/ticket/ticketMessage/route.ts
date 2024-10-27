@@ -16,15 +16,15 @@ export const POST = async (request: NextRequest) => {
       return NextResponse.json(validation.error.format(), { status: 400 });
 
     const [ticketMessages, ticket, user, adminUsers] = await Promise.all([
-      await prisma.ticketMessage.findMany({
+      prisma.ticketMessage.findMany({
         where: { assignetoTicketId },
       }),
 
-      await prisma.ticket.findUnique({
+      prisma.ticket.findUnique({
         where: { id: assignetoTicketId },
       }),
 
-      await prisma.user.findUnique({
+      prisma.user.findUnique({
         where: { id: session?.user.id },
       }),
 
@@ -66,27 +66,30 @@ export const POST = async (request: NextRequest) => {
         { status: 400 }
       );
 
-    await prisma.ticketMessage.updateMany({
-      where: {
-        assignetoTicketId,
-      },
-      data: {
-        canBeModified: false,
-      },
-    });
+    const [newMesaage] = await prisma.$transaction([
+      prisma.ticketMessage.create({
+        data: {
+          message,
+          assignetoTicketId,
+          messageType:
+            session?.user.role === "CUSTOMER" ? "REQUEST" : "RESPONCE",
+          issuerId: session?.user.id!,
+        },
+        include: { Ticket: true },
+      }),
 
-    const newMesaage = await prisma.ticketMessage.create({
-      data: {
-        message,
-        assignetoTicketId,
-        messageType: session?.user.role === "CUSTOMER" ? "REQUEST" : "RESPONCE",
-        issuerId: session?.user.id!,
-      },
-      include: { Ticket: true },
-    });
+      prisma.ticketMessage.updateMany({
+        where: {
+          assignetoTicketId,
+        },
+        data: {
+          canBeModified: false,
+        },
+      }),
+    ]);
 
-    // Notification Section
-    const notificationMessage =
+    // Message for log and notification
+    const log_notification_message =
       ticketMessages.length === 0
         ? `تیکت جدیدی به شماره ${ticket?.ticketNumber} ایجاد شد`
         : ticketMessages.length !== 0 && newMesaage.messageType === "REQUEST"
@@ -95,19 +98,38 @@ export const POST = async (request: NextRequest) => {
         ? `پاسخی از سوی ادمین به تیکت شماره ${ticket?.ticketNumber} ثبت شد`
         : "پیام جدید";
 
-    await prisma.notification.create({
-      data: {
-        message: notificationMessage,
-        type: "INFO",
-        users: {
-          connect:
-            newMesaage.messageType === "REQUEST"
-              ? adminUsers.map((user) => ({ id: user.id }))
-              : { id: ticket?.issuerId },
+    const [issuer] = await prisma.$transaction([
+      prisma.user.findUnique({
+        where: { id: newMesaage.issuerId },
+        select: { adminName: true, companyName: true, companyBranch: true },
+      }),
+
+      prisma.notification.create({
+        data: {
+          message: log_notification_message,
+          type: "INFO",
+          users: {
+            connect:
+              newMesaage.messageType === "REQUEST"
+                ? adminUsers.map((user) => ({ id: user.id }))
+                : { id: ticket?.issuerId },
+          },
+          assignedToSection:
+            ticketMessages.length === 0 ? "TICKET" : "TICKET_MESSAGE",
+          assignedToTicketMessageId: newMesaage.id,
         },
+      }),
+    ]);
+
+    await prisma.log.create({
+      data: {
         assignedToSection:
           ticketMessages.length === 0 ? "TICKET" : "TICKET_MESSAGE",
-        assignedToTicketMessageId: newMesaage.id,
+        issuer:
+          newMesaage.messageType === "REQUEST"
+            ? `${issuer?.companyName} - ${issuer?.companyBranch}`
+            : issuer?.adminName!,
+        message: log_notification_message,
       },
     });
 
