@@ -125,16 +125,11 @@ const InvoiceForm = ({ Userlist, invoice }: Props) => {
       className="flex justify-center items-center max-sm:w-full"
     >
       <Card className="flex flex-col p-5 max-sm:p-2 w-4/5">
-        <div>
-          <h2 className="text-[25px] max-sm:text-[20px] mb-5">
-            اطلاعات فاکتور
-          </h2>
-        </div>
+        <h2 className="text-[25px] max-sm:text-[20px] mb-5">اطلاعات فاکتور</h2>
 
-        <div className="grid grid-cols-3 grid-rows-3 max-md:grid-cols-1 max-md:grid-rows-4 gap-1 max-md:gap-0 place-items-center">
+        <div className="grid grid-cols-3 grid-rows-3 max-md:grid-cols-1 max-md:grid-rows-8 gap-1 max-md:gap-0 place-items-center">
           <div className="w-full">
             <Input
-              size="lg"
               defaultValue={invoice?.invoiceNumber}
               {...register("invoiceNumber")}
               isRequired
@@ -160,7 +155,6 @@ const InvoiceForm = ({ Userlist, invoice }: Props) => {
                     setCompanyName(value!);
                   }}
                   isRequired
-                  size="lg"
                   label="نام سازمان"
                 >
                   {uniqueCompanyName?.map((uniqueCompanyName) => (
@@ -191,7 +185,6 @@ const InvoiceForm = ({ Userlist, invoice }: Props) => {
                     setCompanyBranch(value);
                   }}
                   isRequired
-                  size="lg"
                   label="نام شعبه"
                 >
                   {organizationBranch?.map((organizationBranch) => (
@@ -214,7 +207,6 @@ const InvoiceForm = ({ Userlist, invoice }: Props) => {
               وارد کردن مالیات به صورت دستی
             </Checkbox>
             <Input
-              size="lg"
               onValueChange={setPrice}
               defaultValue={invoice?.price.toString()}
               {...register("price", { valueAsNumber: true })}
@@ -229,8 +221,6 @@ const InvoiceForm = ({ Userlist, invoice }: Props) => {
           <div className="w-full">
             <Input
               isDisabled={!isInputsManual}
-              size="lg"
-              value={!isInputsManual ? undefined : undefined}
               defaultValue={invoice?.tax?.toString() || "0"}
               onValueChange={(value) =>
                 isInputsManual && setValue("tax", parseInt(value))
@@ -247,8 +237,6 @@ const InvoiceForm = ({ Userlist, invoice }: Props) => {
           <div className="w-full">
             <Input
               isDisabled={!isInputsManual}
-              size="lg"
-              value={!isInputsManual ? undefined : undefined}
               defaultValue={invoice?.priceWithTax?.toString() || "0"}
               onValueChange={(value) =>
                 isInputsManual && setValue("priceWithTax", parseInt(value))
@@ -264,7 +252,6 @@ const InvoiceForm = ({ Userlist, invoice }: Props) => {
 
           <div className="col-span-2 place-content-center place-items-start max-md:col-span-1 w-full">
             <Input
-              size="lg"
               defaultValue={invoice?.description}
               {...register("description")}
               isRequired
@@ -282,7 +269,6 @@ const InvoiceForm = ({ Userlist, invoice }: Props) => {
               render={({ field: { onChange } }) => (
                 <Autocomplete
                   defaultSelectedKey={"true"}
-                  size="lg"
                   label="اعلان برای کاربر ارسال شود؟"
                   onSelectionChange={(value) =>
                     onChange(JSON.parse(String(value)))
@@ -300,7 +286,7 @@ const InvoiceForm = ({ Userlist, invoice }: Props) => {
         </div>
 
         <div className="flex flex-row max-sm:flex-col-reverse justify-between items-center gap-5 mt-5 max-sm:-mt-3">
-          <div className="flex flex-row gap-5 max-sm:gap-0 max-sm:mt-3">
+          <div className="flex flex-row gap-5 max-sm:justify-between max-sm:mt-3">
             <Button
               isLoading={isLoading}
               type="submit"
