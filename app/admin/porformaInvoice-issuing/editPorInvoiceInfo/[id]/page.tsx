@@ -24,7 +24,7 @@ const EditPorInvoiceInfoPage = async ({ params: { id } }: Props) => {
 
   return (
     <div>
-      <PorInvoiceForm Userlist={users} PorInvoice={porformaInvoice} />
+      <PorInvoiceForm Userlist={users} porInvoice={porformaInvoice} />
     </div>
   );
 };

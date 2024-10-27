@@ -25,20 +25,23 @@ import {
 
 interface Props {
   Userlist: User[];
-  PorInvoice?: PorformaInvoice;
+  porInvoice?: PorformaInvoice;
 }
 
-const PorInvoiceForm = ({ Userlist, PorInvoice }: Props) => {
+const PorInvoiceForm = ({ Userlist, porInvoice }: Props) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [date, setDate] = useState(
-    moment(PorInvoice?.expiredAt).format("jYYYY/jMM/jDD")
-  );
   const router = useRouter();
+
+  const initialDate =
+    moment(porInvoice?.expiredAt).format("jYYYY/jMM/jDD") ||
+    moment(new Date()).format("jYYYY/jMM/jDD");
+  const [date, setDate] = useState(initialDate);
+
   const [companyBranch, setCompanyBranch] = useState<Key | null>(
-    PorInvoice?.organizationBranch || ""
+    porInvoice?.organizationBranch || ""
   );
   const [companyName, setCompanyName] = useState<Key>(
-    PorInvoice?.organization || ""
+    porInvoice?.organization || ""
   );
 
   const companyNames = Userlist.map((user) => user.companyName);
@@ -70,9 +73,9 @@ const PorInvoiceForm = ({ Userlist, PorInvoice }: Props) => {
 
         setIsLoading(true);
 
-        PorInvoice
+        porInvoice
           ? axios
-              .patch(`/api/porformaInvoice/${PorInvoice.id}`, {
+              .patch(`/api/porformaInvoice/${porInvoice.id}`, {
                 porformaInvoiceNumber: porformaInvoiceNumber.trim(),
                 assignedToUserId,
                 ...data,
@@ -119,7 +122,7 @@ const PorInvoiceForm = ({ Userlist, PorInvoice }: Props) => {
           <div className="w-full">
             <Input
               size="lg"
-              defaultValue={PorInvoice?.porformaInvoiceNumber}
+              defaultValue={porInvoice?.porformaInvoiceNumber}
               {...register("porformaInvoiceNumber")}
               isRequired
               label="شماره فاکتور"
@@ -134,13 +137,13 @@ const PorInvoiceForm = ({ Userlist, PorInvoice }: Props) => {
             <Controller
               name="organization"
               control={control}
-              defaultValue={PorInvoice?.organization}
+              defaultValue={porInvoice?.organization}
               render={({ field: { onChange } }) => (
                 <Autocomplete
                   listboxProps={{
                     emptyContent: "سازمانی یافت نشد",
                   }}
-                  defaultSelectedKey={PorInvoice?.organization}
+                  defaultSelectedKey={porInvoice?.organization}
                   onSelectionChange={(value) => {
                     onChange(value);
                     setCompanyName(value!);
@@ -164,14 +167,14 @@ const PorInvoiceForm = ({ Userlist, PorInvoice }: Props) => {
           <div className="w-full">
             <Controller
               name="organizationBranch"
-              defaultValue={PorInvoice?.organizationBranch}
+              defaultValue={porInvoice?.organizationBranch}
               control={control}
               render={({ field: { onChange } }) => (
                 <Autocomplete
                   listboxProps={{
                     emptyContent: "شعبه ای یافت نشد",
                   }}
-                  defaultSelectedKey={PorInvoice?.organizationBranch}
+                  defaultSelectedKey={porInvoice?.organizationBranch}
                   onSelectionChange={(value) => {
                     onChange(value);
                     setCompanyBranch(value);
@@ -196,16 +199,12 @@ const PorInvoiceForm = ({ Userlist, PorInvoice }: Props) => {
             <Controller
               control={control}
               name="expiredAt"
-              defaultValue={PorInvoice?.expiredAt.toISOString()}
+              defaultValue={porInvoice?.expiredAt?.toISOString() || ""}
               render={({ field: { onChange } }) => (
                 <DatePicker
-                  value={today(getLocalTimeZone())}
                   isRequired
                   className="translate-y-3"
-                  description={`تاریخ شمسی : ${
-                    moment(date).format("jYYYY/jMM/jDD") ||
-                    moment(Date()).format("jYYYY/jMM/jDD")
-                  }`}
+                  description={`تاریخ شمسی : ${date}`}
                   minValue={today(getLocalTimeZone())}
                   onChange={(value) => {
                     const formattedDate = value
@@ -226,7 +225,7 @@ const PorInvoiceForm = ({ Userlist, PorInvoice }: Props) => {
           <div className="col-span-4 max-md:col-span-2 max-sm:col-span-1 w-full">
             <Input
               size="lg"
-              defaultValue={PorInvoice?.description}
+              defaultValue={porInvoice?.description}
               {...register("description")}
               isRequired
               label="توضیحات پیش فاکتور"
@@ -244,7 +243,7 @@ const PorInvoiceForm = ({ Userlist, PorInvoice }: Props) => {
               color="primary"
               variant="shadow"
             >
-              {PorInvoice ? "ویرایش پیش فاکتور" : "صدور پیش فاکتور جدید"}
+              {porInvoice ? "ویرایش پیش فاکتور" : "صدور پیش فاکتور جدید"}
             </Button>
 
             <Button

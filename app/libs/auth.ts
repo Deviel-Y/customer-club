@@ -49,8 +49,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 ? `${user.companyName} شعبه ${user.companyBranch}`
                 : user.adminName!,
             message: `کاربر در تاریخ ${moment(new Date()).format(
-              "jYYYY/jM/jD"
-            )} لاگین کرد`,
+              "jYYYY/jM/jD HH:mm"
+            )} احراز هویت کرد`,
           },
         });
 
