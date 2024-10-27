@@ -53,7 +53,7 @@ const AdminInvoiceTable = ({ invoices, totalPage, userRole }: Props) => {
               listOfIds={invoiceIds}
             />
 
-            <ArchiveButton />
+            {userRole === "SUPER_ADMIN" && <ArchiveButton />}
           </div>
         </div>
       }

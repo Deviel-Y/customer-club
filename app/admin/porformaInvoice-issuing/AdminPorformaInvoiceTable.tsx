@@ -12,7 +12,7 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
-import { PorformaInvoice } from "@prisma/client";
+import { PorformaInvoice, Role } from "@prisma/client";
 import moment from "moment-jalaali";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
@@ -24,9 +24,14 @@ import StatusBadge from "../components/StatusBadge";
 interface Props {
   porformaInvoice: PorformaInvoice[];
   totalPage: number;
+  userRole: Role;
 }
 
-const AdminPorformaInvoiceTable = ({ porformaInvoice, totalPage }: Props) => {
+const AdminPorformaInvoiceTable = ({
+  porformaInvoice,
+  totalPage,
+  userRole,
+}: Props) => {
   const router = useRouter();
 
   const [porInvoiceIds, setPorInvoiceIds] = useState<string[]>([]);
@@ -46,8 +51,7 @@ const AdminPorformaInvoiceTable = ({ porformaInvoice, totalPage }: Props) => {
               setListOfIds={(value) => setPorInvoiceIds(value)}
               listOfIds={porInvoiceIds}
             />
-
-            <ArchiveButton />
+            {userRole === "SUPER_ADMIN" && <ArchiveButton />}
           </div>
         </div>
       }

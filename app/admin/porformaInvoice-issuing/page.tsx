@@ -90,6 +90,7 @@ const porformaInvoiceListPage = async ({
       />
 
       <AdminPorformaInvoiceTable
+        userRole={session?.user.role!}
         porformaInvoice={adminSidePorformaInvoiceList}
         totalPage={Math.ceil(porformaInvoiceCount / pageSize)}
       />
