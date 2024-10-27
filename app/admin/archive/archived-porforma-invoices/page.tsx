@@ -1,6 +1,6 @@
 import ActionBar from "@/app/components/ActionBar";
 import getSession from "@/app/libs/getSession";
-import { authorizeAdmin } from "@/app/utils/authorizeRole";
+import { authorizeSuperAdmin } from "@/app/utils/authorizeRole";
 import prisma from "@/prisma/client";
 import dynamic from "next/dynamic";
 
@@ -24,7 +24,7 @@ const ArchivedPorformaInvoicesPage = async ({
   },
 }: Props) => {
   const session = await getSession();
-  authorizeAdmin(session!);
+  authorizeSuperAdmin(session!);
 
   const currentPage = pageNumber || 1;
 
