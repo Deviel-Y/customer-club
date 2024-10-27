@@ -60,7 +60,7 @@ const MessageCard = ({ ticketMessages, users, sessionId }: Props) => {
             </div>
 
             <p className="text-sm text-gray-500">
-              {moment(ticketMessages.createdAt).format("jYYYY/jM/jD")}
+              {moment(ticketMessages.createdAt).format("HH:mm jYYYY/jMM/jDD")}
             </p>
           </div>
           <p className="mt-3">{ticketMessages.message}</p>

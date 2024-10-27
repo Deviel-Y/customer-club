@@ -71,7 +71,7 @@ const TicketListTable = ({ tickets, totalPage }: Props) => {
               <StatusBadge status={ticket?.status} />
             </TableCell>
             <TableCell>
-              {moment(ticket?.createdAt).format("jYYYY/jM/jD")}
+              {moment(ticket?.createdAt).format(" HH:mm jYYYY/jMM/jDD")}
             </TableCell>
           </TableRow>
         ))}
