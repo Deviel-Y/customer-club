@@ -1,7 +1,16 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, Textarea } from "@nextui-org/react";
+import {
+  Button,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  Textarea,
+  useDisclosure,
+} from "@nextui-org/react";
 import { Ticket } from "@prisma/client";
 import axios, { AxiosError } from "axios";
 import { Session } from "next-auth";
@@ -16,11 +25,11 @@ import {
 import FormErrorMessage from "./FormErrorMessage";
 
 interface Props {
-  session: Session;
   ticket: Ticket;
+  session: Session;
 }
 
-const NewTicketMessagaForm = ({ ticket, session }: Props) => {
+const NewTicketMessagaForm = ({ session, ticket }: Props) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -79,33 +88,7 @@ const NewTicketMessagaForm = ({ ticket, session }: Props) => {
           ارسال پاسخ
         </Button>
 
-        {session?.user?.role !== "CUSTOMER" && (
-          <Button
-            className="-translate-y-6"
-            type="button"
-            isLoading={isLoading}
-            color="danger"
-            variant="light"
-            onPress={() => {
-              setIsLoading(true);
-
-              axios
-                .patch(`/api/ticket/closeTicket/${ticket.id}`, {
-                  ticketid: ticket.id,
-                })
-                .then(() => {
-                  router.push("/admin/ticket");
-                  router.refresh();
-                })
-                .catch((error: AxiosError) =>
-                  toast.error(error.response?.data as string)
-                )
-                .finally(() => setIsLoading(false));
-            }}
-          >
-            بستن تیکت
-          </Button>
-        )}
+        <CloseTicketConfirmation session={session} ticket={ticket} />
       </form>
       <Toaster />
     </>
@@ -113,3 +96,80 @@ const NewTicketMessagaForm = ({ ticket, session }: Props) => {
 };
 
 export default NewTicketMessagaForm;
+
+const CloseTicketConfirmation = ({ session, ticket }: Props) => {
+  const router = useRouter();
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  return (
+    <>
+      <Button
+        className={`-translate-y-6 ${
+          session.user.role === "CUSTOMER" && "hidden"
+        }`}
+        type="button"
+        isLoading={isLoading}
+        color="danger"
+        variant="light"
+        onPress={() => onOpen()}
+      >
+        بستن تیکت
+      </Button>
+      <Modal
+        hidden={session?.user?.role === "CUSTOMER"}
+        backdrop="blur"
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+      >
+        <ModalContent>
+          {(onClose) => (
+            <div>
+              <ModalHeader className="flex flex-col">بستن تیکت</ModalHeader>
+              <ModalBody>
+                <p>
+                  آیا از بستن این تیکت مطمئن هستید؟ این عمل غیر قابل بازگشت می
+                  باشد.
+                </p>
+              </ModalBody>
+              <ModalFooter>
+                <Button
+                  isDisabled={isLoading}
+                  color="primary"
+                  variant="solid"
+                  onPress={onClose}
+                >
+                  انصراف
+                </Button>
+                <Button
+                  isLoading={isLoading}
+                  color="danger"
+                  onPress={() => {
+                    setIsLoading(true);
+
+                    axios
+                      .patch(`/api/ticket/closeTicket/${ticket.id}`, {
+                        ticketId: ticket.id,
+                      })
+                      .then(() => {
+                        toast.success("تیکت با موفقیت بسته شد");
+                        router.push("/admin/ticket");
+                        router.refresh();
+                      })
+                      .catch((error: AxiosError) =>
+                        toast.error(error.response?.data as string)
+                      )
+                      .finally(() => setIsLoading(false));
+                  }}
+                >
+                  بستن تیکت
+                </Button>
+              </ModalFooter>
+            </div>
+          )}
+        </ModalContent>
+      </Modal>
+      <Toaster />
+    </>
+  );
+};
