@@ -48,7 +48,7 @@ const TicketDetailPage = async ({ params: { id } }: Props) => {
         />
       ))}
 
-      <NewTicketMessagaForm ticketId={ticket?.id} />
+      <NewTicketMessagaForm session={session!} ticket={ticket} />
     </div>
   );
 };
