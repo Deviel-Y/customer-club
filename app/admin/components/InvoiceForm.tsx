@@ -262,7 +262,7 @@ const InvoiceForm = ({ Userlist, invoice }: Props) => {
             <FormErrorMessage errorMessage={errors.priceWithTax?.message!} />
           </div>
 
-          <div className="col-span-2 place-content-center place-items-center max-md:col-span-1 w-full">
+          <div className="col-span-2 place-content-center place-items-start max-md:col-span-1 w-full">
             <Input
               size="lg"
               defaultValue={invoice?.description}
@@ -273,22 +273,30 @@ const InvoiceForm = ({ Userlist, invoice }: Props) => {
 
             <FormErrorMessage errorMessage={errors?.description?.message!} />
           </div>
-          <Controller
-            control={control}
-            defaultValue={true}
-            name="sendNotification"
-            render={({ field: { onChange } }) => (
-              <Checkbox
-                isRequired
-                defaultSelected={true}
-                className="col-span-1 -translate-y-2"
-                size="sm"
-                onChange={(event) => onChange(event.target.checked)}
-              >
-                اعلان برای کاربر ارسال شود
-              </Checkbox>
-            )}
-          />
+
+          <div className="w-full">
+            <Controller
+              control={control}
+              defaultValue={true}
+              name="sendNotification"
+              render={({ field: { onChange } }) => (
+                <Autocomplete
+                  defaultSelectedKey={"true"}
+                  size="lg"
+                  label="اعلان برای کاربر ارسال شود؟"
+                  onSelectionChange={(value) =>
+                    onChange(JSON.parse(String(value)))
+                  }
+                >
+                  <AutocompleteItem key={"true"}>بله</AutocompleteItem>
+                  <AutocompleteItem key={"false"}>خیر</AutocompleteItem>
+                </Autocomplete>
+              )}
+            />
+            <FormErrorMessage
+              errorMessage={errors.sendNotification?.message!}
+            />
+          </div>
         </div>
 
         <div className="flex flex-row max-sm:flex-col-reverse justify-between items-center gap-5 mt-5 max-sm:-mt-3">

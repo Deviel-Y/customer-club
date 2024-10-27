@@ -230,17 +230,19 @@ export const invoiceSchema = z.object({
     }),
   tax: z
     .number({ message: "برای وارد کردن مقدار، از اعداد استفاده کنید" })
-    .min(1)
+    .min(1, { message: "وارد کردن این مقدار الزامی می باشد" })
     .max(999_999_999, {
       message: "مبلغ مالیات از این حد نمیتواند بیشتر باشد",
     }),
   priceWithTax: z
     .number({ message: "برای وارد کردن مقدار، از اعداد استفاده کنید" })
-    .min(1)
+    .min(1, { message: "وارد کردن این مقدار الزامی می باشد" })
     .max(999_999_999_999, {
       message: "مبلغ نهایی از این حد نمیتواند بیشتر باشد",
     }),
-  sendNotification: z.boolean(),
+  sendNotification: z
+    .boolean({ message: "وارد کردن این مقدار الزامی می باشد" })
+    .default(true),
 });
 
 export const porInvoiceSchema = z.object({

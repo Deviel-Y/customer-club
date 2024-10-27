@@ -37,6 +37,7 @@ const InvoicePage = async ({
         },
         take: pageSize,
         skip: (currentPage - 1) * pageSize,
+        orderBy: { createdAt: "desc" },
       }),
 
       prisma.invoice.findMany({
