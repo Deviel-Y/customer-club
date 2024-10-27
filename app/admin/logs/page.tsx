@@ -2,6 +2,7 @@ import getSession from "@/app/libs/getSession";
 import { authorizeSuperAdmin } from "@/app/utils/authorizeRole";
 import prisma from "@/prisma/client";
 import { Section } from "@prisma/client";
+import { subMonths } from "date-fns";
 import LogActionBar from "./LogActionBar";
 import LogTable from "./LogTable";
 
@@ -19,6 +20,12 @@ const SuperAdminLogsPage = async ({
 }: Props) => {
   const session = await getSession();
   authorizeSuperAdmin(session!);
+
+  const currentDate = new Date();
+  const twoMonthsFromNow = subMonths(currentDate, 2);
+  await prisma.log.deleteMany({
+    where: { createdAt: { lte: twoMonthsFromNow } },
+  });
 
   const prismaSecions = Object?.values(Section);
   const selectedSections = prismaSecions.includes(section)
