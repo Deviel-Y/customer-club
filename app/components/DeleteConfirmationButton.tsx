@@ -23,7 +23,7 @@ interface Props {
   iconStyle?: string;
   buttonSize?: "sm" | "md" | "lg";
   redirectEndpont: string;
-  variant?: "solid" | "light";
+  variant?: "solid" | "light" | "shadow";
 }
 
 export const DeleteConfirmationButton = ({

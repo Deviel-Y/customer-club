@@ -51,15 +51,17 @@ const AdminPorformaInvoiceTable = ({
       topContent={
         <div className="flex flex-row justify-between items-center w-full">
           {userRole !== "CUSTOMER" && !pathname.includes("archived") && (
-            <Button
-              className="self-center max-sm:self-start"
-              color="success"
-              variant="shadow"
-              onPress={() => router.push(endpoint!)}
-              size="sm"
-            >
-              {buttonLabel}
-            </Button>
+            <div>
+              <Button
+                className="self-center max-sm:self-start"
+                color="success"
+                variant="shadow"
+                onPress={() => router.push(endpoint!)}
+                size="sm"
+              >
+                {buttonLabel}
+              </Button>
+            </div>
           )}
           <div className="flex flex-row gap-3">
             <DeleteMutipleButton
