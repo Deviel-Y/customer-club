@@ -13,6 +13,7 @@ export const getHeadingLabel = (path: string): string => {
   if (path === "/admin/invoice-issuing") return "صدور فاکتور";
   if (path.includes("editInvoiceInfo")) return "ویرایش فاکتور";
 
+  if (path === "/admin/ticket") return "مدیریت تیکت ها";
   if (path === "/ticket") return "تیکت های من";
   if (path.includes("/ticketDetail")) return "جزئیات تیکت";
 

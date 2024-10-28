@@ -25,8 +25,10 @@ const TicketActionBar = ({ isAdmin = true }: Props) => {
   return (
     <div
       className={`grid ${
-        pathname === "/admin/ticket" ? "grid-cols-5" : "grid-cols-5"
-      }  grid-rows-1 w-full gap-5 max-sm:gap-0 mb-5 max-sm:grid-cols-1`}
+        pathname === "/admin/ticket"
+          ? "grid-cols-5 max-md:grid-cols-2 max-md:grid-rows-3"
+          : "grid-cols-3 max-md:grid-cols-2 max-md:grid-rows-2"
+      }  grid-rows-1 w-full gap-x-5 max-sm:gap-x-0 max-sm:grid-cols-1`}
     >
       <Autocomplete
         variant="underlined"
@@ -41,13 +43,17 @@ const TicketActionBar = ({ isAdmin = true }: Props) => {
         ))}
       </Autocomplete>
 
-      <Input
-        defaultValue={searchParmas?.get("title") || ""}
-        onChange={titleOnChangeHandler}
-        label="عنوان"
-        type="search"
+      <Autocomplete
+        defaultSelectedKey={searchParmas?.get("statusFilter") || ""}
+        listboxProps={{ emptyContent: "نتیجه ای یافت نشد" }}
+        onSelectionChange={statusOnChangeHandler}
         variant="underlined"
-      />
+        label="وضعیت بررسی تیکت"
+      >
+        {statusFilter.map((status) => (
+          <AutocompleteItem key={status.value}>{status.label}</AutocompleteItem>
+        ))}
+      </Autocomplete>
 
       {isAdmin && (
         <Input
@@ -69,17 +75,18 @@ const TicketActionBar = ({ isAdmin = true }: Props) => {
         />
       )}
 
-      <Autocomplete
-        defaultSelectedKey={searchParmas?.get("statusFilter") || ""}
-        listboxProps={{ emptyContent: "نتیجه ای یافت نشد" }}
-        onSelectionChange={statusOnChangeHandler}
+      <Input
+        defaultValue={searchParmas?.get("title") || ""}
+        onChange={titleOnChangeHandler}
+        label="عنوان"
+        type="search"
         variant="underlined"
-        label="وضعیت بررسی تیکت"
-      >
-        {statusFilter.map((status) => (
-          <AutocompleteItem key={status.value}>{status.label}</AutocompleteItem>
-        ))}
-      </Autocomplete>
+        className={`${
+          pathname === "/admin/ticket"
+            ? "col-span-2 max-sm:col-span-1"
+            : "max-md:col-span-2 max-sm:col-span-1"
+        }`}
+      />
     </div>
   );
 };
