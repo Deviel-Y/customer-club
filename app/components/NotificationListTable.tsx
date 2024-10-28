@@ -10,16 +10,19 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
-import { Notification, User } from "@prisma/client";
+import { Notification, Role, User } from "@prisma/client";
 import axios from "axios";
 import moment from "moment-jalaali";
 import { Session } from "next-auth";
 import { useRouter } from "next/navigation";
 
+interface NotificationWithUsers extends Notification {
+  users: User[];
+}
 interface Props {
-  notifications: any[];
+  notifications: NotificationWithUsers[];
   totalPage: number;
-  user: User;
+  user: { id: string; role: Role };
   session: Session;
 }
 

@@ -2,7 +2,7 @@ import { Chip } from "@nextui-org/react";
 import { Status, TicketStatus } from "@prisma/client";
 
 interface Props {
-  status: Status;
+  status: Status | TicketStatus | "true" | "false";
 }
 
 const StatusBadge = ({ status }: Props) => {

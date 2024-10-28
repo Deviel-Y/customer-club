@@ -10,13 +10,16 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
-import { Ticket } from "@prisma/client";
+import { Ticket, User } from "@prisma/client";
 import moment from "moment-jalaali";
 import { useRouter } from "next/navigation";
 import StatusBadge from "../components/StatusBadge";
 
+interface TicketWithUser extends Ticket {
+  User: User;
+}
 interface Props {
-  tickets: any[];
+  tickets: TicketWithUser[];
   totalPage: number;
 }
 
@@ -68,7 +71,7 @@ const TicketListTable = ({ tickets, totalPage }: Props) => {
             <TableCell>{ticket?.User?.companyName}</TableCell>
             <TableCell>{ticket?.User?.companyBranch}</TableCell>
             <TableCell>
-              <StatusBadge status={ticket?.status} />
+              <StatusBadge status={ticket.status} />
             </TableCell>
             <TableCell>
               {moment(ticket?.createdAt).format(" HH:mm jYYYY/jMM/jDD")}

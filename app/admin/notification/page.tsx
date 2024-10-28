@@ -79,7 +79,10 @@ const AdminNotificationListPage = async ({
         },
       }),
 
-      prisma.user.findUnique({ where: { id: session?.user.id } }),
+      prisma.user.findUnique({
+        where: { id: session?.user.id },
+        select: { id: true, role: true },
+      }),
     ]);
 
   return (
