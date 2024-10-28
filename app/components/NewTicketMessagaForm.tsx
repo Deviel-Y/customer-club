@@ -44,7 +44,7 @@ const NewTicketMessagaForm = ({ session, ticket }: Props) => {
   return (
     <>
       <form
-        className={`flex flex-row items-end justify-start mt-10 gap-2 w-full ${
+        className={`flex flex-row items-end justify-start max-md:flex-col mt-10 gap-2 w-full ${
           ticket.status === "CLOSED" && "hidden"
         }`}
         onSubmit={handleSubmit(({ message }) => {
@@ -68,7 +68,7 @@ const NewTicketMessagaForm = ({ session, ticket }: Props) => {
           });
         })}
       >
-        <div className="w-1/2">
+        <div className="w-full">
           <Textarea
             {...register("message")}
             size="lg"
@@ -79,16 +79,17 @@ const NewTicketMessagaForm = ({ session, ticket }: Props) => {
           <FormErrorMessage errorMessage={errors.message?.message!} />
         </div>
 
-        <Button
-          className="-translate-y-6"
-          type="submit"
-          isLoading={isLoading}
-          color="primary"
-        >
-          ارسال پاسخ
-        </Button>
-
-        <CloseTicketConfirmation session={session} ticket={ticket} />
+        <div className="w-full max-md:mt-6">
+          <Button
+            className="-translate-y-6"
+            type="submit"
+            isLoading={isLoading}
+            color="primary"
+          >
+            ارسال پاسخ
+          </Button>
+          <CloseTicketConfirmation session={session} ticket={ticket} />
+        </div>
       </form>
       <Toaster />
     </>

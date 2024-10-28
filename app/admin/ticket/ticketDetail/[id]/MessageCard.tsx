@@ -37,7 +37,7 @@ const MessageCard = ({ ticketMessages, users, sessionId }: Props) => {
           />
         </div>
 
-        <Card className="col-span-3 px-4 py-2 w-2/3">
+        <Card className="col-span-3 px-4 py-2 w-2/3 max-md:w-full">
           <div
             className={`flex ${
               ticketMessages.messageType === "REQUEST"
