@@ -14,9 +14,10 @@ import {
 import { Ticket } from "@prisma/client";
 import moment from "moment-jalaali";
 import { useRouter } from "next/navigation";
+import NewTicketPopoverButton from "./NewTicketPopoverButton";
 
 interface Props {
-  tickets: any[];
+  tickets: Ticket[];
   totalPage: number;
 }
 
@@ -25,6 +26,12 @@ const UserTicketListTable = ({ tickets, totalPage }: Props) => {
 
   return (
     <Table
+      topContent={
+        <div className="flex justify-between items-center">
+          <h2>لیست تیکت ها</h2>
+          <NewTicketPopoverButton />
+        </div>
+      }
       bottomContent={
         <div
           className={`flex justify-center w-full ${

@@ -35,7 +35,7 @@ const NewTicketPopoverButton = () => {
     <>
       <Popover className="w-[700px]" size="lg" showArrow>
         <PopoverTrigger>
-          <Button color="secondary" size="lg">
+          <Button color="success" variant="shadow" size="sm">
             ثبت تیکت جدید
           </Button>
         </PopoverTrigger>

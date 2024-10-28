@@ -3,7 +3,6 @@
 import { Autocomplete, AutocompleteItem, Input } from "@nextui-org/react";
 import { Category, TicketStatus } from "@prisma/client";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import NewTicketPopoverButton from "../(customerSide)/ticket/NewTicketPopoverButton";
 import { ticketActionBarOnchangeHandlers } from "../utils/onChangeHandlers";
 
 interface Props {
@@ -24,69 +23,63 @@ const TicketActionBar = ({ isAdmin = true }: Props) => {
   } = ticketActionBarOnchangeHandlers(searchParmas, router);
 
   return (
-    <div className=" flex flex-row max-sm:flex-col gap-5 max-sm:gap-0 max-sm:mt-5 w-full place-content-center place-items-center">
-      {!isAdmin && <NewTicketPopoverButton />}
-
-      <div
-        className={`grid ${
-          pathname === "/admin/ticket" ? "grid-cols-5" : "grid-cols-5"
-        }  grid-rows-1 w-full gap-5 max-sm:gap-0 mb-5 max-sm:grid-cols-1`}
+    <div
+      className={`grid ${
+        pathname === "/admin/ticket" ? "grid-cols-5" : "grid-cols-5"
+      }  grid-rows-1 w-full gap-5 max-sm:gap-0 mb-5 max-sm:grid-cols-1`}
+    >
+      <Autocomplete
+        variant="underlined"
+        onSelectionChange={categoryOnChangeHandler}
+        label="دسته بندی"
+        listboxProps={{ emptyContent: "دسته بندی یافت نشد" }}
       >
-        <Autocomplete
-          variant="underlined"
-          onSelectionChange={categoryOnChangeHandler}
-          label="دسته بندی"
-          listboxProps={{ emptyContent: "دسته بندی یافت نشد" }}
-        >
-          {ticketCategories.map((category) => (
-            <AutocompleteItem key={category}>
-              {categoryMapping[category].label}
-            </AutocompleteItem>
-          ))}
-        </Autocomplete>
+        {ticketCategories.map((category) => (
+          <AutocompleteItem key={category}>
+            {categoryMapping[category].label}
+          </AutocompleteItem>
+        ))}
+      </Autocomplete>
 
+      <Input
+        defaultValue={searchParmas?.get("title") || ""}
+        onChange={titleOnChangeHandler}
+        label="عنوان"
+        type="search"
+        variant="underlined"
+      />
+
+      {isAdmin && (
         <Input
-          defaultValue={searchParmas?.get("title") || ""}
-          onChange={titleOnChangeHandler}
-          label="عنوان"
+          defaultValue={searchParmas?.get("organization") || ""}
+          onChange={companyNameOnChangeHandler}
+          label="سازمان"
           type="search"
           variant="underlined"
         />
+      )}
 
-        {isAdmin && (
-          <Input
-            defaultValue={searchParmas?.get("organization") || ""}
-            onChange={companyNameOnChangeHandler}
-            label="سازمان"
-            type="search"
-            variant="underlined"
-          />
-        )}
-
-        {isAdmin && (
-          <Input
-            defaultValue={searchParmas?.get("organizationBranch") || ""}
-            onChange={companyBranchOnChangeHandler}
-            label="شعبه"
-            type="search"
-            variant="underlined"
-          />
-        )}
-
-        <Autocomplete
-          defaultSelectedKey={searchParmas?.get("statusFilter") || ""}
-          listboxProps={{ emptyContent: "نتیجه ای یافت نشد" }}
-          onSelectionChange={statusOnChangeHandler}
+      {isAdmin && (
+        <Input
+          defaultValue={searchParmas?.get("organizationBranch") || ""}
+          onChange={companyBranchOnChangeHandler}
+          label="شعبه"
+          type="search"
           variant="underlined"
-          label="وضعیت بررسی تیکت"
-        >
-          {statusFilter.map((status) => (
-            <AutocompleteItem key={status.value}>
-              {status.label}
-            </AutocompleteItem>
-          ))}
-        </Autocomplete>
-      </div>
+        />
+      )}
+
+      <Autocomplete
+        defaultSelectedKey={searchParmas?.get("statusFilter") || ""}
+        listboxProps={{ emptyContent: "نتیجه ای یافت نشد" }}
+        onSelectionChange={statusOnChangeHandler}
+        variant="underlined"
+        label="وضعیت بررسی تیکت"
+      >
+        {statusFilter.map((status) => (
+          <AutocompleteItem key={status.value}>{status.label}</AutocompleteItem>
+        ))}
+      </Autocomplete>
     </div>
   );
 };
