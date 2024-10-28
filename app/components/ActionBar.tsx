@@ -1,22 +1,15 @@
 "use client";
 
-import {
-  Autocomplete,
-  AutocompleteItem,
-  Button,
-  Input,
-} from "@nextui-org/react";
+import { Autocomplete, AutocompleteItem, Input } from "@nextui-org/react";
 import { Status } from "@prisma/client";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { actionBarOnChangeHandlers } from "../utils/onChangeHandlers";
 
 interface Props {
-  endpoint?: string;
-  buttonLabel?: string;
   isAdmin?: boolean;
 }
 
-const ActionBar = ({ endpoint, buttonLabel, isAdmin = true }: Props) => {
+const ActionBar = ({ isAdmin = true }: Props) => {
   const pathname = usePathname();
   const searchParmas = useSearchParams();
   const router = useRouter();
@@ -30,17 +23,6 @@ const ActionBar = ({ endpoint, buttonLabel, isAdmin = true }: Props) => {
 
   return (
     <div className=" flex flex-row max-sm:flex-col gap-5 max-sm:gap-0 max-sm:mt-5 w-full place-content-center place-items-center">
-      {isAdmin && !pathname.includes("archived") && (
-        <Button
-          className="self-center max-sm:self-start"
-          color="secondary"
-          variant="shadow"
-          onPress={() => router.push(endpoint!)}
-        >
-          {buttonLabel}
-        </Button>
-      )}
-
       <div
         className={`grid ${
           pathname === "/admin/invoice-issuing" ? "grid-cols-4" : "grid-cols-5"

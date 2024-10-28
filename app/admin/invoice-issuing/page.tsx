@@ -64,13 +64,11 @@ const InvoiceIssuingPage = async ({
 
   return (
     <div className="flex flex-col gap-1 px-5 py-2 w-full">
-      <ActionBar
-        isAdmin
-        buttonLabel="صدور فاکتور جدید"
-        endpoint="/admin/invoice-issuing/createNewInvoice"
-      />
+      <ActionBar isAdmin />
 
       <AdminInvoiceTable
+        buttonLabel="صدور فاکتور جدید"
+        endpoint="/admin/invoice-issuing/createNewInvoice"
         userRole={session?.user.role!}
         totalPage={Math.ceil(invoiceCount / pageSize)}
         invoices={adminSideInvoiceList}

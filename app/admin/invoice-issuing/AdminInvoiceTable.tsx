@@ -15,7 +15,7 @@ import {
 } from "@nextui-org/react";
 import { Invoice, Role } from "@prisma/client";
 import moment from "moment-jalaali";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { BsDownload } from "react-icons/bs";
 import ArchiveButton from "../components/ArchiveButton";
@@ -25,9 +25,18 @@ interface Props {
   invoices: Invoice[];
   totalPage: number;
   userRole: Role;
+  endpoint?: string;
+  buttonLabel?: string;
 }
 
-const AdminInvoiceTable = ({ invoices, totalPage, userRole }: Props) => {
+const AdminInvoiceTable = ({
+  invoices,
+  totalPage,
+  userRole,
+  buttonLabel,
+  endpoint,
+}: Props) => {
+  const pathname = usePathname();
   const router = useRouter();
 
   const [invoiceIds, setInvocieIds] = useState<string[]>();
@@ -46,7 +55,17 @@ const AdminInvoiceTable = ({ invoices, totalPage, userRole }: Props) => {
       onSelectionChange={handleSelection}
       topContent={
         <div className="flex flex-row justify-between items-center w-full">
-          <h2>جدول فاکتورها</h2>
+          {userRole !== "CUSTOMER" && !pathname.includes("archived") && (
+            <Button
+              className="self-center max-sm:self-start"
+              color="success"
+              variant="shadow"
+              onPress={() => router.push(endpoint!)}
+              size="sm"
+            >
+              {buttonLabel}
+            </Button>
+          )}
           <div className="flex flex-row gap-3">
             <DeleteMutipleButton
               setListOfIds={(value) => setInvocieIds(value)}
@@ -90,6 +109,7 @@ const AdminInvoiceTable = ({ invoices, totalPage, userRole }: Props) => {
                   title="حذف فاکتور"
                   endpoint={`/api/invoice/${invoice.id}`}
                   iconStyle="min-w-5 w-4"
+                  variant="shadow"
                 />
 
                 <Button

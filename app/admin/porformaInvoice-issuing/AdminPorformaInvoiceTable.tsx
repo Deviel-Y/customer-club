@@ -14,7 +14,7 @@ import {
 } from "@nextui-org/react";
 import { PorformaInvoice, Role } from "@prisma/client";
 import moment from "moment-jalaali";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { BsDownload } from "react-icons/bs";
 import ArchiveButton from "../components/ArchiveButton";
@@ -25,13 +25,18 @@ interface Props {
   porformaInvoice: PorformaInvoice[];
   totalPage: number;
   userRole: Role;
+  buttonLabel: string;
+  endpoint: string;
 }
 
 const AdminPorformaInvoiceTable = ({
   porformaInvoice,
   totalPage,
   userRole,
+  buttonLabel,
+  endpoint,
 }: Props) => {
+  const pathname = usePathname();
   const router = useRouter();
 
   const [porInvoiceIds, setPorInvoiceIds] = useState<string[]>([]);
@@ -45,7 +50,17 @@ const AdminPorformaInvoiceTable = ({
     <Table
       topContent={
         <div className="flex flex-row justify-between items-center w-full">
-          <h2>جدول پیش فاکتورها</h2>
+          {userRole !== "CUSTOMER" && !pathname.includes("archived") && (
+            <Button
+              className="self-center max-sm:self-start"
+              color="success"
+              variant="shadow"
+              onPress={() => router.push(endpoint!)}
+              size="sm"
+            >
+              {buttonLabel}
+            </Button>
+          )}
           <div className="flex flex-row gap-3">
             <DeleteMutipleButton
               setListOfIds={(value) => setPorInvoiceIds(value)}
@@ -91,6 +106,7 @@ const AdminPorformaInvoiceTable = ({
             <TableCell>
               <div className="flex flex-row justify-center items-center gap-x-3">
                 <DeleteConfirmationButton
+                  variant="shadow"
                   redirectEndpont="/admin/porformaInvoice-issuing"
                   successMessage="پیش فاکتور با موفقیت حذف شد."
                   content="آیا از حذف این پیش فاکتور مطمئن اید؟"
