@@ -26,9 +26,9 @@ const DashboardCard = ({ label, amount }: Props) => {
     <Card
       isPressable
       onClick={() => router.push(dataMapping[label].href)}
-      className={`card hover:scale-105 w-full transition-all h-36 p-5 ${dataMapping[label].backgroundColor}`}
+      className={`card hover:scale-105 w-full transition-all h-36 p-5 shadow-md ${dataMapping[label].backgroundColor} ${dataMapping[label].shadowColor}`}
     >
-      <div className="flex flex-col h-full w-full justify-between">
+      <div className="flex flex-col h-full w-full justify-between ">
         <div className="flex flex-row justify-between items-center">
           <p className="text-lg text-black/65">{dataMapping[label].label}</p>
           <div
@@ -59,6 +59,7 @@ const dataMapping: Record<
     figure: JSX.Element;
     iconBackgroung: string;
     href: string;
+    shadowColor: string;
   }
 > = {
   userInvoice: {
@@ -72,6 +73,7 @@ const dataMapping: Record<
     figure: (
       <HiOutlineShoppingBag className="figureIcon dark:stroke-black absolute bottom-3 left-6 scale-[6] stroke-[2px] opacity-10 w-6 overflow-visible h-8" />
     ),
+    shadowColor: "shadow-red-400",
   },
 
   userProformaInvoice: {
@@ -85,6 +87,7 @@ const dataMapping: Record<
     figure: (
       <HiOutlineNewspaper className="figureIcon dark:stroke-black absolute bottom-4 left-10 scale-[6] stroke-[2px] opacity-10 w-6 overflow-visible h-8" />
     ),
+    shadowColor: "shadow-yellow-200",
   },
 
   usersCount: {
@@ -102,6 +105,7 @@ const dataMapping: Record<
         className="figureIcon dark:stroke-black absolute bottom-[8px] left-7 scale-[6] stroke-[1.6px] opacity-10 w-6 overflow-visible h-8"
       />
     ),
+    shadowColor: "shadow-slate-300",
   },
 
   adminInvoice: {
@@ -115,6 +119,7 @@ const dataMapping: Record<
     figure: (
       <HiOutlineShoppingBag className="figureIcon dark:stroke-black absolute bottom-3 left-6 scale-[6] stroke-[2px] opacity-10 w-6 overflow-visible h-8" />
     ),
+    shadowColor: "shadow-red-400",
   },
 
   adminPorformaInvoice: {
@@ -128,6 +133,7 @@ const dataMapping: Record<
     figure: (
       <HiOutlineNewspaper className="figureIcon dark:stroke-black absolute bottom-4 left-10 scale-[6] stroke-[2px] opacity-10 w-6 overflow-visible h-8" />
     ),
+    shadowColor: "shadow-yellow-200",
   },
 
   adminTicket: {
@@ -141,6 +147,7 @@ const dataMapping: Record<
     figure: (
       <HiOutlineTicket className="figureIcon dark:stroke-black absolute bottom-5 left-10 scale-[6] stroke-[2px] opacity-10 w-6 overflow-visible h-8" />
     ),
+    shadowColor: "shadow-cyan-200",
   },
 
   userTicket: {
@@ -154,5 +161,6 @@ const dataMapping: Record<
     figure: (
       <HiOutlineTicket className="figureIcon dark:stroke-black absolute bottom-5 left-10 scale-[6] stroke-[2px] opacity-10 w-6 overflow-visible h-8" />
     ),
+    shadowColor: "shadow-cyan-200",
   },
 };
