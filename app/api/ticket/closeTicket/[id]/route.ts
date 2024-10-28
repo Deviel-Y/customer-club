@@ -21,28 +21,38 @@ export const PATCH = async (
   });
   if (!ticket) return NextResponse.json("Ticket not found", { status: 404 });
 
-  const [issuer, updatedTicket] = await prisma.$transaction([
-    prisma.user.findUnique({
-      where: { id: session?.user.id },
-      select: { adminName: true },
-    }),
+  try {
+    const [issuer, updatedTicket] = await prisma.$transaction([
+      prisma.user.findUnique({
+        where: { id: session?.user.id },
+        select: { adminName: true },
+      }),
 
-    prisma.ticket.update({
-      where: { id: ticketId },
-      data: { status: "CLOSED" },
-      select: { ticketNumber: true },
-    }),
-  ]);
+      prisma.ticket.update({
+        where: { id: ticketId },
+        data: { status: "CLOSED" },
+        select: { ticketNumber: true },
+      }),
 
-  await prisma.log.create({
-    data: {
-      assignedToSection: "TICKET",
-      issuer: issuer?.adminName!,
-      message: `تیکت شماره ${updatedTicket.ticketNumber} توسط ${issuer?.adminName} بسته شد`,
-    },
-  });
+      prisma.ticketMessage.updateMany({
+        where: { assignetoTicketId: ticketId },
+        data: { canBeModified: false },
+      }),
+    ]);
 
-  return NextResponse.json(
-    `Ticket ${ticket.ticketNumber} has been closed by ${issuer?.adminName}`
-  );
+    await prisma.log.create({
+      data: {
+        assignedToSection: "TICKET",
+        issuer: issuer?.adminName!,
+        message: `تیکت شماره ${updatedTicket.ticketNumber} توسط ${issuer?.adminName} بسته شد`,
+      },
+    });
+
+    return NextResponse.json(
+      `Ticket ${ticket.ticketNumber} has been closed by ${issuer?.adminName}`
+    );
+  } catch (error) {
+    console.log(error);
+    return NextResponse.json(error, { status: 500 });
+  }
 };
