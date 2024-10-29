@@ -88,12 +88,18 @@ const UserForm = ({ user, session }: Props) => {
           <h2 className="text-[25px] max-sm:text-[18px]">اطلاعات کاربر</h2>
         </div>
 
-        <div className="grid grid-cols-4 max-sm:grid-cols-1 grid-rows-4 max-sm:grid-rows-8 gap-3 max-sm:gap-1 place-items-center">
+        <div
+          className={`grid grid-cols-4 max-sm:grid-cols-1 grid-rows-4 ${
+            session?.user?.role === "SUPER_ADMIN"
+              ? "max-sm:grid-rows-8"
+              : "max-sm:grid-rows-7"
+          } gap-3 max-sm:gap-1 place-items-center`}
+        >
           <div
             className={`${
               session?.user?.role === "SUPER_ADMIN"
                 ? "col-span-2 max-md:col-span-2"
-                : "col-span-4 max-md:col-span-4"
+                : "col-span-4 max-md:col-span-4 max-sm:col-span-1"
             } w-full`}
           >
             <Input
@@ -234,7 +240,13 @@ const UserForm = ({ user, session }: Props) => {
 
             <FormErrorMessage errorMessage={errors.itManager?.message || ""} />
           </div>
-          <div className="col-span-3 max-md:col-span-2 w-full">
+          <div
+            className={`col-span-3 ${
+              session?.user.role === "SUPER_ADMIN"
+                ? "max-md:col-span-4"
+                : "max-md:col-span-2"
+            } max-sm:col-span-1 w-full`}
+          >
             <Input
               defaultValue={user?.address || ""}
               {...register("address")}
