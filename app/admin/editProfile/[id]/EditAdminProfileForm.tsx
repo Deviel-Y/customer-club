@@ -60,30 +60,22 @@ const EditAdminProfileForm = ({ user }: Props) => {
       })}
     >
       <Card className="flex flex-col gap-5 max-sm:gap-1 p-5 max-sm:p-2">
-        <h2 className="text-[25px] max-sm:text-[18px]">اطلاعات کاربر</h2>
+        <h2 className="text-[25px] max-sm:text-[18px] max-sm:mb-5">
+          اطلاعات کاربر
+        </h2>
 
-        <div className="grid grid-cols-1 grid-rows-2 place-content-center place-items-center">
-          <div className="grid grid-cols-2 grid-rows-1 w-full place-items-center place-content-center">
-            <div className="w-full">
-              <Input
-                defaultValue={user?.adminName!}
-                {...register("adminName")}
-                size="lg"
-                label="نام ادمین"
-              />
-              <FormErrorMessage
-                errorMessage={errors.adminName?.message || ""}
-              />
-            </div>
-
-            <div>
-              <Button color="secondary" className="-translate-y-2" size="lg">
-                ویرایش عکس پروفایل
-              </Button>
-            </div>
+        <div className="grid grid-cols-1 grid-rows-2 max-sm:grid-rows-1 place-content-center place-items-center">
+          <div className="w-full">
+            <Input
+              defaultValue={user?.adminName!}
+              {...register("adminName")}
+              size="lg"
+              label="نام ادمین"
+            />
+            <FormErrorMessage errorMessage={errors.adminName?.message || ""} />
           </div>
 
-          <div className="grid grid-cols-3 max-sm:-translate-y-11 max-sm:grid-cols-1 grid-rows-1 max-sm:grid-rows-3 gap-5 max-sm:gap-0 w-full">
+          <div className="grid grid-cols-3 max-sm:grid-cols-1 grid-rows-1 max-sm:grid-rows-3 gap-5 max-sm:gap-0 w-full">
             <div className="w-full">
               <Input
                 {...register("currentPassword")}
@@ -122,19 +114,27 @@ const EditAdminProfileForm = ({ user }: Props) => {
           </div>
         </div>
 
-        <div className="flex flex-row max-sm:justify-center gap-5">
-          <Button type="submit" size="lg" color="primary" variant="shadow">
-            ویرایش اطلاعات
-          </Button>
+        <div className="flex flex-row justify-between items-center max-sm:justify-center max-sm:flex-col-reverse gap-y-5">
+          <div className="flex flex-row gap-x-5">
+            <Button type="submit" size="lg" color="primary" variant="shadow">
+              ویرایش اطلاعات
+            </Button>
 
-          <Button
-            onPress={() => router.push("/")}
-            size="lg"
-            variant="light"
-            color="danger"
-          >
-            انصراف
-          </Button>
+            <Button
+              onPress={() => router.push("/")}
+              size="lg"
+              variant="light"
+              color="danger"
+            >
+              انصراف
+            </Button>
+          </div>
+
+          <div className="max-sm:w-full max-sm:justify-self-center">
+            <Button color="secondary" className="max-sm:w-full" size="lg">
+              ویرایش عکس پروفایل
+            </Button>
+          </div>
         </div>
       </Card>
       <Toaster />
