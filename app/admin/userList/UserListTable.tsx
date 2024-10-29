@@ -29,13 +29,12 @@ const UserListTable = ({ users, totalPage, session }: Props) => {
   return (
     <Table
       topContent={
-        <div className="flex flex-row max-sm:justify-start gap-x-5 justify-between items-center">
-          <h2>لیست کاربرها</h2>
-
+        <div>
           <Button
             onPress={() => router.push("/admin/createNewUser")}
             className="self-center max-sm:self-start"
-            color="secondary"
+            color="success"
+            size="sm"
             variant="shadow"
           >
             تعریف کاربر جدید

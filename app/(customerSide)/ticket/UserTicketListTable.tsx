@@ -27,8 +27,9 @@ const UserTicketListTable = ({ tickets, totalPage }: Props) => {
   return (
     <Table
       topContent={
-        <div className="flex justify-between items-center">
+        <div className="flex gap-x-5 max-md:justify-start justify-between items-center">
           <h2>لیست تیکت ها</h2>
+
           <NewTicketPopoverButton />
         </div>
       }

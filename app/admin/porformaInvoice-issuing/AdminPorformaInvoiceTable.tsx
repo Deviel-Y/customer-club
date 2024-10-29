@@ -49,7 +49,7 @@ const AdminPorformaInvoiceTable = ({
   return (
     <Table
       topContent={
-        <div className="flex flex-row justify-between items-center w-full">
+        <div className="flex flex-row gap-x-5 max-md:justify-start justify-between items-center w-full">
           {userRole !== "CUSTOMER" && !pathname.includes("archived") && (
             <div>
               <Button

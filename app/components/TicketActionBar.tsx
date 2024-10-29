@@ -83,7 +83,7 @@ const TicketActionBar = ({ isAdmin = true }: Props) => {
         variant="underlined"
         className={`${
           pathname === "/admin/ticket"
-            ? "col-span-2 max-sm:col-span-1"
+            ? "col-span-1 max-md:col-span-2 max-sm:col-span-1"
             : "max-md:col-span-2 max-sm:col-span-1"
         }`}
       />
