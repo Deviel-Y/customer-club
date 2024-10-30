@@ -15,24 +15,27 @@ export const POST = async (request: NextRequest) => {
     if (!validation.success)
       return NextResponse.json(validation.error.format(), { status: 400 });
 
-    const [ticketMessages, ticket, user, adminUsers] = await Promise.all([
-      prisma.ticketMessage.findMany({
-        where: { assignetoTicketId },
-      }),
+    const [ticketMessagesCount, ticket, user, adminUsers] =
+      await prisma.$transaction([
+        prisma.ticketMessage.count({
+          where: { assignetoTicketId },
+        }),
 
-      prisma.ticket.findUnique({
-        where: { id: assignetoTicketId },
-      }),
+        prisma.ticket.findUnique({
+          where: { id: assignetoTicketId },
+          select: { ticketNumber: true, issuerId: true },
+        }),
 
-      prisma.user.findUnique({
-        where: { id: session?.user.id },
-      }),
+        prisma.user.findUnique({
+          where: { id: session?.user.id },
+          select: { companyName: true, companyBranch: true },
+        }),
 
-      prisma.user.findMany({
-        where: { role: { in: ["ADMIN", "SUPER_ADMIN"] } },
-        select: { id: true },
-      }),
-    ]);
+        prisma.user.findMany({
+          where: { role: { in: ["ADMIN", "SUPER_ADMIN"] } },
+          select: { id: true },
+        }),
+      ]);
 
     (session?.user.role === "ADMIN" || session?.user.role === "SUPER_ADMIN") && // change ticketMessage status to INVESTIGATING if admin send its response
       (await prisma?.ticket.update({
@@ -57,7 +60,7 @@ export const POST = async (request: NextRequest) => {
       );
 
     if (
-      ticketMessages.length &&
+      ticketMessagesCount &&
       session?.user.role === "CUSTOMER" &&
       lastTicketMessage?.messageType === "REQUEST"
     )
@@ -90,11 +93,11 @@ export const POST = async (request: NextRequest) => {
 
     // Message for log and notification
     const log_notification_message =
-      ticketMessages.length === 0
+      ticketMessagesCount === 0
         ? `تیکت جدیدی به شماره ${ticket?.ticketNumber} ایجاد شد`
-        : ticketMessages.length !== 0 && newMesaage.messageType === "REQUEST"
+        : ticketMessagesCount !== 0 && newMesaage.messageType === "REQUEST"
         ? `کاربر ${user?.companyName} شعبه ${user?.companyBranch} به تیکت شماره ${ticket?.ticketNumber} پاسخ خود را ثبت کرد`
-        : ticketMessages.length !== 0 && newMesaage.messageType === "RESPONCE"
+        : ticketMessagesCount !== 0 && newMesaage.messageType === "RESPONCE"
         ? `پاسخی از سوی ادمین به تیکت شماره ${ticket?.ticketNumber} ثبت شد`
         : "پیام جدید";
 
@@ -115,7 +118,7 @@ export const POST = async (request: NextRequest) => {
                 : { id: ticket?.issuerId },
           },
           assignedToSection:
-            ticketMessages.length === 0 ? "TICKET" : "TICKET_MESSAGE",
+            ticketMessagesCount === 0 ? "TICKET" : "TICKET_MESSAGE",
           assignedToTicketMessageId: newMesaage.id,
         },
       }),
@@ -124,7 +127,7 @@ export const POST = async (request: NextRequest) => {
     await prisma.log.create({
       data: {
         assignedToSection:
-          ticketMessages.length === 0 ? "TICKET" : "TICKET_MESSAGE",
+          ticketMessagesCount === 0 ? "TICKET" : "TICKET_MESSAGE",
         issuer:
           newMesaage.messageType === "REQUEST"
             ? `${issuer?.companyName} - ${issuer?.companyBranch}`
