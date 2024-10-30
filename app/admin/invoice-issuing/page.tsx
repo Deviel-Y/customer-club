@@ -63,7 +63,7 @@ const InvoiceIssuingPage = async ({
     ]);
 
   return (
-    <div className="flex flex-col gap-1 px-5 py-2 w-full">
+    <div className="flex flex-col gap-5 px-5 py-2 w-full">
       <ActionBar isAdmin />
 
       <AdminInvoiceTable

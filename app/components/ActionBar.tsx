@@ -38,7 +38,7 @@ const ActionBar = ({ isAdmin = true }: Props) => {
     <div
       className={`grid ${getResponsiveDesign(
         pathname
-      )} grid-rows-1 w-full gap-x-5 max-sm:mb-5 max-md:gap-x-3 max-md:grid-cols-2  max-sm:grid-cols-1`}
+      )} grid-rows-1 w-full gap-x-5 max-md:gap-x-3 max-md:grid-cols-2  max-sm:grid-cols-1`}
     >
       <Input
         defaultValue={searchParmas?.get("number") || ""}

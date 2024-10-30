@@ -18,7 +18,7 @@ const UserSearchField = () => {
   } = userSearchFieldOnchangeHandlers(searchParmas, router);
 
   return (
-    <div className=" flex flex-row max-sm:flex-col max-sm:flex mb-5 max-md:grid max-md:grid-cols-2 max-md:grid-rows-3 gap-5 max-sm:gap-1 max-sm:mt-2">
+    <div className=" flex flex-row max-sm:flex-col max-sm:flex max-md:grid max-md:grid-cols-2 max-md:grid-rows-3 gap-5 max-sm:gap-1 max-sm:mt-2">
       <Input
         defaultValue={searchParmas.get("companyName") || ""}
         onChange={componyNameOnChangeHandler}

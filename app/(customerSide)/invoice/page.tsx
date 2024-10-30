@@ -51,7 +51,7 @@ const InvoicePage = async ({
   );
 
   return (
-    <div className="flex flex-col gap-5 max-sm:gap-0 px-5 py-2 max-sm:p-5 max-sm:-translate-y-12 w-full">
+    <div className="flex flex-col gap-5 px-5 py-2 max-sm:py-5 w-full">
       <ActionBar isAdmin={false} />
 
       <UserInvoiceTable
