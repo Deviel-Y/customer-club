@@ -14,6 +14,7 @@ import {
 import { Ticket } from "@prisma/client";
 import moment from "moment-jalaali";
 import { useRouter } from "next/navigation";
+import { BsEye } from "react-icons/bs";
 import NewTicketPopoverButton from "./NewTicketPopoverButton";
 
 interface Props {
@@ -62,12 +63,13 @@ const UserTicketListTable = ({ tickets, totalPage }: Props) => {
           <TableRow key={ticket?.id}>
             <TableCell>
               <Button
+                isIconOnly
                 onPress={() =>
                   router.push(`/ticket/ticketDetail/${ticket?.id}`)
                 }
                 color="primary"
               >
-                نمایش تیکت
+                <BsEye size={20} />
               </Button>
             </TableCell>
             <TableCell className="text-nowrap">{ticket.ticketNumber}</TableCell>

@@ -51,6 +51,7 @@ const AdminInvoiceTable = ({
   return (
     <Table
       selectionMode="multiple"
+      color="primary"
       selectedKeys={new Set(invoiceIds)}
       onSelectionChange={handleSelection}
       topContent={

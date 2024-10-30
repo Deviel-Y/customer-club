@@ -12,6 +12,7 @@ import {
 } from "@nextui-org/react";
 import { Invoice } from "@prisma/client";
 import moment from "moment-jalaali";
+import { BsDownload } from "react-icons/bs";
 import PaginationControl from "../../components/PaginationControl";
 
 interface Props {
@@ -45,8 +46,8 @@ const UserInvoiceTable = ({ invoices, totalPage }: Props) => {
         {invoices.map((invoice) => (
           <TableRow key={invoice.id}>
             <TableCell>
-              <Button color="primary" variant="shadow">
-                دانلود
+              <Button isIconOnly color="primary" variant="shadow">
+                <BsDownload size={20} />
               </Button>
             </TableCell>
             <TableCell>{invoice.invoiceNumber}</TableCell>
