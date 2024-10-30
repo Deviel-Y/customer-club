@@ -40,11 +40,15 @@ export const PATCH = async (
 
     const user = await prisma.user.findUnique({
       where: { id: assignedToUserId },
+      select: { id: true },
     });
     if (!user)
       return NextResponse.json("سازمان مورد نظر یافت نشد", { status: 404 });
 
-    const invoice = await prisma.invoice.findUnique({ where: { id } });
+    const invoice = await prisma.invoice.findUnique({
+      where: { id },
+      select: { id: true },
+    });
     if (!invoice)
       return NextResponse.json("Invoice not found", { status: 404 });
 
@@ -54,6 +58,7 @@ export const PATCH = async (
 
     const similerInvoice = await prisma.invoice.findFirst({
       where: { invoiceNumber: invoiceNumber.trim(), NOT: { id } },
+      select: { id: true },
     });
     if (similerInvoice)
       return NextResponse.json("فاکتور با این شماره فاکتور موجود میباشد.", {
