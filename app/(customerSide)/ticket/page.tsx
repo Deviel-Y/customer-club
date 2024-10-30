@@ -20,22 +20,23 @@ const TicketIssuingPage = async ({
   const session = await getSession();
   authorizeUser(session!);
 
+  // Assuring that user sends proper category to back-end
   const prismaCategory = Object.values(Category);
   const categoryFilterEnum = prismaCategory.includes(category)
     ? category
     : undefined;
 
+  // Assuring that user sends proper category to back-end
   const prismaStatus = Object.values(TicketStatus);
   const allStatuses = [...prismaStatus, "ALL"];
-  const statusFilterEnum =
-    statusFilter === "ALL" || !allStatuses.includes(statusFilter)
-      ? undefined
-      : (statusFilter as TicketStatus);
+  const statusFilterEnum = allStatuses.includes(statusFilter)
+    ? (statusFilter as TicketStatus)
+    : undefined;
 
   const currentPage = pageNumber || 1;
-  const pageSize: number = 6;
 
   const [tickets, ticketCountCount] = await prisma.$transaction([
+    // tickets
     prisma.ticket.findMany({
       where: {
         title: { contains: title },
@@ -49,6 +50,7 @@ const TicketIssuingPage = async ({
       orderBy: { createdAt: "desc" },
     }),
 
+    // ticketCountCount
     prisma.ticket.count({
       where: {
         category: { equals: categoryFilterEnum },
@@ -71,3 +73,5 @@ const TicketIssuingPage = async ({
 };
 
 export default TicketIssuingPage;
+
+const pageSize: number = 6;

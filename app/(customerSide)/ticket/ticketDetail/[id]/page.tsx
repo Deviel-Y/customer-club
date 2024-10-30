@@ -15,16 +15,19 @@ const TicketDetailPage = async ({ params: { id } }: Props) => {
   authorizeUser(session!);
 
   const [ticket, ticketMessages, users] = await prisma.$transaction([
+    //ticket
     prisma.ticket.findUnique({
       where: { id },
     }),
 
+    // ticketMessages
     prisma.ticketMessage.findMany({
       where: {
         assignetoTicketId: id,
       },
     }),
 
+    //users
     prisma.user.findMany(),
   ]);
 
@@ -44,7 +47,7 @@ const TicketDetailPage = async ({ params: { id } }: Props) => {
           sessionId={session?.user.id!}
           key={message.id}
           ticketMessages={message}
-          users={users}
+          messageIssuer={users.find((user) => user.id === message.issuerId)!}
         />
       ))}
 

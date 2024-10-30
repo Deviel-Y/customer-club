@@ -21,11 +21,14 @@ const PorformaInvoicePage = async ({
   authorizeUser(session!);
 
   const currentPage = pageNumber || 1;
+
+  //Assure that user sends proper proforma invoice status to back-end
   const statusFilterEnum =
     statusFilter === "ALL" ? undefined : (statusFilter as Status);
 
   const [porInvoiceCount, userPorInvoice, expiredPorInvoice] =
     await prisma.$transaction([
+      //porInvoiceCount
       prisma.porformaInvoice.count({
         where: {
           description: { contains: description },
@@ -34,6 +37,7 @@ const PorformaInvoicePage = async ({
         },
       }),
 
+      //userPorInvoice
       prisma.porformaInvoice.findMany({
         where: {
           assignedToUserId: session?.user.id,
@@ -46,6 +50,7 @@ const PorformaInvoicePage = async ({
         orderBy: { createdAt: "desc" },
       }),
 
+      //expiredPorInvoice : This is used for creating notification record
       prisma.porformaInvoice.findMany({
         where: {
           expiredAt: { lt: new Date(new Date().setHours(0, 0, 0, 0)) },
@@ -54,10 +59,12 @@ const PorformaInvoicePage = async ({
       }),
     ]);
 
+  //Getting the list of expired porforma invoice IDs
   const expiredPorInvoiceIds = expiredPorInvoice.map(
     (por_invoice) => por_invoice.id
   );
 
+  //Update expired porforma invoice statuses to EXPIRED
   await prisma.porformaInvoice.updateMany({
     where: {
       id: { in: expiredPorInvoiceIds },
@@ -66,6 +73,7 @@ const PorformaInvoicePage = async ({
     data: { status: "EXPIRED" },
   });
 
+  //Create notification record for each porforma invoices that has expired
   expiredPorInvoice.forEach(async (invocie) => {
     await prisma.notification.create({
       data: {

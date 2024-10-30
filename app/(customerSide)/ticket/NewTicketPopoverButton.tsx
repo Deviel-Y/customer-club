@@ -27,7 +27,10 @@ import {
 const NewTicketPopoverButton = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  //Getting ticket categories in array
   const ticketCategories = Object.values(Category);
+
   const [textAreaValue, setTextAreaValue] = useState<string>();
   const { register, handleSubmit, control } = useForm<TicketSchemaType>();
 
@@ -46,27 +49,32 @@ const NewTicketPopoverButton = () => {
             onSubmit={handleSubmit(({ category, title }) => {
               setIsLoading(true);
 
-              const myRequest = axios
+              // First request is about creating ticket record and then
+              // if it was successful, it will send second request which
+              // is mean to create ticketMessage record
+              // that is assigned to the ticket that we just created
+              axios
                 .post<Ticket>("/api/ticket", { title, category })
                 .then((res) => {
                   const ticket = res.data;
 
-                  axios.post("/api/ticket/ticketMessage", {
-                    message: textAreaValue,
-                    assignetoTicketId: ticket.id,
-                  });
-                  router.push("/ticket");
+                  // And then here goes the second request
+                  axios
+                    .post("/api/ticket/ticketMessage", {
+                      message: textAreaValue,
+                      assignetoTicketId: ticket.id,
+                    })
+                    .then(() => toast.success("درخواست شما با موفقیت ثبت شد"))
+                    .catch((error: AxiosError) =>
+                      toast.error(error.response?.data as string)
+                    );
+
+                  router.push("/");
                   router.refresh();
                 })
                 .finally(() => {
                   setIsLoading(false);
                 });
-
-              toast.promise(myRequest, {
-                error: (error: AxiosError) => error?.response?.data as string,
-                loading: "در حال ثبت درخواست",
-                success: "درخواست شما با موفقیت ثبت شد",
-              });
             })}
           >
             <h2 className="text-[25px]">فرم تیکت</h2>

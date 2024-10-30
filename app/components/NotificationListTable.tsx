@@ -13,7 +13,6 @@ import {
 import { Notification, Role, User } from "@prisma/client";
 import axios from "axios";
 import moment from "moment-jalaali";
-import { Session } from "next-auth";
 import { useRouter } from "next/navigation";
 
 interface NotificationWithUsers extends Notification {
@@ -23,14 +22,14 @@ interface Props {
   notifications: NotificationWithUsers[];
   totalPage: number;
   user: { id: string; role: Role };
-  session: Session;
+  userRole: Role;
 }
 
 const NotificationListTable = ({
   notifications,
   totalPage,
   user,
-  session,
+  userRole,
 }: Props) => {
   const router = useRouter();
 
@@ -71,7 +70,7 @@ const NotificationListTable = ({
         {columns.map((column) => (
           <TableColumn
             hidden={
-              session.user.role === "CUSTOMER" &&
+              userRole === "CUSTOMER" &&
               (column?.value === "companyName" ||
                 column?.value === "companyBranch")
             }
@@ -90,10 +89,10 @@ const NotificationListTable = ({
             <TableCell>
               {sectionMapping[notification?.assignedToSection]?.label}
             </TableCell>
-            <TableCell hidden={session?.user?.role === "CUSTOMER"}>
+            <TableCell hidden={userRole === "CUSTOMER"}>
               {notification.users[0]?.companyName}
             </TableCell>
-            <TableCell hidden={session?.user?.role === "CUSTOMER"}>
+            <TableCell hidden={userRole === "CUSTOMER"}>
               {notification?.users[0].companyBranch}
             </TableCell>
             <TableCell>{notification?.message}</TableCell>

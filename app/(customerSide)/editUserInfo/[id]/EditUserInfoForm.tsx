@@ -43,7 +43,7 @@ const EditUserInfoForm = ({ user }: Props) => {
             companyName: user?.companyName,
             address: user?.address,
             email: user?.email,
-            adminName: null,
+            adminName: null, // Because in this case created user is not admin
           })
           .then(() => {
             router.push("/");

@@ -21,14 +21,17 @@ const InvoicePage = async ({
 
   const currentPage = pageNumber || 1;
 
-  const [invoiceCount, userInvoice, userAllInvoice] = await prisma.$transaction(
+  const [invoiceCount, invoiceList, userAllInvoice] = await prisma.$transaction(
     [
+      //invoiceCount : number of invoices for pagination
       prisma.invoice.count({
         where: {
           description: { contains: description },
-          invoiceNumber: { contains: number },
+          invoiceNumber: { contains: number }, //number === invoiceNumber
         },
       }),
+
+      //userInvoice : list of invoices that are assigned to specific user
       prisma.invoice.findMany({
         where: {
           assignedToUserId: session?.user.id,
@@ -40,6 +43,7 @@ const InvoicePage = async ({
         orderBy: { createdAt: "desc" },
       }),
 
+      //userAllInvoice : for InvoiceSummery component to show sum of price, tax and price with tax
       prisma.invoice.findMany({
         where: {
           assignedToUserId: session?.user.id,
@@ -56,7 +60,7 @@ const InvoicePage = async ({
 
       <UserInvoiceTable
         totalPage={Math.ceil(invoiceCount / pageSize)}
-        invoices={userInvoice}
+        invoices={invoiceList}
       />
 
       <InvoiceSummery invoices={userAllInvoice} />

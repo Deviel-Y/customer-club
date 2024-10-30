@@ -5,15 +5,11 @@ import moment from "moment-jalaali";
 
 interface Props {
   ticketMessages: TicketMessage;
-  users: User[];
+  messageIssuer: User;
   sessionId: string;
 }
 
-const MessageCard = ({ ticketMessages, users, sessionId }: Props) => {
-  const messageIssuer: User = users.find(
-    (user) => user?.id === ticketMessages?.issuerId
-  )!;
-
+const MessageCard = ({ ticketMessages, messageIssuer, sessionId }: Props) => {
   return (
     <div
       className={`w-full my-3 flex ${

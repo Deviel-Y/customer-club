@@ -12,7 +12,7 @@ const EditUserInfoPage = async ({ params: { id } }: Props) => {
   const session = await getSession();
   authorizeUser(session!);
 
-  if (id !== session?.user.id) redirect("/");
+  if (id !== session?.user.id) redirect("/"); //Prevent users to modify each other profiles
 
   const user = await prisma.user.findUnique({ where: { id } });
 
