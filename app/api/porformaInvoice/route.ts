@@ -28,6 +28,7 @@ export const POST = async (request: NextRequest) => {
 
     const porformaInvoice = await prisma.porformaInvoice.findUnique({
       where: { porformaInvoiceNumber },
+      select: { id: true },
     });
 
     if (porformaInvoice)

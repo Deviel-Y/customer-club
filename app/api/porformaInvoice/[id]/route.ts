@@ -14,6 +14,7 @@ export const DELETE = async (
 ) => {
   const porformaInvoice = await prisma.porformaInvoice.findUnique({
     where: { id },
+    select: { id: true },
   });
   if (!porformaInvoice)
     return NextResponse.json("پیش فاکتوری یافت نشد.", { status: 404 });
@@ -56,6 +57,7 @@ export const PATCH = async (
       porformaInvoiceNumber: porformaInvoiceNumber.trim(),
       NOT: { id },
     },
+    select: { id: true },
   });
   if (similarPorInvoice)
     return NextResponse.json("پیش فاکتور با این شماره قبلا صادر شده است.", {
