@@ -12,6 +12,11 @@ export const DELETE = async (
   request: NextRequest,
   { params: { id } }: Props
 ) => {
+  const session = await getSession();
+
+  if (!session)
+    return NextResponse.json("you're not authenticated", { status: 401 });
+
   const porformaInvoice = await prisma.porformaInvoice.findUnique({
     where: { id },
     select: { id: true },
@@ -30,6 +35,9 @@ export const PATCH = async (
   { params: { id } }: Props
 ) => {
   const session = await getSession();
+
+  if (!session)
+    return NextResponse.json("you're not authenticated", { status: 401 });
 
   const body: PorformaInvoice = await request.json();
   const {

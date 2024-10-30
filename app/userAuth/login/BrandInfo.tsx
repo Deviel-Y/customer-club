@@ -1,15 +1,6 @@
-"use client";
-
-import { motion } from "framer-motion";
-
 const BrandInfo = () => {
   return (
-    <motion.div
-      initial={{ translateX: 30, opacity: 0 }}
-      animate={{ translateX: 0, opacity: 1 }}
-      transition={{ duration: 0.5, ease: "backInOut" }}
-      className="p-24 max-md:hidden max-lg:w-full"
-    >
+    <div className="p-24 max-md:hidden max-lg:w-full">
       <h1 className="font-extrabold text-[60px] max-lg:text-[50px]">
         پردازش شبکه
       </h1>
@@ -24,7 +15,7 @@ const BrandInfo = () => {
         انطباق با نیازهای دنیای تکنولوژی هستیم تا تجربه بهتری را برای مشتریان
         خود ایجاد کنیم
       </article>
-    </motion.div>
+    </div>
   );
 };
 

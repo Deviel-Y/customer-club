@@ -9,6 +9,9 @@ type InvoiceType = Invoice & InvoiceSchemaType;
 export const POST = async (request: NextRequest) => {
   const session = await getSession();
 
+  if (!session)
+    return NextResponse.json("you're not authenticated", { status: 401 });
+
   try {
     const body: InvoiceType = await request.json();
     const {

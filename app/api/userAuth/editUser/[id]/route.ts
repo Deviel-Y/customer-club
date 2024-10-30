@@ -15,6 +15,11 @@ export const DELETE = async (
   request: NextRequest,
   { params: { id } }: Props
 ) => {
+  const session = getSession();
+
+  if (!session)
+    return NextResponse.json("you're not authenticated", { status: 401 });
+
   try {
     const [invoice, por_invocie, ticket] = await prisma.$transaction([
       prisma.invoice.findFirst({
@@ -39,7 +44,6 @@ export const DELETE = async (
     const deletedUser = await prisma.user.delete({ where: { id } });
     return NextResponse.json(deletedUser);
   } catch (error) {
-    console.log(error);
     return NextResponse.json(error);
   }
 };
@@ -49,6 +53,10 @@ export const PATCH = async (
   { params: { id } }: Props
 ) => {
   const session = await getSession();
+
+  if (!session)
+    return NextResponse.json("you're not authenticated", { status: 401 });
+
   try {
     const body: FullUserSchameType = await request.json();
     const {
@@ -126,7 +134,6 @@ export const PATCH = async (
     });
     return NextResponse.json(updatedUser);
   } catch (error) {
-    console.log(error);
     return NextResponse.json(error, { status: 500 });
   }
 };

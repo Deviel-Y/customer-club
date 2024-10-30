@@ -12,6 +12,11 @@ export const DELETE = async (
   request: NextRequest,
   { params: { id } }: Props
 ) => {
+  const session = await getSession();
+
+  if (!session)
+    return NextResponse.json("you're not authenticated", { status: 401 });
+
   const deletedInvoice = await prisma.invoice.delete({
     where: { id },
   });
@@ -25,6 +30,9 @@ export const PATCH = async (
 ) => {
   try {
     const session = await getSession();
+
+    if (!session)
+      return NextResponse.json("you're not authenticated", { status: 401 });
 
     const body: Invoice = await request.json();
     const {

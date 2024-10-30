@@ -12,6 +12,9 @@ export const PATCH = async (
 ) => {
   const session = await getSession();
 
+  if (!session)
+    return NextResponse.json("you're not authenticated", { status: 401 });
+
   const body = await request.json();
   const { ticketId } = body;
 
@@ -52,7 +55,6 @@ export const PATCH = async (
       `Ticket ${ticket.ticketNumber} has been closed by ${issuer?.adminName}`
     );
   } catch (error) {
-    console.log(error);
     return NextResponse.json(error, { status: 500 });
   }
 };

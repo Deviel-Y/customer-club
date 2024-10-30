@@ -11,6 +11,9 @@ import { NextRequest, NextResponse } from "next/server";
 export const DELETE = async (request: NextRequest) => {
   const session = await getSession();
 
+  if (!session)
+    return NextResponse.json("you're not authenticated", { status: 401 });
+
   const body: ModifyPorInvoiceType = await request.json();
   const { fromDate, toDate } = body;
 

@@ -8,6 +8,9 @@ export const POST = async (request: NextRequest) => {
   try {
     const session = await getSession();
 
+    if (!session)
+      return NextResponse.json("you're not authenticated", { status: 401 });
+
     const body: TicketMessage = await request.json();
     const { message, assignetoTicketId } = body;
 
