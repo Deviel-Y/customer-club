@@ -69,18 +69,7 @@ export const POST = async (request: NextRequest) => {
         { status: 400 }
       );
 
-    const [newMesaage] = await prisma.$transaction([
-      prisma.ticketMessage.create({
-        data: {
-          message,
-          assignetoTicketId,
-          messageType:
-            session?.user.role === "CUSTOMER" ? "REQUEST" : "RESPONCE",
-          issuerId: session?.user.id!,
-        },
-        include: { Ticket: true },
-      }),
-
+    const [_updatedMessage, newMesaage] = await prisma.$transaction([
       prisma.ticketMessage.updateMany({
         where: {
           assignetoTicketId,
@@ -88,6 +77,18 @@ export const POST = async (request: NextRequest) => {
         data: {
           canBeModified: false,
         },
+      }),
+
+      prisma.ticketMessage.create({
+        data: {
+          message,
+          assignetoTicketId,
+          canBeModified: true,
+          messageType:
+            session?.user.role === "CUSTOMER" ? "REQUEST" : "RESPONCE",
+          issuerId: session?.user.id!,
+        },
+        include: { Ticket: true },
       }),
     ]);
 

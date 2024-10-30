@@ -3,7 +3,6 @@ import {
   TicketMessageSchemaType,
 } from "@/app/libs/validationSchema";
 import prisma from "@/prisma/client";
-import { TicketMessage } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
 interface Props {
@@ -17,17 +16,24 @@ export const DELETE = async (
   const message = await prisma.ticketMessage.findUnique({ where: { id } });
   if (!message) return NextResponse.json("Message not found", { status: 404 });
 
-  const deletedMessage = await prisma.ticketMessage.delete({ where: { id } });
+  const [deletedMessage, ticketMessagesCount] = await prisma.$transaction([
+    prisma.ticketMessage.delete({ where: { id } }),
 
-  const ticketMessages: TicketMessage[] = await prisma.ticketMessage.findMany({
-    where: { assignetoTicketId: message.assignetoTicketId },
-  });
+    prisma.ticketMessage.count({
+      where: { assignetoTicketId: message.assignetoTicketId },
+    }),
+  ]);
 
-  if (ticketMessages.length === 0) {
-    await prisma.ticket.delete({
+  ticketMessagesCount === 0 &&
+    (await prisma.ticket.delete({
       where: { id: message.assignetoTicketId },
-    });
-  }
+    }));
+
+  ticketMessagesCount === 1 &&
+    (await prisma.ticket.update({
+      where: { id: message.assignetoTicketId },
+      data: { status: "OPEN" },
+    }));
 
   return NextResponse.json(deletedMessage);
 };
