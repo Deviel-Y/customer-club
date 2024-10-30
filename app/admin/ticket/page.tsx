@@ -51,50 +51,60 @@ const AdminTicketIssuingPage = async ({
 
   const currentPage = pageNumber || 1;
 
-  const [tickets, ticketCountCount] = await prisma.$transaction([
-    prisma.ticket.findMany({
-      where: {
-        title: { contains: title },
-        category: { equals: categoryFilterEnum },
-        User: {
-          companyName: { contains: companyName },
-          companyBranch: { contains: companyBranch },
-        },
-        status: { equals: statusFilterEnum },
-      },
-      take: pageSize,
-      skip: (currentPage - 1) * pageSize,
-      orderBy: { createdAt: "desc" },
-      include: { User: true },
-    }),
-
-    prisma.ticket.count({
-      where: {
-        category: { equals: categoryFilterEnum },
-        title: { contains: title },
-        User: {
-          companyName: { contains: companyName },
-          companyBranch: { contains: companyBranch },
-        },
-        status: statusFilterEnum,
-      },
-    }),
-
-    //Set tickets statuses that are one week old and their last message is sent by customer
-    prisma.ticket.updateMany({
-      where: {
-        status: "INVESTIGATING",
-        ticketMessage: {
-          some: {
-            messageType: "REQUEST",
-            createdAt: { gte: startOfOneWeekAgo, lte: endOfOneWeekAgo },
+  const [updatedTickets, tickets, ticketCountCount] = await prisma.$transaction(
+    [
+      //Set tickets statuses that are one week old and their last message is sent by customer
+      prisma.ticket.updateMany({
+        where: {
+          status: "INVESTIGATING",
+          ticketMessage: {
+            some: {
+              messageType: "REQUEST",
+              createdAt: { gte: startOfOneWeekAgo, lte: endOfOneWeekAgo },
+            },
           },
         },
-      },
 
-      data: { status: "CLOSED" },
-    }),
-  ]);
+        data: { status: "CLOSED" },
+      }),
+
+      prisma.ticket.findMany({
+        where: {
+          title: { contains: title },
+          category: { equals: categoryFilterEnum },
+          User: {
+            companyName: { contains: companyName },
+            companyBranch: { contains: companyBranch },
+          },
+          status: { equals: statusFilterEnum },
+        },
+        take: pageSize,
+        skip: (currentPage - 1) * pageSize,
+        orderBy: { createdAt: "desc" },
+        include: { User: true },
+      }),
+
+      prisma.ticket.count({
+        where: {
+          category: { equals: categoryFilterEnum },
+          title: { contains: title },
+          User: {
+            companyName: { contains: companyName },
+            companyBranch: { contains: companyBranch },
+          },
+          status: statusFilterEnum,
+        },
+      }),
+    ]
+  );
+
+  prisma.log.create({
+    data: {
+      assignedToSection: "TICKET",
+      issuer: " ",
+      message: `تعداد ${updatedTickets.count} به صورت خودکار به دلیل عدم پاسخگویی از سوی مشتری بسته شد`,
+    },
+  });
 
   return (
     <div className="flex flex-col gap-5 px-5 py-2 w-full">
