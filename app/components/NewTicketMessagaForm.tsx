@@ -11,9 +11,8 @@ import {
   Textarea,
   useDisclosure,
 } from "@nextui-org/react";
-import { Ticket } from "@prisma/client";
+import { Role, Ticket } from "@prisma/client";
 import axios, { AxiosError } from "axios";
-import { Session } from "next-auth";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -26,10 +25,10 @@ import FormErrorMessage from "./FormErrorMessage";
 
 interface Props {
   ticket: Ticket;
-  session: Session;
+  userRole: Role;
 }
 
-const NewTicketMessagaForm = ({ session, ticket }: Props) => {
+const NewTicketMessagaForm = ({ userRole, ticket }: Props) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -89,7 +88,7 @@ const NewTicketMessagaForm = ({ session, ticket }: Props) => {
             ارسال پاسخ
           </Button>
 
-          <CloseTicketConfirmation session={session} ticket={ticket} />
+          <CloseTicketConfirmation userRole={userRole} ticket={ticket} />
         </div>
       </form>
       <Toaster />
@@ -99,7 +98,7 @@ const NewTicketMessagaForm = ({ session, ticket }: Props) => {
 
 export default NewTicketMessagaForm;
 
-const CloseTicketConfirmation = ({ session, ticket }: Props) => {
+const CloseTicketConfirmation = ({ userRole, ticket }: Props) => {
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -107,9 +106,7 @@ const CloseTicketConfirmation = ({ session, ticket }: Props) => {
   return (
     <>
       <Button
-        className={`-translate-y-6 ${
-          session.user.role === "CUSTOMER" && "hidden"
-        }`}
+        className={`-translate-y-6 ${userRole === "CUSTOMER" && "hidden"}`}
         type="button"
         isLoading={isLoading}
         color="danger"
@@ -119,7 +116,7 @@ const CloseTicketConfirmation = ({ session, ticket }: Props) => {
         بستن تیکت
       </Button>
       <Modal
-        hidden={session?.user?.role === "CUSTOMER"}
+        hidden={userRole === "CUSTOMER"}
         backdrop="blur"
         isOpen={isOpen}
         onOpenChange={onOpenChange}

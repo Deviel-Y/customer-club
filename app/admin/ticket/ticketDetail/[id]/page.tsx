@@ -44,11 +44,11 @@ const TicketDetailPage = async ({ params: { id } }: Props) => {
           sessionId={session?.user?.id!}
           key={message.id}
           ticketMessages={message}
-          users={users}
+          messageIssuer={users.find((user) => user.id === message.issuerId)!}
         />
       ))}
 
-      <NewTicketMessagaForm session={session!} ticket={ticket} />
+      <NewTicketMessagaForm userRole={session?.user.role!} ticket={ticket} />
     </div>
   );
 };

@@ -90,7 +90,7 @@ const AdminNotificationListPage = async ({
       <NotificationActionBar />
 
       <NotificationListTable
-        session={session!}
+        userRole={session?.user.role!}
         user={authenticatedUser!}
         totalPage={Math.ceil(notificationCount / pageSize)}
         notifications={notification}

@@ -5,7 +5,10 @@ import { Autocomplete, AutocompleteItem, Input } from "@nextui-org/react";
 import { Role } from "@prisma/client";
 import { useRouter, useSearchParams } from "next/navigation";
 
-const UserSearchField = () => {
+interface Props {
+  userRole: Role;
+}
+const UserSearchField = ({ userRole }: Props) => {
   const searchParmas = useSearchParams();
   const router = useRouter();
 
@@ -18,7 +21,11 @@ const UserSearchField = () => {
   } = userSearchFieldOnchangeHandlers(searchParmas, router);
 
   return (
-    <div className=" flex flex-row max-sm:flex-col max-sm:flex max-md:grid max-md:grid-cols-2 max-md:grid-rows-3 gap-5 max-sm:gap-1 max-sm:mt-2">
+    <div
+      className={`flex flex-row max-sm:flex-col max-sm:flex max-md:grid max-md:grid-cols-2 ${
+        userRole === "ADMIN" ? "max-md:grid-rows-2" : "max-md:grid-rows-3"
+      }  gap-5 max-sm:gap-1 max-sm:mt-2`}
+    >
       <Input
         defaultValue={searchParmas.get("companyName") || ""}
         onChange={componyNameOnChangeHandler}
@@ -51,18 +58,20 @@ const UserSearchField = () => {
         variant="underlined"
       />
 
-      <Autocomplete
-        defaultSelectedKey={searchParmas?.get("role") || "ALL"}
-        listboxProps={{ emptyContent: "نتیجه ای یافت نشد" }}
-        onSelectionChange={roleOnChangeHandler}
-        label="سطح دسترسی"
-        variant="underlined"
-        className="max-md:col-span-2"
-      >
-        {roles.map((role) => (
-          <AutocompleteItem key={role.value}>{role.label}</AutocompleteItem>
-        ))}
-      </Autocomplete>
+      {userRole === "SUPER_ADMIN" && (
+        <Autocomplete
+          defaultSelectedKey={searchParmas?.get("role") || "ALL"}
+          listboxProps={{ emptyContent: "نتیجه ای یافت نشد" }}
+          onSelectionChange={roleOnChangeHandler}
+          label="سطح دسترسی"
+          variant="underlined"
+          className="max-md:col-span-2"
+        >
+          {roles.map((role) => (
+            <AutocompleteItem key={role.value}>{role.label}</AutocompleteItem>
+          ))}
+        </Autocomplete>
+      )}
     </div>
   );
 };
