@@ -6,6 +6,7 @@ import {
 } from "@/app/libs/validationSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Card, Input } from "@nextui-org/react";
+import { motion } from "framer-motion";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -20,7 +21,7 @@ import { BsKey } from "react-icons/bs";
 
 const LoginForm = () => {
   const router = useRouter();
-  const { data: session } = useSession(); // Moved outside to access session data after login
+  const { data: session } = useSession();
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [isLoading, setLoading] = useState(false);
 
@@ -51,7 +52,12 @@ const LoginForm = () => {
   };
 
   return (
-    <div className="w-full flex justify-center items-center">
+    <motion.div
+      initial={{ translateX: -30, opacity: 0 }}
+      animate={{ translateX: 0, opacity: 1 }}
+      transition={{ duration: 0.5, ease: "backInOut" }}
+      className="w-full flex justify-center items-center"
+    >
       <form className="w-3/4 max-lg:w-5/6" onSubmit={handleSubmit(onSubmit)}>
         <Card isBlurred className="flex flex-col p-5" shadow="lg">
           <h1 className="font-bold text-[30px]">ورود</h1>
@@ -125,7 +131,7 @@ const LoginForm = () => {
         </Card>
         <Toaster />
       </form>
-    </div>
+    </motion.div>
   );
 };
 
