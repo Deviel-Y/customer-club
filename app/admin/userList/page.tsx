@@ -34,55 +34,41 @@ const UserListPage = async ({
 
   const currentPage = pageNumber || 1;
 
-  const [adminSideUsers, s_adminSideUsers, userCount] =
-    await prisma.$transaction([
-      prisma.user.findMany({
-        where: {
-          role: "CUSTOMER",
-          companyName: { contains: companyName },
-          companyBranch: { contains: companyBranch },
-          email: { contains: email },
-          itManager: { contains: itManager },
-        },
-        take: pageSize,
-        skip: (currentPage - 1) * pageSize,
-        orderBy: { createdAt: "desc" },
-      }),
+  const [adminSideUsers, userCount] = await prisma.$transaction([
+    prisma.user.findMany({
+      where: {
+        role: session?.user.role === "ADMIN" ? "CUSTOMER" : selectedRole,
+        companyName: { contains: companyName },
+        companyBranch: { contains: companyBranch },
+        email: { contains: email },
+        itManager: { contains: itManager },
+      },
+      take: pageSize,
+      skip: (currentPage - 1) * pageSize,
+      orderBy: { createdAt: "desc" },
+    }),
 
-      prisma.user.findMany({
-        where: {
-          role: { equals: selectedRole },
-          companyName: { contains: companyName },
-          companyBranch: { contains: companyBranch },
-          email: { contains: email },
-          itManager: { contains: itManager },
-        },
-        take: pageSize,
-        skip: (currentPage - 1) * pageSize,
-        orderBy: { createdAt: "desc" },
-      }),
-
-      prisma.user.count({
-        where: {
-          role: "CUSTOMER",
-          companyName: { contains: companyName },
-          companyBranch: { contains: companyBranch },
-          email: { contains: email },
-          itManager: { contains: itManager },
-        },
-      }),
-    ]);
+    prisma.user.count({
+      where: {
+        role: "CUSTOMER",
+        companyName: { contains: companyName },
+        companyBranch: { contains: companyBranch },
+        email: { contains: email },
+        itManager: { contains: itManager },
+      },
+    }),
+  ]);
 
   return (
     <div className="px-5 py-2 gap-5 flex flex-col">
-      <UserSearchField />
+      <UserSearchField userRole={session?.user.role!} />
 
       <UserListTable
         session={session!}
         users={
           session?.user?.role === "ADMIN"
             ? adminSideUsers
-            : s_adminSideUsers.filter((user) => user.role !== "SUPER_ADMIN")
+            : adminSideUsers.filter((user) => user.role !== "SUPER_ADMIN")
         }
         totalPage={Math.ceil(userCount / pageSize)}
       />
