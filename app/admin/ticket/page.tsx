@@ -3,6 +3,7 @@ import getSession from "@/app/libs/getSession";
 import { authorizeAdmin } from "@/app/utils/authorizeRole";
 import prisma from "@/prisma/client";
 import { Category, TicketStatus } from "@prisma/client";
+import { subWeeks } from "date-fns";
 import TicketListTable from "./TicketListTable";
 
 interface Props {
@@ -28,6 +29,13 @@ const AdminTicketIssuingPage = async ({
 }: Props) => {
   const session = await getSession();
   authorizeAdmin(session!);
+
+  const currentDate = new Date();
+  const startOfOneWeekAgo = subWeeks(currentDate, 1);
+  startOfOneWeekAgo.setHours(0, 0, 0, 0);
+
+  const endOfOneWeekAgo = subWeeks(currentDate, 1);
+  endOfOneWeekAgo.setHours(23, 59, 59, 999);
 
   const prismaCategory = Object.values(Category);
   const categoryFilterEnum = prismaCategory.includes(category)
@@ -70,6 +78,21 @@ const AdminTicketIssuingPage = async ({
         },
         status: statusFilterEnum,
       },
+    }),
+
+    //Set tickets statuses that are one week old and their last message is sent by customer
+    prisma.ticket.updateMany({
+      where: {
+        status: "INVESTIGATING",
+        ticketMessage: {
+          some: {
+            messageType: "REQUEST",
+            createdAt: { gte: startOfOneWeekAgo, lte: endOfOneWeekAgo },
+          },
+        },
+      },
+
+      data: { status: "CLOSED" },
     }),
   ]);
 

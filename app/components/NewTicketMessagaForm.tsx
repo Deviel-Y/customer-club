@@ -79,7 +79,7 @@ const NewTicketMessagaForm = ({ session, ticket }: Props) => {
           <FormErrorMessage errorMessage={errors.message?.message!} />
         </div>
 
-        <div className="w-full max-md:mt-6">
+        <div className="w-full max-md:mt-6 flex flex-row gap-x-3">
           <Button
             className="-translate-y-6"
             type="submit"
@@ -88,6 +88,7 @@ const NewTicketMessagaForm = ({ session, ticket }: Props) => {
           >
             ارسال پاسخ
           </Button>
+
           <CloseTicketConfirmation session={session} ticket={ticket} />
         </div>
       </form>
