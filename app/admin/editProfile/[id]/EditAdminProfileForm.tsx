@@ -45,7 +45,7 @@ const EditAdminProfileForm = ({ user }: Props) => {
             role: user?.role,
             companyName: user?.companyName,
             address: user?.address,
-            email: user?.email,
+            phoneNumber: user?.phoneNumber,
           })
           .then(() => {
             router.push("/");

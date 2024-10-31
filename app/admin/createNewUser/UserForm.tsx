@@ -8,9 +8,8 @@ import {
 } from "@/app/libs/validationSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Card, Input } from "@nextui-org/react";
-import { User } from "@prisma/client";
+import { Role, User } from "@prisma/client";
 import axios, { AxiosError } from "axios";
-import { Session } from "next-auth";
 import { useRouter } from "next/navigation";
 import { Key, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -24,10 +23,10 @@ type PasswordVisibility = {
 
 interface Props {
   user?: User;
-  session: Session;
+  userRole: Role;
 }
 
-const UserForm = ({ user, session }: Props) => {
+const UserForm = ({ user, userRole }: Props) => {
   const router = useRouter();
   const [isLoading, setisLoading] = useState<boolean>(false);
   const [selectedRole, setSelectedRole] = useState<Key>();
@@ -45,40 +44,40 @@ const UserForm = ({ user, session }: Props) => {
     resolver: zodResolver(fullUserSchame),
   });
 
-  const onSubmit = handleSubmit(({ email, companyName, ...data }) => {
+  const onSubmit = handleSubmit(({ phoneNumber, companyName, ...data }) => {
     setisLoading(true);
 
-    const promise = user
+    user
       ? axios
           .patch(`/api/userAuth/editUser/${user.id}`, {
-            email: email?.trim(),
+            phoneNumber,
             companyName: companyName?.trim(),
             ...data,
           })
           .then(() => {
+            toast.success("اطلاعات کاربر ویرایش شد");
             router.push("/admin/userList");
             router.refresh();
           })
+          .catch((error: AxiosError) =>
+            toast.error(error.response?.data as string)
+          )
           .finally(() => setisLoading(false))
       : axios
           .post("/api/userAuth", {
-            email: email?.trim(),
+            phoneNumber,
             companyName: companyName?.trim(),
             ...data,
           })
           .then(() => {
+            toast.success("کاربر جدید تعریف شد");
             router.push("/admin/userList");
             router.refresh();
           })
+          .catch((error: AxiosError) =>
+            toast.error(error.response?.data as string)
+          )
           .finally(() => setisLoading(false));
-
-    toast.promise(promise, {
-      error: (error: AxiosError) => error.response?.data as string,
-      loading: user
-        ? "در حال ویرایش اطلاعات کاربر "
-        : "در حال تعریف کاربر جدید",
-      success: user ? "اطلاعات کاربر ویرایش شد" : "کاربر جدید تعریف شد",
-    });
   });
 
   return (
@@ -90,30 +89,32 @@ const UserForm = ({ user, session }: Props) => {
 
         <div
           className={`grid grid-cols-4 max-sm:grid-cols-1 grid-rows-4 ${
-            session?.user?.role === "SUPER_ADMIN"
+            userRole === "SUPER_ADMIN"
               ? "max-sm:grid-rows-8"
               : "max-sm:grid-rows-7"
           } gap-3 max-sm:gap-1 place-items-center`}
         >
           <div
             className={`${
-              session?.user?.role === "SUPER_ADMIN"
+              userRole === "SUPER_ADMIN"
                 ? "col-span-2 max-md:col-span-2"
                 : "col-span-4 max-md:col-span-4 max-sm:col-span-1"
             } w-full`}
           >
             <Input
-              {...register("email")}
-              defaultValue={user?.email || ""}
+              {...register("phoneNumber")}
+              defaultValue={user?.phoneNumber || ""}
               isRequired
-              type="email"
-              label="آدرس ایمیل"
+              type="number"
+              label="شماره همراه"
             />
 
-            <FormErrorMessage errorMessage={errors.email?.message || ""} />
+            <FormErrorMessage
+              errorMessage={errors.phoneNumber?.message || ""}
+            />
           </div>
 
-          {session?.user?.role === "SUPER_ADMIN" && (
+          {userRole === "SUPER_ADMIN" && (
             <>
               <div className="col-span-1 max-md:col-span-2 w-full">
                 <Input
@@ -199,9 +200,7 @@ const UserForm = ({ user, session }: Props) => {
               defaultValue={user?.companyName || ""}
               {...register("companyName")}
               isDisabled={selectedRole === "ADMIN"}
-              isRequired={
-                selectedRole === "CUSTOMER" || session?.user?.role === "ADMIN"
-              }
+              isRequired={selectedRole === "CUSTOMER" || userRole === "ADMIN"}
               size="md"
               label="نام سازمان"
             />
@@ -215,9 +214,7 @@ const UserForm = ({ user, session }: Props) => {
               defaultValue={user?.companyBranch || ""}
               {...register("companyBranch")}
               isDisabled={selectedRole === "ADMIN"}
-              isRequired={
-                selectedRole === "CUSTOMER" || session?.user?.role === "ADMIN"
-              }
+              isRequired={selectedRole === "CUSTOMER" || userRole === "ADMIN"}
               size="md"
               label="نام شعبه"
             />
@@ -231,9 +228,7 @@ const UserForm = ({ user, session }: Props) => {
               defaultValue={user?.itManager || ""}
               {...register("itManager")}
               isDisabled={selectedRole === "ADMIN"}
-              isRequired={
-                selectedRole === "CUSTOMER" || session?.user?.role === "ADMIN"
-              }
+              isRequired={selectedRole === "CUSTOMER" || userRole === "ADMIN"}
               size="md"
               label="مسئول انفوماتیک"
             />
@@ -242,7 +237,7 @@ const UserForm = ({ user, session }: Props) => {
           </div>
           <div
             className={`col-span-3 ${
-              session?.user.role === "SUPER_ADMIN"
+              userRole === "SUPER_ADMIN"
                 ? "max-md:col-span-4"
                 : "max-md:col-span-2"
             } max-sm:col-span-1 w-full`}
@@ -251,9 +246,7 @@ const UserForm = ({ user, session }: Props) => {
               defaultValue={user?.address || ""}
               {...register("address")}
               isDisabled={selectedRole === "ADMIN"}
-              isRequired={
-                selectedRole === "CUSTOMER" || session?.user?.role === "ADMIN"
-              }
+              isRequired={selectedRole === "CUSTOMER" || userRole === "ADMIN"}
               size="md"
               label="آدرس"
             />

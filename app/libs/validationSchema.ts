@@ -75,11 +75,9 @@ export const userSide_userSchame = z
 
 export const fullUserSchame = z
   .object({
-    email: z
-      .string()
-      .email({ message: "آدرس ایمیل خود را به درستی وارد کنید" })
-      .min(6)
-      .max(50, { message: "ایمیل باید کمتر از 50 کاراکتر باشد" })
+    phoneNumber: z
+      .string({ message: "شماره همراه خود را به درستی وارد کنید" })
+      .length(11, { message: "شماره همراه باید 11 رقم باشد" })
       .optional(),
     adminName: z.string().min(1).max(50).optional().nullable().or(literal("")),
     currentPassword: z
@@ -177,7 +175,7 @@ export const fullUserSchame = z
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
             path: ["address"],
-            message: "وارد کردن آدرس الزامی است",
+            message: "وارد کردن شماره همراه است",
           });
         }
       }
@@ -194,11 +192,9 @@ export const fullUserSchame = z
   );
 
 export const signInUserSchema = z.object({
-  email: z
-    .string()
-    .min(1, { message: "وارد کردن آدرس ایمیل اجباری میباشد" })
-    .max(40, { message: "آدرس ایمیل باید کمتر از 40 کاراکتر باشد" })
-    .email({ message: "ایمیل خود را به درستی وارد کنید" }),
+  phoneNumber: z
+    .string({ message: "asdasd" })
+    .length(11, { message: "شماره همراه باید 11 رقم باشد" }),
   password: z
     .string()
     .min(8, { message: "رمز عبور باید بیشتر از 8 کاراکتر باشد" })

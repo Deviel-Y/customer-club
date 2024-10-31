@@ -66,7 +66,9 @@ const Navbar = ({
           <PopoverContent>
             <div className="flex flex-col gap-5 p-1">
               <div className="flex flex-col">
-                <p className="text-gray-600">{authenticatedUser?.email}</p>
+                <p className="text-gray-600">
+                  {authenticatedUser?.phoneNumber}
+                </p>
                 <p className="text-lg">
                   {authenticatedUser?.role === "ADMIN"
                     ? authenticatedUser?.adminName
@@ -87,9 +89,9 @@ const Navbar = ({
                     setIsOpen(false);
 
                     router.push(
-                      authenticatedUser?.role === "ADMIN"
-                        ? `/admin/editProfile/${authenticatedUser.id}`
-                        : `/editUserInfo//${authenticatedUser?.id}`
+                      authenticatedUser?.role === "CUSTOMER"
+                        ? `/editUserInfo//${authenticatedUser?.id}`
+                        : `/admin/editProfile/${authenticatedUser.id}`
                     );
                   }}
                   color="primary"

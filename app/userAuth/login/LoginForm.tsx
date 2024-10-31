@@ -32,16 +32,16 @@ const LoginForm = () => {
     resolver: zodResolver(signInUserSchema),
   });
 
-  const onSubmit = async ({ email, password }: SignInUserSchemaType) => {
+  const onSubmit = async ({ phoneNumber, password }: SignInUserSchemaType) => {
     setLoading(true);
     const res = await signIn("credentials", {
-      email: email.trim(),
+      phoneNumber: phoneNumber,
       password,
       redirect: false,
     });
 
     if (res?.error) {
-      toast.error("رمز عبور یا آدرس ایمیل اشتباه است");
+      toast.error("رمز عبور یا شماره همراه اشتباه است");
       setLoading(false);
     } else {
       router.push(session?.user.role === "ADMIN" ? "/admin" : "/");
@@ -58,23 +58,23 @@ const LoginForm = () => {
           <p className="text-[15px] mt-2 mb-5">برای ادامه وارد شوید</p>
 
           <Input
-            {...register("email")}
+            {...register("phoneNumber", { valueAsNumber: false })}
             isRequired
             startContent={<AiOutlineMail size={19} />}
             size="lg"
-            type="email"
+            type="text"
             className="mb-3 !transition-all"
-            label="آدرس ایمیل"
-            placeholder="example@domain.com"
+            label="شماره همراه"
+            placeholder="...090"
             variant="underlined"
-            isInvalid={!!errors.email?.message}
+            isInvalid={!!errors.phoneNumber?.message}
           />
           <p
             className={`${
-              errors.email?.message?.length ? "opacity-100" : "opacity-0"
+              errors.phoneNumber?.message?.length ? "opacity-100" : "opacity-0"
             } transition-opacity duration-250 ease-in-out -mt-3 mb-3 text-[13px] text-[#F31260] h-2`}
           >
-            {errors.email?.message}
+            {errors.phoneNumber?.message}
           </p>
 
           <Input

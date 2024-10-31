@@ -9,7 +9,7 @@ interface Props {
   searchParams: {
     companyName: string;
     companyBranch: string;
-    email: string;
+    phoneNumber: string;
     itManager: string;
     role: Role;
     pageNumber: number;
@@ -20,7 +20,7 @@ const UserListPage = async ({
   searchParams: {
     companyBranch,
     companyName,
-    email,
+    phoneNumber,
     itManager,
     pageNumber,
     role,
@@ -40,7 +40,7 @@ const UserListPage = async ({
         role: session?.user.role === "ADMIN" ? "CUSTOMER" : selectedRole,
         companyName: { contains: companyName },
         companyBranch: { contains: companyBranch },
-        email: { contains: email },
+        phoneNumber: { contains: phoneNumber },
         itManager: { contains: itManager },
       },
       take: pageSize,
@@ -53,7 +53,7 @@ const UserListPage = async ({
         role: "CUSTOMER",
         companyName: { contains: companyName },
         companyBranch: { contains: companyBranch },
-        email: { contains: email },
+        phoneNumber: { contains: phoneNumber },
         itManager: { contains: itManager },
       },
     }),

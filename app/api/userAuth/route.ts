@@ -19,7 +19,7 @@ export const POST = async (request: NextRequest) => {
       confirmPassword,
       companyBranch,
       companyName,
-      email,
+      phoneNumber,
       adminName,
       itManager,
       newPassword,
@@ -34,11 +34,11 @@ export const POST = async (request: NextRequest) => {
 
     const user = await prisma.user.findFirst({
       where: {
-        email,
+        phoneNumber,
       },
     });
     if (user)
-      return NextResponse.json("کاربر با این ایمیل وجود دارد", {
+      return NextResponse.json("کاربر با این شماره همراه وجود دارد", {
         status: 400,
       });
 
@@ -50,7 +50,7 @@ export const POST = async (request: NextRequest) => {
     });
     if (similarUser)
       return NextResponse.json(
-        "نام سازمان و نام شعبه برای ایمیل دیگر ثبت شده است",
+        "نام سازمان و نام شعبه برای شماره همراه دیگر ثبت شده است",
         {
           status: 400,
         }
@@ -71,12 +71,12 @@ export const POST = async (request: NextRequest) => {
     const newUser = await prisma.user.create({
       data: {
         adminName: role === "ADMIN" ? adminName : undefined,
-        companyBranch: role === "ADMIN" ? undefined : companyBranch,
-        companyName: role === "ADMIN" ? undefined : companyName,
-        email: email?.toLocaleLowerCase()!,
-        itManager: role === "ADMIN" ? undefined : itManager,
+        companyBranch: role === "CUSTOMER" ? companyBranch : undefined,
+        companyName: role === "CUSTOMER" ? companyName : undefined,
+        phoneNumber: phoneNumber!,
+        itManager: role === "CUSTOMER" ? itManager : undefined,
         hashedPassword,
-        address: role === "ADMIN" ? undefined : address,
+        address: role === "CUSTOMER" ? address : undefined,
         image,
         role,
       },

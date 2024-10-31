@@ -60,7 +60,7 @@ export const PATCH = async (
   try {
     const body: FullUserSchameType = await request.json();
     const {
-      email,
+      phoneNumber,
       currentPassword,
       newPassword,
       confirmPassword,
@@ -80,11 +80,11 @@ export const PATCH = async (
     if (!validation.success)
       return NextResponse.json(validation.error.format(), { status: 400 });
 
-    const similarEmail = await prisma.user.findFirst({
-      where: { email, NOT: { id } },
+    const similarphoneNumber = await prisma?.user?.findFirst({
+      where: { phoneNumber, NOT: { id } },
     });
-    if (similarEmail)
-      return NextResponse.json("کاربر با این ایمیل وجود دارد", {
+    if (similarphoneNumber)
+      return NextResponse.json("کاربر با این شماره همراه وجود دارد", {
         status: 400,
       });
 
@@ -93,7 +93,7 @@ export const PATCH = async (
     });
     if (similarNameAndBranch)
       return NextResponse.json(
-        "نام سازمان و نام شعبه برای ایمیل دیگر ثبت شده است",
+        "نام سازمان و نام شعبه برای شماره همراه دیگر ثبت شده است",
         {
           status: 400,
         }
@@ -102,7 +102,7 @@ export const PATCH = async (
     if (session?.user.role === "CUSTOMER" && newPassword && confirmPassword) {
       const isCurrentPasswordValid: boolean =
         !!currentPassword &&
-        (await bcrypt.compare(currentPassword, user.hashedPassword));
+        (await bcrypt.compare(currentPassword, user?.hashedPassword));
       if (!isCurrentPasswordValid)
         return NextResponse.json("گذرواژه فعلی خود را به درستی وارد کنید", {
           status: 400,
@@ -118,10 +118,10 @@ export const PATCH = async (
       ? await bcrypt.hash(newPassword!, 10)
       : undefined;
 
-    const updatedUser = await prisma.user.update({
+    const updatedUser = await prisma?.user?.update({
       where: { id },
       data: {
-        email: email?.toLocaleLowerCase()!,
+        phoneNumber: phoneNumber,
         hashedPassword,
         role,
         address: role === "ADMIN" ? null : address,
@@ -134,6 +134,7 @@ export const PATCH = async (
     });
     return NextResponse.json(updatedUser);
   } catch (error) {
+    console.log(error);
     return NextResponse.json(error, { status: 500 });
   }
 };

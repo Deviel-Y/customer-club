@@ -183,8 +183,8 @@ export const userSearchFieldOnchangeHandlers = (
     if (searchParmas.get("itManager"))
       newParams.set("itManager", searchParmas.get("itManager")!);
 
-    if (searchParmas.get("email"))
-      newParams.set("email", searchParmas.get("email")!);
+    if (searchParmas.get("phoneNumber"))
+      newParams.set("phoneNumber", searchParmas.get("phoneNumber")!);
 
     if (searchParmas.get("pageNumber")) newParams.delete("pageNumber");
 
@@ -209,8 +209,8 @@ export const userSearchFieldOnchangeHandlers = (
     if (searchParmas.get("itManager"))
       newParams.set("itManager", searchParmas.get("itManager")!);
 
-    if (searchParmas.get("email"))
-      newParams.set("email", searchParmas.get("email")!);
+    if (searchParmas.get("phoneNumber"))
+      newParams.set("phoneNumber", searchParmas.get("phoneNumber")!);
 
     if (searchParmas.get("pageNumber")) newParams.delete("pageNumber");
 
@@ -237,23 +237,21 @@ export const userSearchFieldOnchangeHandlers = (
     if (searchParmas.get("itManager"))
       newParams.set("itManager", searchParmas.get("itManager")!);
 
-    if (searchParmas.get("email"))
-      newParams.set("email", searchParmas.get("email")!);
+    if (searchParmas.get("phoneNumber"))
+      newParams.set("phoneNumber", searchParmas.get("phoneNumber")!);
 
     if (searchParmas.get("pageNumber")) newParams.delete("pageNumber");
 
     router.push(`?${newParams.toString()}`);
   };
 
-  const emailAddressOnChangeHandler = (
-    event: ChangeEvent<HTMLInputElement>
-  ) => {
+  const phoneNumberOnChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
     const newParams = new URLSearchParams(searchParmas);
 
     if (event.target.value) {
-      newParams.set("email", event.target.value as string);
+      newParams.set("phoneNumber", event.target.value as string);
     } else {
-      newParams.delete("email");
+      newParams.delete("phoneNumber");
     }
 
     if (searchParmas.get("role"))
@@ -288,8 +286,8 @@ export const userSearchFieldOnchangeHandlers = (
     if (searchParmas.get("companyBranch"))
       newParams.set("companyBranch", searchParmas.get("companyBranch")!);
 
-    if (searchParmas.get("email"))
-      newParams.set("email", searchParmas.get("email")!);
+    if (searchParmas.get("phoneNumber"))
+      newParams.set("phoneNumber", searchParmas.get("phoneNumber")!);
 
     if (searchParmas.get("companyName"))
       newParams.set("companyName", searchParmas.get("companyName")!);
@@ -302,7 +300,7 @@ export const userSearchFieldOnchangeHandlers = (
   return {
     componyNameOnChangeHandler,
     componyBranchOnChangeHandler,
-    emailAddressOnChangeHandler,
+    phoneNumberOnChangeHandler,
     itMnagerOnChangeHandler,
     roleOnChangeHandler,
   };

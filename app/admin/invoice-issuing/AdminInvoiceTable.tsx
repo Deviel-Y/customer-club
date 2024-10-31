@@ -105,7 +105,9 @@ const AdminInvoiceTable = ({
               <div className="flex flex-row justify-center items-center gap-x-3">
                 <DeleteConfirmationButton
                   redirectEndpont={`${
-                    userRole === "ADMIN" ? "/admin/invoice-issuing" : "/invoice"
+                    userRole === "ADMIN" || userRole === "SUPER_ADMIN"
+                      ? "/admin/invoice-issuing"
+                      : "/invoice"
                   }`}
                   successMessage="فاکتور با موفقیت حذف شد."
                   content="آیا از حذف این فاکتور مطمئن اید؟"

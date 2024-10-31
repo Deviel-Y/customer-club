@@ -70,29 +70,26 @@ export const DeleteConfirmationButton = ({
                   >
                     انصراف
                   </Button>
+
                   <Button
                     color="danger"
                     isLoading={isLoading}
                     onPress={() => {
                       setisLoading(true);
 
-                      const myPromise = axios
+                      axios
                         .delete(endpoint)
                         .then(() => {
                           router.push(redirectEndpont);
                           router.refresh();
                         })
+                        .catch((error: AxiosError) =>
+                          toast.error(error.response?.data as string)
+                        )
                         .finally(() => {
                           setisLoading(false);
                           onClose();
                         });
-
-                      toast.promise(myPromise, {
-                        error: (error: AxiosError) =>
-                          error.response?.data as string,
-                        loading: "در حال حذف...",
-                        success: successMessage,
-                      });
                     }}
                   >
                     حذف

@@ -15,7 +15,7 @@ const UserSearchField = ({ userRole }: Props) => {
   const {
     componyBranchOnChangeHandler,
     componyNameOnChangeHandler,
-    emailAddressOnChangeHandler,
+    phoneNumberOnChangeHandler,
     itMnagerOnChangeHandler,
     roleOnChangeHandler,
   } = userSearchFieldOnchangeHandlers(searchParmas, router);
@@ -43,9 +43,9 @@ const UserSearchField = ({ userRole }: Props) => {
       />
 
       <Input
-        defaultValue={searchParmas.get("email") || ""}
-        onChange={emailAddressOnChangeHandler}
-        label="آدرس ایمیل"
+        defaultValue={searchParmas.get("phoneNumber") || ""}
+        onChange={phoneNumberOnChangeHandler}
+        label="شماره همراه"
         type="search"
         variant="underlined"
       />

@@ -79,7 +79,7 @@ const UserListTable = ({ users, totalPage, session }: Props) => {
                   successMessage="کاربر با موفقیت حذف شد"
                   content="آیا از حذف این کاربر مطمئن اید؟"
                   title="حذف کاربر"
-                  endpoint={`/api/userAuth/${user.id}`}
+                  endpoint={`/api/userAuth/editUser/${user.id}`}
                   iconStyle="min-w-5 w-4"
                 />
                 <Button
@@ -96,7 +96,7 @@ const UserListTable = ({ users, totalPage, session }: Props) => {
             </TableCell>
             <TableCell>{user.companyName}</TableCell>
             <TableCell>{user.companyBranch}</TableCell>
-            <TableCell>{user.email}</TableCell>
+            <TableCell>{user.phoneNumber}</TableCell>
             <TableCell>{user.itManager}</TableCell>
             <TableCell>
               {moment(user.createdAt).format("jYYYY/jM/jD")}
@@ -123,7 +123,7 @@ const columns: {
   { label: "سطح دسترسی", value: "role" },
   { label: "نام سازمان", value: "companyName" },
   { label: "شعبه", value: "companyBranch" },
-  { label: "آدرس ایمیل", value: "email" },
+  { label: "شماره همراه", value: "phoneNumber" },
   { label: "مسئول انفوماتیک", value: "itManager" },
   { label: "تاریخ ایجاد", value: "createdAt" },
 ];
