@@ -12,7 +12,7 @@ import {
 import { Invoice, User } from "@prisma/client";
 import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
-import { Key, useEffect, useState } from "react";
+import { Key, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
 import FormErrorMessage from "../../components/FormErrorMessage";
@@ -44,30 +44,16 @@ const InvoiceForm = ({ Userlist, invoice }: Props) => {
   ).map((companyName) => companyName.companyBranch);
 
   const [price, setPrice] = useState<string>(invoice?.price?.toString() || "0");
-  const [isInputsManual, setIsInputsManual] = useState<boolean>(false);
+  const [hasTax, setHasTax] = useState<boolean>(invoice?.tax !== 0);
 
   const {
     register,
     handleSubmit,
     control,
-    setValue,
     formState: { errors },
   } = useForm<InvoiceSchemaType>({
     resolver: zodResolver(invoiceSchema),
   });
-
-  useEffect(() => {
-    if (!isInputsManual) {
-      const calculatedTax = (parseInt(price) * 0.1).toFixed(0);
-      const calculatedPriceWithTax = (
-        parseInt(price) * 0.1 +
-        parseInt(price)
-      ).toFixed(0);
-
-      setValue("tax", parseInt(calculatedTax));
-      setValue("priceWithTax", parseInt(calculatedPriceWithTax));
-    }
-  }, [price, isInputsManual, setValue]);
 
   const submitHandler = handleSubmit(
     ({ invoiceNumber, sendNotification, ...data }) => {
@@ -201,12 +187,24 @@ const InvoiceForm = ({ Userlist, invoice }: Props) => {
           </div>
 
           <div className="w-full -translate-y-3">
-            <Checkbox
-              size="sm"
-              onChange={(event) => setIsInputsManual(event.target.checked)}
-            >
-              فاکتور دارای مالیات می باشد
-            </Checkbox>
+            <Controller
+              control={control}
+              defaultValue={invoice?.tax !== 0}
+              name="invoiceHasTax"
+              render={({ field: { onChange } }) => (
+                <Checkbox
+                  defaultSelected={invoice?.tax !== 0}
+                  size="sm"
+                  onChange={(event) => {
+                    onChange(event.target.checked);
+                    setHasTax(event.target.checked);
+                  }}
+                >
+                  فاکتور دارای مالیات می باشد
+                </Checkbox>
+              )}
+            />
+
             <Input
               onValueChange={setPrice}
               defaultValue={invoice?.price.toString()}
@@ -221,34 +219,24 @@ const InvoiceForm = ({ Userlist, invoice }: Props) => {
 
           <div className="w-full">
             <Input
-              isDisabled={!isInputsManual}
+              className="-translate-y-3"
+              isDisabled
+              value={hasTax ? (Number(price) * 0.1).toFixed(0).toString() : "0"}
               defaultValue={invoice?.tax?.toString() || "0"}
-              onValueChange={(value) =>
-                isInputsManual && setValue("tax", parseInt(value))
-              }
-              {...register("tax", { valueAsNumber: true })}
               isRequired
-              type="number"
               label="%10 مالیات بر ارزش افزوده"
             />
-
-            <FormErrorMessage errorMessage={errors.tax?.message!} />
           </div>
 
           <div className="w-full">
             <Input
-              isDisabled={!isInputsManual}
-              defaultValue={invoice?.priceWithTax?.toString() || "0"}
-              onValueChange={(value) =>
-                isInputsManual && setValue("priceWithTax", parseInt(value))
-              }
-              {...register("priceWithTax", { valueAsNumber: true })}
+              className="-translate-y-3"
               isRequired
-              type="number"
+              isDisabled
+              value={hasTax ? (Number(price) * 1.1).toFixed(0) : price}
+              defaultValue={invoice?.priceWithTax?.toString() || "0"}
               label="مبلغ کل فاکتور"
             />
-
-            <FormErrorMessage errorMessage={errors.priceWithTax?.message!} />
           </div>
 
           <div className="col-span-2 place-content-center place-items-start max-md:col-span-1 w-full">
