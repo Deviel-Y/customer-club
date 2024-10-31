@@ -1,7 +1,6 @@
 import prisma from "@/prisma/client";
 import { Role } from "@prisma/client";
 import bcrypt from "bcrypt";
-import moment from "moment-jalaali";
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 
@@ -46,11 +45,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             assignedToSection: "LOGIN",
             issuer:
               user.role === "CUSTOMER"
-                ? `${user.companyName} شعبه ${user.companyBranch}`
+                ? `${user.companyName} - ${user.companyBranch}`
                 : user.adminName!,
-            message: `کاربر در تاریخ ${moment(new Date()).format(
-              "jYYYY/jM/jD HH:mm"
-            )} احراز هویت کرد`,
+            message: "کاربر وارد شد",
           },
         });
 
