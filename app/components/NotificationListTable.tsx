@@ -40,6 +40,7 @@ const NotificationListTable = ({
           <h2 className="text-lg">اعلان های خوانده نشده</h2>
           {user?.role !== "SUPER_ADMIN" && (
             <Button
+              isDisabled={notifications.length === 0}
               color="danger"
               variant="light"
               size="sm"

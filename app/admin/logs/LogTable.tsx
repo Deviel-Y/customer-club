@@ -66,7 +66,7 @@ const sesctionMapping: Record<LogSection, { label: string }> = {
 };
 
 const columns: { label: string; value: keyof Log | "dateTime" }[] = [
-  { label: "صادر کننده", value: "issuer" },
+  { label: "نام کاربر", value: "issuer" },
   { label: "مربوط به بخش", value: "assignedToSection" },
   { label: "پیام", value: "message" },
   { label: "ساعت", value: "dateTime" },

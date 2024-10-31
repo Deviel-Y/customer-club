@@ -133,6 +133,7 @@ const InvoiceForm = ({ Userlist, invoice }: Props) => {
               defaultValue={invoice?.invoiceNumber}
               {...register("invoiceNumber")}
               isRequired
+              type="number"
               label="شماره فاکتور"
             />
 
@@ -204,7 +205,7 @@ const InvoiceForm = ({ Userlist, invoice }: Props) => {
               size="sm"
               onChange={(event) => setIsInputsManual(event.target.checked)}
             >
-              وارد کردن مالیات به صورت دستی
+              فاکتور دارای مالیات می باشد
             </Checkbox>
             <Input
               onValueChange={setPrice}
@@ -212,7 +213,7 @@ const InvoiceForm = ({ Userlist, invoice }: Props) => {
               {...register("price", { valueAsNumber: true })}
               isRequired
               type="number"
-              label="مبلغ بدون مالیات"
+              label="مبلغ خام فاکتور"
             />
 
             <FormErrorMessage errorMessage={errors.price?.message!} />
@@ -244,7 +245,7 @@ const InvoiceForm = ({ Userlist, invoice }: Props) => {
               {...register("priceWithTax", { valueAsNumber: true })}
               isRequired
               type="number"
-              label="مبلغ با احتساب مالیات"
+              label="مبلغ کل فاکتور"
             />
 
             <FormErrorMessage errorMessage={errors.priceWithTax?.message!} />
