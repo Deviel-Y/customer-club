@@ -9,7 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
-import { Log, Section } from "@prisma/client";
+import { Log, LogSection } from "@prisma/client";
 import moment from "moment-jalaali";
 
 interface Props {
@@ -46,6 +46,7 @@ const LogTable = ({ logs, totalPage }: Props) => {
               {sesctionMapping[log.assignedToSection]?.label}
             </TableCell>
             <TableCell>{log.message}</TableCell>
+            <TableCell>{moment(log.createdAt).format("HH:mm")}</TableCell>
             <TableCell>{moment(log.createdAt).format("jYYYY/jM/jD")}</TableCell>
           </TableRow>
         ))}
@@ -56,17 +57,18 @@ const LogTable = ({ logs, totalPage }: Props) => {
 
 export default LogTable;
 
-const sesctionMapping: Record<Section, { label: string }> = {
+const sesctionMapping: Record<LogSection, { label: string }> = {
   INVOICE: { label: "فاکتور" },
   POR_INVOICE: { label: "پیش فاکتور" },
   TICKET: { label: "تیکت" },
   TICKET_MESSAGE: { label: "پاسخ به تیکت" },
-  LOGIN: { label: "احراز هویت" },
+  LOGIN: { label: "ورود" },
 };
 
-const columns: { label: string; value: keyof Log }[] = [
+const columns: { label: string; value: keyof Log | "dateTime" }[] = [
   { label: "صادر کننده", value: "issuer" },
   { label: "مربوط به بخش", value: "assignedToSection" },
   { label: "پیام", value: "message" },
-  { label: "تاریخ ایجاد", value: "createdAt" },
+  { label: "ساعت", value: "dateTime" },
+  { label: "تاریخ", value: "createdAt" },
 ];

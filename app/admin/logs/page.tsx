@@ -1,7 +1,7 @@
 import getSession from "@/app/libs/getSession";
 import { authorizeSuperAdmin } from "@/app/utils/authorizeRole";
 import prisma from "@/prisma/client";
-import { Section } from "@prisma/client";
+import { LogSection } from "@prisma/client";
 import { subMonths } from "date-fns";
 import LogActionBar from "./LogActionBar";
 import LogTable from "./LogTable";
@@ -9,7 +9,7 @@ import LogTable from "./LogTable";
 interface Props {
   searchParams: {
     message: string;
-    section: Section;
+    section: LogSection;
     issuer: string;
     pageNumber: number;
   };
@@ -27,7 +27,7 @@ const SuperAdminLogsPage = async ({
     where: { createdAt: { lte: twoMonthsFromNow } },
   });
 
-  const prismaSecions = Object?.values(Section);
+  const prismaSecions = Object?.values(LogSection);
   const selectedSections = prismaSecions.includes(section)
     ? section
     : undefined;

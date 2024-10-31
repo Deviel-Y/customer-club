@@ -2,7 +2,7 @@
 
 import { logActionBarOnchangeHandlers } from "@/app/utils/onChangeHandlers";
 import { Autocomplete, AutocompleteItem, Input } from "@nextui-org/react";
-import { Section } from "@prisma/client";
+import { LogSection } from "@prisma/client";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 const LogActionBar = () => {
@@ -56,7 +56,7 @@ const LogActionBar = () => {
 
 export default LogActionBar;
 
-const sectionFilter: { label: string; value: Section | "ALL" }[] = [
+const sectionFilter: { label: string; value: LogSection | "ALL" }[] = [
   { label: "همه بخش ها", value: "ALL" },
   { label: "احراز هویت", value: "LOGIN" },
   { label: "فاکتور", value: "INVOICE" },

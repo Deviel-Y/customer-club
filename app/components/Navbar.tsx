@@ -77,7 +77,7 @@ const Navbar = ({
                 <p className="-translate-y-1 text-gray-500">
                   {authenticatedUser?.role === "ADMIN"
                     ? "ادمین"
-                    : authenticatedUser.role === "SUPER_ADMIN"
+                    : authenticatedUser?.role === "SUPER_ADMIN"
                     ? "سوپر ادمین"
                     : authenticatedUser?.companyBranch}
                 </p>

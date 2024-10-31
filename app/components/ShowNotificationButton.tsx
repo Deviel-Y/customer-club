@@ -8,7 +8,7 @@ import {
   DropdownMenu,
   DropdownTrigger,
 } from "@nextui-org/react";
-import { Notification, Section } from "@prisma/client";
+import { Notification, NotificationSection } from "@prisma/client";
 import axios from "axios";
 import moment from "moment-jalaali";
 import { useSession } from "next-auth/react";
@@ -139,7 +139,7 @@ const ShowNotificationButton = ({
 export default ShowNotificationButton;
 
 const dropdownItemMapping: Record<
-  Section,
+  NotificationSection,
   {
     infoLabel: string;
     warningLabel?: string;
@@ -191,20 +191,6 @@ const dropdownItemMapping: Record<
   },
 
   TICKET: {
-    infoLabel: "تیکت جدید",
-    userHref: "/ticket",
-    adminHref: "/admin/ticket",
-    icon: (
-      <HiOutlineTicket
-        size={35}
-        fill="white"
-        className="stroke-[1.3px] bg-white group-hover:fill-white group-hover:stroke-black transition-all group-hover:bg-white   rounded-lg me-1 w-10"
-      />
-    ),
-  },
-
-  LOGIN: {
-    // This is not used anywhere
     infoLabel: "تیکت جدید",
     userHref: "/ticket",
     adminHref: "/admin/ticket",

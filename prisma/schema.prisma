@@ -103,11 +103,11 @@ model TicketMessage {
 }
 
 model Notification {
-  id                String           @id @default(cuid())
+  id                String              @id @default(cuid())
   message           String
   type              NotificationType
-  isRead            Boolean          @default(false)
-  assignedToSection Section
+  isRead            Boolean             @default(false)
+  assignedToSection NotificationSection
 
   assignedToTicketMessageId String?
   TicketMessage             TicketMessage? @relation(fields: [assignedToTicketMessageId], references: [id])
@@ -130,10 +130,10 @@ model Notification {
 }
 
 model Log {
-  id                String  @id @default(cuid())
+  id                String     @id @default(cuid())
   message           String
   issuer            String
-  assignedToSection Section
+  assignedToSection LogSection
 
   createdAt DateTime @default(now())
 }
@@ -177,7 +177,14 @@ model ArchivedInvoice {
   archivedAt DateTime @default(now())
 }
 
-enum Section {
+enum NotificationSection {
+  INVOICE
+  POR_INVOICE
+  TICKET
+  TICKET_MESSAGE
+}
+
+enum LogSection {
   INVOICE
   POR_INVOICE
   TICKET

@@ -1,7 +1,7 @@
 "use client";
 
 import { Autocomplete, AutocompleteItem, Input } from "@nextui-org/react";
-import { NotificationType, Section } from "@prisma/client";
+import { NotificationSection, NotificationType } from "@prisma/client";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { notificationActionBarOnchangeHandlers } from "../utils/onChangeHandlers";
 
@@ -11,7 +11,7 @@ interface Props {
 
 const NotificationActionBar = ({ isAdmin = true }: Props) => {
   const notificationType = Object.values(NotificationType);
-  const sections = Object.values(Section);
+  const sections = Object.values(NotificationSection);
 
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -94,7 +94,10 @@ const NotificationActionBar = ({ isAdmin = true }: Props) => {
 
 export default NotificationActionBar;
 
-const typeMapping: Record<NotificationType | Section, { label: string }> = {
+const typeMapping: Record<
+  NotificationType | NotificationSection,
+  { label: string }
+> = {
   INFO: { label: "اطلاع رسانی" },
   WARNING: { label: "هشدار" },
   EXPIRED: { label: "پیش فاکتور منقضی شده" },
@@ -103,5 +106,4 @@ const typeMapping: Record<NotificationType | Section, { label: string }> = {
   POR_INVOICE: { label: "پیش فاکتور" },
   TICKET: { label: "تیکت" },
   TICKET_MESSAGE: { label: "پاسخ به تیکت" },
-  LOGIN: { label: "احراز هویت" },
 };

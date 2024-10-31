@@ -2,14 +2,14 @@ import NotificationActionBar from "@/app/components/NotificationActionBar";
 import getSession from "@/app/libs/getSession";
 import { authorizeUser } from "@/app/utils/authorizeRole";
 import prisma from "@/prisma/client";
-import { NotificationType, Section } from "@prisma/client";
+import { NotificationSection, NotificationType } from "@prisma/client";
 import { subMonths } from "date-fns";
 import NotificationListTable from "../../components/NotificationListTable";
 
 interface Props {
   searchParams: {
     type: NotificationType;
-    section: Section;
+    notificationsection: NotificationSection;
     companyName: string;
     companyBranch: string;
     content: string;
@@ -19,7 +19,7 @@ interface Props {
 }
 
 const UserNotificationListPage = async ({
-  searchParams: { section, content, type, pageNumber },
+  searchParams: { notificationsection, content, type, pageNumber },
 }: Props) => {
   const session = await getSession();
   authorizeUser(session!);
@@ -38,9 +38,11 @@ const UserNotificationListPage = async ({
     : undefined;
 
   //Assure that user sends proper notification section to back-end as well
-  const prismaAssigneToSection = Object.values(Section);
-  const notificationSection = prismaAssigneToSection.includes(section)
-    ? section
+  const prismaAssigneToSection = Object.values(NotificationSection);
+  const notificationSection = prismaAssigneToSection.includes(
+    notificationsection
+  )
+    ? notificationsection
     : undefined;
 
   const currentPage = pageNumber || 1;
