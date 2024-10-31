@@ -14,11 +14,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     Credentials({
       name: "credentials",
       credentials: {
-        email: {
-          name: "email",
-          label: "Email",
-          type: "email",
-          placeholder: "example@domail.com",
+        phoneNumber: {
+          name: "phoneNumber",
+          label: "phoneNumber",
+          type: "text",
+          placeholder: "09...",
         },
         password: {
           name: "password",
@@ -28,10 +28,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         },
       },
       async authorize(credentials) {
-        if (!credentials.email || !credentials.password) return null;
+        if (!credentials.phoneNumber || !credentials.password) return null;
 
         const user = await prisma.user.findUnique({
-          where: { email: credentials.email as string },
+          where: { phoneNumber: credentials.phoneNumber as string },
         });
 
         if (!user) return null;
@@ -63,7 +63,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     async jwt({ token, user, session, trigger }) {
       if (trigger === "update") {
         token.name = session.name;
-        token.email = session.email;
+        token.phoneNumber = session.phoneNumber;
         token.picture = session.image;
       }
 
@@ -71,8 +71,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         return {
           ...token,
           id: user?.id,
-          name: user?.name,
-          email: user?.email,
+          phoneNumber: user.phoneNumber,
           image: user?.image,
           role: user?.role,
         };
@@ -81,13 +80,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return token;
     },
 
-    async session({ session, token }) {
+    async session({ session, token, user }) {
       return {
         ...session,
         user: {
           ...session.user,
           id: token.sub,
           role: token.role as Role,
+          phoneNumber: token.phoneNumber as string,
         },
       };
     },

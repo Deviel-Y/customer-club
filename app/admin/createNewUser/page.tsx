@@ -8,7 +8,7 @@ const CreateNewUserPage = async () => {
 
   return (
     <div className="py-5 px-2">
-      <UserForm session={session!} />
+      <UserForm userRole={session?.user.role!} />
     </div>
   );
 };
