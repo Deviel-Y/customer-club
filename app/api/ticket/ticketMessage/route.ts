@@ -46,32 +46,6 @@ export const POST = async (request: NextRequest) => {
         data: { status: "INVESTIGATING" },
       }));
 
-    const lastTicketMessage: TicketMessage = (
-      await prisma?.ticketMessage.findMany({
-        orderBy: { createdAt: "desc" },
-        take: 1,
-      })
-    )[0];
-
-    if (
-      session?.user.role === "ADMIN" &&
-      lastTicketMessage?.messageType === "RESPONCE"
-    )
-      return NextResponse.json(
-        "شما قادر به ارسال مجدد پیام نیستید. برای ارسال پیام باید منتظر پاسخ کاربر باشید",
-        { status: 400 }
-      );
-
-    if (
-      ticketMessagesCount &&
-      session?.user.role === "CUSTOMER" &&
-      lastTicketMessage?.messageType === "REQUEST"
-    )
-      return NextResponse.json(
-        "شما قادر به ارسال مجدد پیام نیستید. برای ارسال پیام باید منتظر پاسخ ادمین باشید",
-        { status: 400 }
-      );
-
     const [_updatedMessage, newMesaage] = await prisma.$transaction([
       prisma.ticketMessage.updateMany({
         where: {
