@@ -1,5 +1,5 @@
 import getSession from "@/app/libs/getSession";
-import { invoiceSchema } from "@/app/libs/validationSchema";
+import { invoiceSchema, InvoiceSchemaType } from "@/app/libs/validationSchema";
 import prisma from "@/prisma/client";
 import { Invoice } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
@@ -34,7 +34,7 @@ export const PATCH = async (
     if (!session)
       return NextResponse.json("you're not authenticated", { status: 401 });
 
-    const body: Invoice = await request.json();
+    const body: InvoiceSchemaType & Invoice = await request.json();
     const {
       organization,
       assignedToUserId,
@@ -42,8 +42,7 @@ export const PATCH = async (
       invoiceNumber,
       organizationBranch,
       price,
-      tax,
-      priceWithTax,
+      invoiceHasTax,
     } = body;
 
     const user = await prisma.user.findUnique({
@@ -84,8 +83,8 @@ export const PATCH = async (
           issuerId: session?.user.id,
           organization,
           price,
-          tax,
-          priceWithTax,
+          tax: invoiceHasTax ? price * 0.1 : 0,
+          priceWithTax: invoiceHasTax ? price * 1.1 : price,
         },
       }),
 

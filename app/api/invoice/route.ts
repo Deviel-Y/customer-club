@@ -20,10 +20,9 @@ export const POST = async (request: NextRequest) => {
       organization,
       organizationBranch,
       price,
-      tax,
-      priceWithTax,
       sendNotification,
       assignedToUserId,
+      invoiceHasTax,
     } = body;
 
     const validation = invoiceSchema.safeParse(body);
@@ -55,8 +54,8 @@ export const POST = async (request: NextRequest) => {
           organizationBranch,
           assignedToUserId,
           price,
-          priceWithTax,
-          tax,
+          priceWithTax: invoiceHasTax ? price * 1.1 : price,
+          tax: invoiceHasTax ? price * 0.1 : 0,
           issuerId: session?.user.id!,
         },
       }),
